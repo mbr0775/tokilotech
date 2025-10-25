@@ -3,10 +3,8 @@
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, CheckCircle, Target, Zap, Users } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 export default function About() {
-  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -107,16 +105,11 @@ export default function About() {
 
               {/* CTA Buttons */}
               <div className="flex flex-wrap gap-4 pt-4">
-                <button 
-                onClick={() => router.push('/about')}       
-                className="px-8 py-4 bg-[#24375a] text-white rounded-full font-semibold hover:bg-[#2d4666] transition-all duration-300 transform hover:scale-105 shadow-lg shadow-[#24375a]/30 flex items-center gap-2 group">
+                <button className="px-8 py-4 bg-[#24375a] text-white rounded-full font-semibold hover:bg-[#2d4666] transition-all duration-300 transform hover:scale-105 shadow-lg shadow-[#24375a]/30 flex items-center gap-2 group">
                   Get Started
                   <ArrowRight className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" />
                 </button>
-
-                <button 
-                onClick={() => router.push('/services')}
-                className="px-8 py-4 bg-transparent border-2 border-gray-700 text-white rounded-full font-semibold hover:border-[#91BF48] hover:bg-[#91BF48]/10 transition-all duration-300 transform hover:scale-105">
+                <button className="px-8 py-4 bg-transparent border-2 border-gray-700 text-white rounded-full font-semibold hover:border-[#91BF48] hover:bg-[#91BF48]/10 transition-all duration-300 transform hover:scale-105">
                   Learn More
                 </button>
               </div>

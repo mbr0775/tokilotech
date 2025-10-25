@@ -1,11 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-
-
-
-
 import { 
   Code, 
   Smartphone, 
@@ -112,7 +107,6 @@ const categories = [
 ];
 
 export default function Services() {
-   const router = useRouter();
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -244,9 +238,7 @@ export default function Services() {
               <p className="text-gray-200 mb-8 text-lg max-w-2xl mx-auto">
                 Let us discuss how our solutions can help you achieve your goals
               </p>
-              <button 
-              onClick={() => router.push('/shedule_contact')} 
-              className="px-8 py-4 bg-white text-[#24375a] rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl">
+              <button className="px-8 py-4 bg-white text-[#24375a] rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl">
                 Schedule a Consultation
               </button>
             </div>

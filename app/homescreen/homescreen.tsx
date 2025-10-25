@@ -1,8 +1,11 @@
 'use client';
 
 import { ArrowRight, Sparkles, Zap, Brain } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 relative overflow-hidden" id="home">
       {/* Animated Background Elements */}
@@ -40,11 +43,17 @@ export default function HomeScreen() {
 
           {/* CTA Buttons */}
           <div className="flex flex-wrap gap-4 justify-center mb-16 animate-fade-in animation-delay-600">
-            <button className="group px-8 py-4 bg-gradient-to-r from-[#24375a] to-[#4a5f8a] text-white rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-[#24375a]/50 transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
+            <button 
+              onClick={() => router.push('/about')}
+              className="group px-8 py-4 bg-gradient-to-r from-[#24375a] to-[#4a5f8a] text-white rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-[#24375a]/50 transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
+            >
               Get Started
               <ArrowRight size={20} className="transform group-hover:translate-x-1 transition-transform duration-300" />
             </button>
-            <button className="px-8 py-4 bg-transparent border-2 border-gray-700 text-white rounded-full font-semibold text-lg hover:border-[#91BF48] hover:bg-[#91BF48]/10 transition-all duration-300 transform hover:scale-105">
+            <button 
+              onClick={() => router.push('/services')}
+              className="px-8 py-4 bg-transparent border-2 border-gray-700 text-white rounded-full font-semibold text-lg hover:border-[#91BF48] hover:bg-[#91BF48]/10 transition-all duration-300 transform hover:scale-105"
+            >
               Learn More
             </button>
           </div>

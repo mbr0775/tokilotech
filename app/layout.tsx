@@ -56,70 +56,50 @@ const bdScript = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.tokilotech.com"),
-
-  title: {
-    default: "Tokilo Technologies | Websites, Mobile Apps & AI Software Solutions",
-    template: "%s | Tokilo Technologies",
-  },
-
+  title: "Tokilo Technologies | Websites, Mobile Apps & AI Software Solutions",
   description:
-    "Tokilo Technologies builds modern websites, mobile apps, admin dashboards, project tracking systems, Supabase backends, and AI-powered business solutions for growing businesses.",
-
+    "Tokilo Technologies is an AI and software development company creating websites, mobile apps, backend systems, and intelligent digital solutions for modern businesses.",
   keywords: [
     "Tokilo Technologies",
-    "TokiloTech",
     "Tokilo Tech",
-    "Tokilo software",
-    "Tokilo AI",
     "web development",
     "mobile app development",
     "AI software solutions",
-    "business systems",
-    "admin dashboard development",
-    "project tracking system",
-    "Supabase developer",
-    "Next.js developer",
-    "React developer",
-    "software company Sri Lanka",
-    "software solutions Qatar",
+    "software company",
+    "Sri Lanka software company",
   ],
-
   authors: [{ name: "Tokilo Technologies" }],
   creator: "Tokilo Technologies",
   publisher: "Tokilo Technologies",
-
-  alternates: {
-    canonical: "https://www.tokilotech.com",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
-
+  manifest: "/site.webmanifest",
   openGraph: {
     title: "Tokilo Technologies | Websites, Mobile Apps & AI Software Solutions",
     description:
-      "Tokilo Technologies builds modern websites, mobile apps, admin dashboards, project tracking systems, Supabase backends, and AI-powered business solutions.",
+      "AI and software development solutions for websites, mobile apps, backend systems, and intelligent digital products.",
     url: "https://www.tokilotech.com",
     siteName: "Tokilo Technologies",
-    type: "website",
+    images: [
+      {
+        url: "/tokilotechlogo.png",
+        width: 1200,
+        height: 630,
+        alt: "Tokilo Technologies",
+      },
+    ],
     locale: "en_US",
+    type: "website",
   },
-
   twitter: {
     card: "summary_large_image",
     title: "Tokilo Technologies | Websites, Mobile Apps & AI Software Solutions",
     description:
-      "Modern websites, mobile apps, admin dashboards, project tracking systems, and AI-powered business solutions.",
-  },
-
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-    },
+      "AI and software development solutions for websites, mobile apps, backend systems, and intelligent digital products.",
+    images: ["/tokilotechlogo.png"],
   },
 };
 

@@ -1,132 +1,201 @@
-'use client';
+"use client";
 
-import { Mail, Phone, MapPin, Send, Twitter, Linkedin, Github, Facebook } from 'lucide-react';
+import {
+  Facebook,
+  Github,
+  Linkedin,
+  Mail,
+  MapPin,
+  Phone,
+  Send,
+  Twitter,
+} from "lucide-react";
+
+const currentYear = 2026;
 
 export default function Contact() {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
   return (
-    <div className="bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 relative overflow-hidden flex flex-col" id="contact">
+    <div
+      id="contact"
+      className="relative flex flex-col overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white text-slate-950 transition-colors duration-500 dark:bg-gradient-to-b dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 dark:text-white"
+    >
       {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#24375a] rounded-full blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#91BF48] rounded-full blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-[#4a5f8a] rounded-full blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }}></div>
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute left-1/4 top-1/4 h-64 w-64 rounded-full bg-[#24375a]/10 blur-3xl animate-pulse dark:bg-[#24375a]/20 md:h-96 md:w-96"></div>
+
+        <div
+          className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-[#91BF48]/10 blur-3xl animate-pulse dark:bg-[#91BF48]/10 md:h-96 md:w-96"
+          style={{ animationDelay: "1s" }}
+        ></div>
+
+        <div
+          className="absolute left-1/2 top-1/2 h-48 w-48 rounded-full bg-[#4a5f8a]/10 blur-3xl animate-pulse dark:bg-[#4a5f8a]/15 md:h-64 md:w-64"
+          style={{ animationDelay: "2s" }}
+        ></div>
       </div>
 
       {/* Grid Pattern Overlay */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]"></div>
+      <div className="contact-grid pointer-events-none absolute inset-0 opacity-70 dark:opacity-100"></div>
 
       {/* Contact Section */}
-      <div className="relative flex-1 flex items-center justify-center pt-20 px-6">
-        <div className="relative z-10 text-center max-w-5xl w-full">
+      <section className="relative flex flex-1 items-center justify-center px-4 pb-20 pt-24 sm:px-6 md:px-8 lg:px-16">
+        <div className="relative z-10 w-full max-w-6xl text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#24375a]/30 border border-[#24375a]/50 rounded-full text-sm font-semibold text-[#91BF48] mb-8 backdrop-blur-sm animate-fade-in">
+          <div className="mb-8 inline-flex animate-fade-in items-center gap-2 rounded-full border border-[#91BF48]/25 bg-[#91BF48]/10 px-4 py-2 text-sm font-black uppercase tracking-wider text-[#4b7a16] shadow-sm backdrop-blur-sm dark:border-[#24375a]/50 dark:bg-[#24375a]/30 dark:text-[#91BF48]">
             <Send size={16} className="animate-pulse" />
-            <span className="uppercase tracking-wider">Get in Touch</span>
+            Get in Touch
           </div>
 
           {/* Main Heading */}
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight leading-[1.1] animate-fade-in animation-delay-200">
-            <span className="text-white">LETS</span>
+          <h2 className="mb-6 animate-fade-in text-4xl font-black leading-[1.1] tracking-tight animation-delay-200 sm:text-5xl md:text-6xl lg:text-7xl">
+            <span className="text-slate-950 dark:text-white">LETS</span>
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#24375a] via-[#4a5f8a] to-[#91BF48] animate-gradient">
+            <span className="animate-gradient bg-gradient-to-r from-[#24375a] via-[#4a5f8a] to-[#91BF48] bg-clip-text text-transparent">
               CONNECT
             </span>
           </h2>
 
           {/* Subheading */}
-          <p className="text-gray-400 text-lg md:text-xl mb-16 max-w-2xl mx-auto leading-relaxed animate-fade-in animation-delay-400">
-            Reach out to discuss how our <span className="text-[#91BF48] font-semibold">AI-powered solutions</span> can transform your business
+          <p className="mx-auto mb-12 max-w-2xl animate-fade-in text-base leading-relaxed text-slate-600 animation-delay-400 dark:text-gray-400 sm:text-lg md:mb-16 md:text-xl">
+            Reach out to discuss how our{" "}
+            <span className="font-bold text-[#91BF48]">
+              AI-powered solutions
+            </span>{" "}
+            can transform your business.
           </p>
 
           {/* Contact Content */}
-          <div className="grid md:grid-cols-2 gap-12 animate-fade-in animation-delay-600">
+          <div className="grid gap-8 animate-fade-in animation-delay-600 md:grid-cols-2 md:gap-12">
             {/* Contact Info */}
-            <div className="text-left space-y-8">
-              <div className="flex items-start gap-4 group">
-                <div className="p-3 bg-gray-800/50 rounded-full border border-gray-700 group-hover:border-[#91BF48] transition-all duration-300">
-                  <Mail size={24} className="text-[#91BF48]" />
-                </div>
-                <div>
-                  <h3 className="text-white font-semibold mb-1">Email</h3>
-                  <p className="text-gray-400">info@tokilotech.com</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-4 group">
-                <div className="p-3 bg-gray-800/50 rounded-full border border-gray-700 group-hover:border-[#91BF48] transition-all duration-300">
-                  <Phone size={24} className="text-[#91BF48]" />
-                </div>
-                <div>
-                  <h3 className="text-white font-semibold mb-1">Phone</h3>
-                  <p className="text-gray-400">+1 (555) 123-4567</p>
+            <div className="space-y-5 text-left sm:space-y-6">
+              <div className="group rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#24375a] hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 dark:hover:border-[#91BF48]">
+                <div className="flex items-start gap-4">
+                  <div className="rounded-full border border-slate-200 bg-slate-50 p-3 transition-all duration-300 group-hover:border-[#91BF48] dark:border-gray-700 dark:bg-gray-800/60">
+                    <Mail size={24} className="text-[#91BF48]" />
+                  </div>
+
+                  <div>
+                    <h3 className="mb-1 font-black text-slate-950 dark:text-white">
+                      Email
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-gray-400 sm:text-base">
+                      info@tokilotech.com
+                    </p>
+                  </div>
                 </div>
               </div>
-              
-              <div className="flex items-start gap-4 group">
-                <div className="p-3 bg-gray-800/50 rounded-full border border-gray-700 group-hover:border-[#91BF48] transition-all duration-300">
-                  <MapPin size={24} className="text-[#91BF48]" />
+
+              <div className="group rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#24375a] hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 dark:hover:border-[#91BF48]">
+                <div className="flex items-start gap-4">
+                  <div className="rounded-full border border-slate-200 bg-slate-50 p-3 transition-all duration-300 group-hover:border-[#91BF48] dark:border-gray-700 dark:bg-gray-800/60">
+                    <Phone size={24} className="text-[#91BF48]" />
+                  </div>
+
+                  <div>
+                    <h3 className="mb-1 font-black text-slate-950 dark:text-white">
+                      Phone
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-gray-400 sm:text-base">
+                      +94 77 123 4567
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-white font-semibold mb-1">Address</h3>
-                  <p className="text-gray-400">123 AI Innovation Street<br />Tech Valley, CA 94043</p>
+              </div>
+
+              <div className="group rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#24375a] hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 dark:hover:border-[#91BF48]">
+                <div className="flex items-start gap-4">
+                  <div className="rounded-full border border-slate-200 bg-slate-50 p-3 transition-all duration-300 group-hover:border-[#91BF48] dark:border-gray-700 dark:bg-gray-800/60">
+                    <MapPin size={24} className="text-[#91BF48]" />
+                  </div>
+
+                  <div>
+                    <h3 className="mb-1 font-black text-slate-950 dark:text-white">
+                      Address
+                    </h3>
+                    <p className="text-sm leading-relaxed text-slate-600 dark:text-gray-400 sm:text-base">
+                      Tokilo Technologies
+                      <br />
+                      Sri Lanka
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Contact Form */}
-            <form className="space-y-6 text-left">
-              <input 
-                type="text" 
-                placeholder="Your Name" 
-                className="w-full px-6 py-4 bg-gray-800/50 border border-gray-700 rounded-full text-gray-300 placeholder-gray-500 focus:border-[#91BF48] focus:outline-none transition-all duration-300" 
-              />
-              <input 
-                type="email" 
-                placeholder="Your Email" 
-                className="w-full px-6 py-4 bg-gray-800/50 border border-gray-700 rounded-full text-gray-300 placeholder-gray-500 focus:border-[#91BF48] focus:outline-none transition-all duration-300" 
-              />
-              <textarea 
-                placeholder="Your Message" 
-                className="w-full px-6 py-4 bg-gray-800/50 border border-gray-700 rounded-3xl text-gray-300 placeholder-gray-500 focus:border-[#91BF48] focus:outline-none transition-all duration-300 h-40 resize-none"
-              />
-              <button 
-                type="submit"
-                className="w-full px-8 py-4 bg-gradient-to-r from-[#24375a] to-[#4a5f8a] text-white rounded-full font-semibold hover:shadow-2xl hover:shadow-[#24375a]/50 transition-all duration-300 transform hover:scale-105"
-              >
-                Send Message
-              </button>
+            <form
+              onSubmit={handleSubmit}
+              className="rounded-[2rem] border border-slate-200 bg-white p-5 text-left shadow-xl shadow-slate-200/60 dark:border-gray-800 dark:bg-gray-900 dark:shadow-black/20 sm:p-6"
+            >
+              <div className="mb-5">
+                <h3 className="text-2xl font-black text-slate-950 dark:text-white">
+                  Send a Message
+                </h3>
+                <p className="mt-2 text-sm text-slate-600 dark:text-gray-400">
+                  Tell us about your project or idea. We will get back to you
+                  soon.
+                </p>
+              </div>
+
+              <div className="space-y-5">
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  className="w-full rounded-full border border-slate-300 bg-white px-6 py-4 text-slate-950 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-[#91BF48] dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:placeholder:text-gray-500"
+                />
+
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  className="w-full rounded-full border border-slate-300 bg-white px-6 py-4 text-slate-950 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-[#91BF48] dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:placeholder:text-gray-500"
+                />
+
+                <textarea
+                  placeholder="Your Message"
+                  className="h-40 w-full resize-none rounded-3xl border border-slate-300 bg-white px-6 py-4 text-slate-950 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-[#91BF48] dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:placeholder:text-gray-500"
+                />
+
+                <button
+                  type="submit"
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#24375a] to-[#4a5f8a] px-8 py-4 font-black text-white shadow-lg shadow-[#24375a]/20 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[#24375a]/40"
+                >
+                  Send Message
+                  <Send size={18} />
+                </button>
+              </div>
             </form>
           </div>
         </div>
 
         {/* Floating Elements */}
-        <div className="absolute inset-0 pointer-events-none">
-          {/* Top Left */}
-          <div className="absolute top-1/4 left-10 w-20 h-20 border-2 border-[#24375a]/30 rounded-lg rotate-12 animate-float"></div>
-          
-          {/* Top Right */}
-          <div className="absolute top-1/3 right-10 w-16 h-16 border-2 border-[#91BF48]/30 rounded-full animate-float-delayed"></div>
-          
-          {/* Bottom Left */}
-          <div className="absolute bottom-1/4 left-20 w-12 h-12 bg-gradient-to-br from-[#24375a]/20 to-[#4a5f8a]/20 rounded-lg rotate-45 animate-float"></div>
-          
-          {/* Bottom Right */}
-          <div className="absolute bottom-1/3 right-20 w-24 h-24 border-2 border-[#4a5f8a]/30 rounded-lg rotate-6 animate-float-delayed"></div>
+        <div className="pointer-events-none absolute inset-0 hidden md:block">
+          <div className="absolute left-10 top-1/4 h-20 w-20 rotate-12 animate-float rounded-lg border-2 border-[#24375a]/15 dark:border-[#24375a]/30"></div>
+
+          <div className="absolute right-10 top-1/3 h-16 w-16 animate-float-delayed rounded-full border-2 border-[#91BF48]/25 dark:border-[#91BF48]/30"></div>
+
+          <div className="absolute bottom-1/4 left-20 h-12 w-12 rotate-45 animate-float rounded-lg bg-gradient-to-br from-[#24375a]/10 to-[#4a5f8a]/10 dark:from-[#24375a]/20 dark:to-[#4a5f8a]/20"></div>
+
+          <div className="absolute bottom-1/3 right-20 h-24 w-24 rotate-6 animate-float-delayed rounded-lg border-2 border-[#4a5f8a]/20 dark:border-[#4a5f8a]/30"></div>
         </div>
-      </div>
+      </section>
 
       {/* Footer */}
-      <footer className="relative py-12 bg-gray-900/95 border-t border-gray-800 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <footer className="relative border-t border-slate-200 bg-white/95 py-12 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/95">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-12">
             {/* Company Info */}
             <div className="flex flex-col gap-4">
               <div className="flex items-center group">
                 <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#24375a] to-[#4a5f8a] rounded-full blur-md opacity-50 group-hover:opacity-75 transition-opacity duration-300"></div>
-                  <div className="relative w-10 h-10 bg-gradient-to-br from-[#24375a] to-[#4a5f8a] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#24375a] to-[#4a5f8a] opacity-50 blur-md transition-opacity duration-300 group-hover:opacity-75"></div>
+
+                  <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#24375a] to-[#4a5f8a] transition-transform duration-300 group-hover:scale-110">
                     <svg
-                      className="w-6 h-6 text-white"
+                      className="h-6 w-6 text-white"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -138,34 +207,60 @@ export default function Contact() {
                     </svg>
                   </div>
                 </div>
+
                 <div className="ml-3">
-                  <div className="text-white font-bold text-lg tracking-wide group-hover:text-[#91BF48] transition-colors duration-300">
+                  <div className="text-lg font-black tracking-wide text-slate-950 transition-colors duration-300 group-hover:text-[#91BF48] dark:text-white">
                     TOKILO TECHNOLOGIES
                   </div>
-                  <div className="text-[#91BF48] text-xs tracking-wider font-medium">
+
+                  <div className="text-xs font-medium tracking-wider text-[#91BF48]">
                     AI & SOFTWARE SOLUTIONS
                   </div>
                 </div>
               </div>
-              <p className="text-gray-400 text-sm">
-                Harnessing AI to drive innovation and transform businesses worldwide.
+
+              <p className="text-sm leading-relaxed text-slate-600 dark:text-gray-400">
+                Harnessing AI to drive innovation and transform businesses
+                worldwide.
               </p>
             </div>
 
             {/* Social Media */}
             <div className="flex flex-col gap-4">
-              <h3 className="text-white font-semibold text-lg">Follow Us</h3>
+              <h3 className="text-lg font-black text-slate-950 dark:text-white">
+                Follow Us
+              </h3>
+
               <div className="flex gap-4">
-                <a href="https://twitter.com" className="p-2 bg-gray-800/50 rounded-full border border-gray-700 hover:border-[#91BF48] hover:bg-gray-800 transition-all duration-300">
+                <a
+                  href="https://twitter.com"
+                  aria-label="Twitter"
+                  className="rounded-full border border-slate-200 bg-slate-50 p-2 transition-all duration-300 hover:border-[#91BF48] hover:bg-white dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800"
+                >
                   <Twitter size={20} className="text-[#91BF48]" />
                 </a>
-                <a href="https://linkedin.com" className="p-2 bg-gray-800/50 rounded-full border border-gray-700 hover:border-[#91BF48] hover:bg-gray-800 transition-all duration-300">
+
+                <a
+                  href="https://linkedin.com"
+                  aria-label="LinkedIn"
+                  className="rounded-full border border-slate-200 bg-slate-50 p-2 transition-all duration-300 hover:border-[#91BF48] hover:bg-white dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800"
+                >
                   <Linkedin size={20} className="text-[#91BF48]" />
                 </a>
-                <a href="https://github.com" className="p-2 bg-gray-800/50 rounded-full border border-gray-700 hover:border-[#91BF48] hover:bg-gray-800 transition-all duration-300">
+
+                <a
+                  href="https://github.com"
+                  aria-label="GitHub"
+                  className="rounded-full border border-slate-200 bg-slate-50 p-2 transition-all duration-300 hover:border-[#91BF48] hover:bg-white dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800"
+                >
                   <Github size={20} className="text-[#91BF48]" />
                 </a>
-                <a href="https://facebook.com" className="p-2 bg-gray-800/50 rounded-full border border-gray-700 hover:border-[#91BF48] hover:bg-gray-800 transition-all duration-300">
+
+                <a
+                  href="https://facebook.com"
+                  aria-label="Facebook"
+                  className="rounded-full border border-slate-200 bg-slate-50 p-2 transition-all duration-300 hover:border-[#91BF48] hover:bg-white dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800"
+                >
                   <Facebook size={20} className="text-[#91BF48]" />
                 </a>
               </div>
@@ -173,33 +268,52 @@ export default function Contact() {
 
             {/* Partners */}
             <div className="flex flex-col gap-4">
-              <h3 className="text-white font-semibold text-lg">Our Partners</h3>
-              <div className="flex flex-wrap gap-4">
-                <div className="px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-full text-gray-300 text-sm hover:text-[#91BF48] transition-colors duration-300">
-                  Google Cloud
-                </div>
-                <div className="px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-full text-gray-300 text-sm hover:text-[#91BF48] transition-colors duration-300">
-                  AWS
-                </div>
-                <div className="px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-full text-gray-300 text-sm hover:text-[#91BF48] transition-colors duration-300">
-                  Microsoft Azure
-                </div>
-                <div className="px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-full text-gray-300 text-sm hover:text-[#91BF48] transition-colors duration-300">
-                  OpenAI
-                </div>
+              <h3 className="text-lg font-black text-slate-950 dark:text-white">
+                Our Partners
+              </h3>
+
+              <div className="flex flex-wrap gap-3">
+                {["Google Cloud", "AWS", "Microsoft Azure", "OpenAI"].map(
+                  (partner) => (
+                    <div
+                      key={partner}
+                      className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-600 transition-colors duration-300 hover:text-[#91BF48] dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-300"
+                    >
+                      {partner}
+                    </div>
+                  )
+                )}
               </div>
             </div>
           </div>
 
           {/* Bottom Bar */}
-          <div className="mt-12 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-sm">
+          <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 text-sm text-slate-500 dark:border-gray-800 dark:text-gray-500 md:flex-row">
             <div>
-              © {new Date().getFullYear()} Tokilo Technologies. All rights reserved.
+              © {currentYear} Tokilo Technologies. All rights reserved.
             </div>
-            <div className="flex gap-6">
-              <a href="/privacy" className="hover:text-[#91BF48] transition-colors duration-300">Privacy Policy</a>
-              <a href="/terms" className="hover:text-[#91BF48] transition-colors duration-300">Terms of Service</a>
-              <a href="/cookies" className="hover:text-[#91BF48] transition-colors duration-300">Cookie Policy</a>
+
+            <div className="flex flex-wrap justify-center gap-5 sm:gap-6">
+              <a
+                href="/privacy"
+                className="transition-colors duration-300 hover:text-[#91BF48]"
+              >
+                Privacy Policy
+              </a>
+
+              <a
+                href="/terms"
+                className="transition-colors duration-300 hover:text-[#91BF48]"
+              >
+                Terms of Service
+              </a>
+
+              <a
+                href="/cookies"
+                className="transition-colors duration-300 hover:text-[#91BF48]"
+              >
+                Cookie Policy
+              </a>
             </div>
           </div>
         </div>
@@ -234,7 +348,8 @@ export default function Contact() {
         }
 
         @keyframes float {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0px) rotate(12deg);
           }
           50% {
@@ -243,7 +358,8 @@ export default function Contact() {
         }
 
         @keyframes float-delayed {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0px);
           }
           50% {
@@ -252,7 +368,8 @@ export default function Contact() {
         }
 
         @keyframes gradient {
-          0%, 100% {
+          0%,
+          100% {
             background-position: 0% 50%;
           }
           50% {
@@ -274,11 +391,29 @@ export default function Contact() {
           animation: gradient 8s ease infinite;
         }
 
-        .bg-grid-pattern {
-          background-image: 
-            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        .contact-grid {
+          background-image: linear-gradient(
+              rgba(36, 55, 90, 0.06) 1px,
+              transparent 1px
+            ),
+            linear-gradient(
+              90deg,
+              rgba(36, 55, 90, 0.06) 1px,
+              transparent 1px
+            );
           background-size: 50px 50px;
+        }
+
+        :global(html.dark) .contact-grid {
+          background-image: linear-gradient(
+              rgba(255, 255, 255, 0.05) 1px,
+              transparent 1px
+            ),
+            linear-gradient(
+              90deg,
+              rgba(255, 255, 255, 0.05) 1px,
+              transparent 1px
+            );
         }
       `}</style>
     </div>

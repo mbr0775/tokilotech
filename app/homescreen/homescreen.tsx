@@ -1,96 +1,138 @@
-'use client';
+"use client";
 
-import { ArrowRight, Sparkles, Zap, Brain } from 'lucide-react';
+import { ArrowRight, Sparkles, Zap, Brain } from "lucide-react";
 
 export default function HomeScreen() {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 relative overflow-hidden" id="home">
+    <section
+      id="home"
+      className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white text-slate-950 transition-colors duration-500 dark:bg-gradient-to-b dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 dark:text-white"
+    >
       {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-64 md:w-96 h-64 md:h-96 bg-[#24375a] rounded-full blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-64 md:w-96 h-64 md:h-96 bg-[#91BF48] rounded-full blur-3xl opacity-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-48 md:w-64 h-48 md:h-64 bg-[#4a5f8a] rounded-full blur-3xl opacity-15 animate-pulse" style={{ animationDelay: '2s' }}></div>
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute left-1/4 top-1/4 h-64 w-64 rounded-full bg-[#24375a]/10 blur-3xl animate-pulse md:h-96 md:w-96 dark:bg-[#24375a]/20"></div>
+
+        <div
+          className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-[#91BF48]/10 blur-3xl animate-pulse md:h-96 md:w-96 dark:bg-[#91BF48]/10"
+          style={{ animationDelay: "1s" }}
+        ></div>
+
+        <div
+          className="absolute left-1/2 top-1/2 h-48 w-48 rounded-full bg-[#4a5f8a]/10 blur-3xl animate-pulse md:h-64 md:w-64 dark:bg-[#4a5f8a]/15"
+          style={{ animationDelay: "2s" }}
+        ></div>
       </div>
 
       {/* Grid Pattern Overlay */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]"></div>
+      <div className="hero-grid pointer-events-none absolute inset-0 opacity-70 dark:opacity-100"></div>
 
       {/* Hero Section */}
-      <div className="relative min-h-screen flex items-center justify-center pt-24 pb-20 px-4 sm:px-6">
-        <div className="relative z-10 text-center max-w-6xl w-full">
+      <div className="relative flex min-h-screen items-center justify-center px-4 pb-20 pt-28 sm:px-6 sm:pt-32">
+        <div className="relative z-10 w-full max-w-6xl text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-[#24375a]/30 border border-[#24375a]/50 rounded-full text-xs sm:text-sm font-semibold text-[#91BF48] mb-6 sm:mb-8 backdrop-blur-sm animate-fade-in">
-            <Sparkles size={14} className="animate-pulse sm:w-4 sm:h-4" />
-            <span className="uppercase tracking-wider">AI-Powered Solutions</span>
+          <div className="mb-6 inline-flex animate-fade-in items-center gap-2 rounded-full border border-[#91BF48]/25 bg-[#91BF48]/10 px-3 py-1.5 text-xs font-black uppercase tracking-wider text-[#4b7a16] shadow-sm backdrop-blur-sm sm:mb-8 sm:px-4 sm:py-2 sm:text-sm dark:border-[#24375a]/50 dark:bg-[#24375a]/30 dark:text-[#91BF48]">
+            <Sparkles size={14} className="animate-pulse sm:h-4 sm:w-4" />
+            AI-Powered Solutions
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold mb-4 sm:mb-6 tracking-tight leading-[1.1] animate-fade-in animation-delay-200">
-            <span className="text-white">THE FUTURE</span>
+          <h1 className="mb-4 animate-fade-in text-4xl font-black leading-[1.1] tracking-tight animation-delay-200 sm:mb-6 sm:text-5xl md:text-7xl lg:text-8xl">
+            <span className="text-slate-950 dark:text-white">THE FUTURE</span>
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#24375a] via-[#4a5f8a] to-[#91BF48] animate-gradient">
+            <span className="animate-gradient bg-gradient-to-r from-[#24375a] via-[#4a5f8a] to-[#91BF48] bg-clip-text text-transparent">
               IS INTELLIGENT
             </span>
           </h1>
 
           {/* Subheading */}
-          <p className="text-gray-400 text-sm sm:text-lg md:text-2xl mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in animation-delay-400 px-2">
-            Harness the power of <span className="text-[#91BF48] font-semibold">AI and intelligent software</span> to transform your business with cutting-edge solutions
+          <p className="mx-auto mb-8 max-w-3xl animate-fade-in px-2 text-sm leading-relaxed text-slate-600 animation-delay-400 sm:mb-12 sm:text-lg md:text-2xl dark:text-gray-400">
+            Harness the power of{" "}
+            <span className="font-bold text-[#91BF48]">
+              AI and intelligent software
+            </span>{" "}
+            to transform your business with cutting-edge solutions
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center mb-10 sm:mb-16 animate-fade-in animation-delay-600 px-4">
-            <button 
-              onClick={() => alert('Navigate to About')}
-              className="group px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#24375a] to-[#4a5f8a] text-white rounded-full font-semibold text-base sm:text-lg hover:shadow-2xl hover:shadow-[#24375a]/50 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2"
+          <div className="mb-10 flex animate-fade-in flex-col flex-wrap justify-center gap-3 px-4 animation-delay-600 sm:mb-16 sm:flex-row sm:gap-4">
+            <button
+              type="button"
+              onClick={() => scrollToSection("contact")}
+              className="group flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#24375a] to-[#4a5f8a] px-6 py-3 text-base font-black text-white shadow-lg shadow-[#24375a]/20 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[#24375a]/40 sm:px-8 sm:py-4 sm:text-lg"
             >
               Get Started
-              <ArrowRight size={18} className="transform group-hover:translate-x-1 transition-transform duration-300 sm:w-5 sm:h-5" />
+              <ArrowRight
+                size={18}
+                className="transition-transform duration-300 group-hover:translate-x-1 sm:h-5 sm:w-5"
+              />
             </button>
-            <button 
-              onClick={() => alert('Navigate to Services')}
-              className="px-6 sm:px-8 py-3 sm:py-4 bg-transparent border-2 border-gray-700 text-white rounded-full font-semibold text-base sm:text-lg hover:border-[#91BF48] hover:bg-[#91BF48]/10 transition-all duration-300 transform hover:scale-105"
+
+            <button
+              type="button"
+              onClick={() => scrollToSection("services")}
+              className="rounded-full border-2 border-slate-300 bg-white/70 px-6 py-3 text-base font-black text-slate-900 shadow-sm backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#91BF48] hover:bg-[#91BF48]/10 sm:px-8 sm:py-4 sm:text-lg dark:border-gray-700 dark:bg-transparent dark:text-white dark:hover:border-[#91BF48] dark:hover:bg-[#91BF48]/10"
             >
               Learn More
             </button>
           </div>
 
           {/* Feature Pills */}
-          <div className="flex flex-wrap gap-2 sm:gap-4 justify-center animate-fade-in animation-delay-800 px-4">
-            <div className="group flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gray-800/50 border border-gray-700 rounded-full hover:border-[#24375a] hover:bg-gray-800 transition-all duration-300 cursor-pointer">
-              <Zap size={16} className="text-[#91BF48] group-hover:animate-pulse sm:w-[18px] sm:h-[18px]" />
-              <span className="text-gray-300 text-xs sm:text-sm font-medium">Fast Deployment</span>
+          <div className="flex animate-fade-in flex-wrap justify-center gap-2 px-4 animation-delay-800 sm:gap-4">
+            <div className="group flex cursor-pointer items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-4 py-2 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-[#24375a] hover:bg-slate-50 sm:px-6 sm:py-3 dark:border-gray-700 dark:bg-gray-800/50 dark:hover:border-[#24375a] dark:hover:bg-gray-800">
+              <Zap
+                size={16}
+                className="text-[#91BF48] group-hover:animate-pulse sm:h-[18px] sm:w-[18px]"
+              />
+              <span className="text-xs font-bold text-slate-700 sm:text-sm dark:text-gray-300">
+                Fast Deployment
+              </span>
             </div>
-            <div className="group flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gray-800/50 border border-gray-700 rounded-full hover:border-[#24375a] hover:bg-gray-800 transition-all duration-300 cursor-pointer">
-              <Brain size={16} className="text-[#91BF48] group-hover:animate-pulse sm:w-[18px] sm:h-[18px]" />
-              <span className="text-gray-300 text-xs sm:text-sm font-medium">AI-Powered</span>
+
+            <div className="group flex cursor-pointer items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-4 py-2 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-[#24375a] hover:bg-slate-50 sm:px-6 sm:py-3 dark:border-gray-700 dark:bg-gray-800/50 dark:hover:border-[#24375a] dark:hover:bg-gray-800">
+              <Brain
+                size={16}
+                className="text-[#91BF48] group-hover:animate-pulse sm:h-[18px] sm:w-[18px]"
+              />
+              <span className="text-xs font-bold text-slate-700 sm:text-sm dark:text-gray-300">
+                AI-Powered
+              </span>
             </div>
-            <div className="group flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gray-800/50 border border-gray-700 rounded-full hover:border-[#24375a] hover:bg-gray-800 transition-all duration-300 cursor-pointer">
-              <Sparkles size={16} className="text-[#91BF48] group-hover:animate-pulse sm:w-[18px] sm:h-[18px]" />
-              <span className="text-gray-300 text-xs sm:text-sm font-medium">Scalable Solutions</span>
+
+            <div className="group flex cursor-pointer items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-4 py-2 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-[#24375a] hover:bg-slate-50 sm:px-6 sm:py-3 dark:border-gray-700 dark:bg-gray-800/50 dark:hover:border-[#24375a] dark:hover:bg-gray-800">
+              <Sparkles
+                size={16}
+                className="text-[#91BF48] group-hover:animate-pulse sm:h-[18px] sm:w-[18px]"
+              />
+              <span className="text-xs font-bold text-slate-700 sm:text-sm dark:text-gray-300">
+                Scalable Solutions
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Floating Elements - Hidden on mobile */}
-        <div className="absolute inset-0 pointer-events-none hidden md:block">
-          {/* Top Left */}
-          <div className="absolute top-1/4 left-10 w-20 h-20 border-2 border-[#24375a]/30 rounded-lg rotate-12 animate-float"></div>
-          
-          {/* Top Right */}
-          <div className="absolute top-1/3 right-10 w-16 h-16 border-2 border-[#91BF48]/30 rounded-full animate-float-delayed"></div>
-          
-          {/* Bottom Left */}
-          <div className="absolute bottom-1/4 left-20 w-12 h-12 bg-gradient-to-br from-[#24375a]/20 to-[#4a5f8a]/20 rounded-lg rotate-45 animate-float"></div>
-          
-          {/* Bottom Right */}
-          <div className="absolute bottom-1/3 right-20 w-24 h-24 border-2 border-[#4a5f8a]/30 rounded-lg rotate-6 animate-float-delayed"></div>
+        {/* Floating Elements */}
+        <div className="pointer-events-none absolute inset-0 hidden md:block">
+          <div className="absolute left-10 top-1/4 h-20 w-20 animate-float rounded-lg border-2 border-[#24375a]/15 rotate-12 dark:border-[#24375a]/30"></div>
+
+          <div className="absolute right-10 top-1/3 h-16 w-16 animate-float-delayed rounded-full border-2 border-[#91BF48]/25 dark:border-[#91BF48]/30"></div>
+
+          <div className="absolute bottom-1/4 left-20 h-12 w-12 animate-float rounded-lg bg-gradient-to-br from-[#24375a]/10 to-[#4a5f8a]/10 rotate-45 dark:from-[#24375a]/20 dark:to-[#4a5f8a]/20"></div>
+
+          <div className="absolute bottom-1/3 right-20 h-24 w-24 animate-float-delayed rounded-lg border-2 border-[#4a5f8a]/20 rotate-6 dark:border-[#4a5f8a]/30"></div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-5 h-8 sm:w-6 sm:h-10 border-2 border-gray-600 rounded-full flex justify-center">
-            <div className="w-1 h-2 sm:w-1.5 sm:h-3 bg-[#91BF48] rounded-full mt-1.5 sm:mt-2 animate-scroll"></div>
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce sm:bottom-10">
+          <div className="flex h-8 w-5 justify-center rounded-full border-2 border-slate-300 sm:h-10 sm:w-6 dark:border-gray-600">
+            <div className="mt-1.5 h-2 w-1 animate-scroll rounded-full bg-[#91BF48] sm:mt-2 sm:h-3 sm:w-1.5"></div>
           </div>
         </div>
       </div>
@@ -128,7 +170,8 @@ export default function HomeScreen() {
         }
 
         @keyframes float {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0px) rotate(12deg);
           }
           50% {
@@ -137,7 +180,8 @@ export default function HomeScreen() {
         }
 
         @keyframes float-delayed {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0px);
           }
           50% {
@@ -160,7 +204,8 @@ export default function HomeScreen() {
         }
 
         @keyframes gradient {
-          0%, 100% {
+          0%,
+          100% {
             background-position: 0% 50%;
           }
           50% {
@@ -186,13 +231,31 @@ export default function HomeScreen() {
           animation: gradient 8s ease infinite;
         }
 
-        .bg-grid-pattern {
-          background-image: 
-            linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        .hero-grid {
+          background-image: linear-gradient(
+              rgba(36, 55, 90, 0.06) 1px,
+              transparent 1px
+            ),
+            linear-gradient(
+              90deg,
+              rgba(36, 55, 90, 0.06) 1px,
+              transparent 1px
+            );
           background-size: 50px 50px;
         }
+
+        :global(html.dark) .hero-grid {
+          background-image: linear-gradient(
+              rgba(255, 255, 255, 0.05) 1px,
+              transparent 1px
+            ),
+            linear-gradient(
+              90deg,
+              rgba(255, 255, 255, 0.05) 1px,
+              transparent 1px
+            );
+        }
       `}</style>
-    </div>
+    </section>
   );
 }

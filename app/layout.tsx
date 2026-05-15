@@ -1,42 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto } from "next/font/google";
 import localFont from "next/font/local";
+import { ThemeProvider } from "./theme-provider";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const bdSans = localFont({
-  src: [
-    {
-      path: "../public/fonts/BDSans-Thin.otf",
-      weight: "100",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/BDSans-Regular.otf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/BDSans-Bold.otf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/BDSans-Black.otf",
-      weight: "900",
-      style: "normal",
-    },
-  ],
-  variable: "--font-bd-sans",
+  weight: ["100", "300", "400", "500", "700", "900"],
 });
 
 const bdScript = localFont({
@@ -56,6 +27,7 @@ const bdScript = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.tokilotech.com"),
   title: "Tokilo Technologies | Websites, Mobile Apps & AI Software Solutions",
   description:
     "Tokilo Technologies is an AI and software development company creating websites, mobile apps, backend systems, and intelligent digital solutions for modern businesses.",
@@ -109,11 +81,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${bdSans.variable} ${bdScript.variable} antialiased`}
+        className={`${roboto.className} ${roboto.variable} ${bdScript.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

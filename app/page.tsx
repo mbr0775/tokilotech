@@ -4,9 +4,8 @@ import About from "./about/about";
 import Navigation from "./navigation/navigations";
 import Stakeholders from "./stackholder/stackholder";
 import Services from "./services/services";
+import Projects from "./projects/projects";
 import Contact from "./contact/contact";
-
-
 
 export default function Page() {
   return (
@@ -14,8 +13,9 @@ export default function Page() {
       <Navigation />
       <HomeScreen />
       <About />
-      <Stakeholders />
+      <Projects />
       <Services />
+      <Stakeholders />
       <Contact />
     </>
   );

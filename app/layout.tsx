@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import localFont from "next/font/local";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { ThemeProvider } from "./theme-provider";
 import "./globals.css";
+
+const GA_MEASUREMENT_ID = "G-WFWXH5N911";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -28,31 +31,47 @@ const bdScript = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.tokilotech.com"),
-  title: "Tokilo Technologies | Websites, Mobile Apps & AI Software Solutions",
+
+  title:
+    "Tokilo Technologies | Startup Software & AI Solutions | MBR Group",
+
   description:
-    "Tokilo Technologies is an AI and software development company creating websites, mobile apps, backend systems, and intelligent digital solutions for modern businesses.",
+    "Tokilo Technologies is a startup software and AI solutions company founded as the first company under MBR Group. We build websites, mobile apps, backend systems, automation tools, and intelligent digital solutions for startups, small businesses, and growing brands.",
+
   keywords: [
     "Tokilo Technologies",
+    "TokiloTech",
     "Tokilo Tech",
+    "MBR Group",
+    "startup software company",
+    "AI solutions company",
     "web development",
     "mobile app development",
-    "AI software solutions",
-    "software company",
+    "backend systems",
+    "business website development",
+    "automation tools",
+    "software development Sri Lanka",
     "Sri Lanka software company",
+    "startup technology company",
   ],
+
   authors: [{ name: "Tokilo Technologies" }],
   creator: "Tokilo Technologies",
   publisher: "Tokilo Technologies",
+
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
+
   manifest: "/site.webmanifest",
+
   openGraph: {
-    title: "Tokilo Technologies | Websites, Mobile Apps & AI Software Solutions",
+    title:
+      "Tokilo Technologies | Startup Software & AI Solutions | MBR Group",
     description:
-      "AI and software development solutions for websites, mobile apps, backend systems, and intelligent digital products.",
+      "A startup software and AI solutions company founded as the first company under MBR Group, building websites, mobile apps, backend systems, automation tools, and digital solutions.",
     url: "https://www.tokilotech.com",
     siteName: "Tokilo Technologies",
     images: [
@@ -66,12 +85,18 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "Tokilo Technologies | Websites, Mobile Apps & AI Software Solutions",
+    title:
+      "Tokilo Technologies | Startup Software & AI Solutions | MBR Group",
     description:
-      "AI and software development solutions for websites, mobile apps, backend systems, and intelligent digital products.",
+      "Tokilo Technologies builds websites, mobile apps, backend systems, automation tools, and AI-powered digital solutions for startups and growing businesses.",
     images: ["/tokilotechlogo.png"],
+  },
+
+  alternates: {
+    canonical: "https://www.tokilotech.com",
   },
 };
 
@@ -87,6 +112,8 @@ export default function RootLayout({
       >
         <ThemeProvider>{children}</ThemeProvider>
       </body>
+
+      <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />
     </html>
   );
 }

@@ -1,421 +1,800 @@
 "use client";
 
 import {
-  Facebook,
-  Github,
-  Linkedin,
   Mail,
-  MapPin,
   Phone,
-  Send,
-  Twitter,
+  ArrowRight,
+  Code2,
+  Smartphone,
+  BrainCircuit,
+  Cloud,
+  Sparkles,
 } from "lucide-react";
 
-const currentYear = 2026;
+
+const services = [
+  {
+    icon: Code2,
+    title: "Web Applications",
+  },
+  {
+    icon: Smartphone,
+    title: "Mobile Applications",
+  },
+  {
+    icon: BrainCircuit,
+    title: "AI Solutions",
+  },
+  {
+    icon: Cloud,
+    title: "Cloud Systems",
+  },
+];
+
 
 export default function Contact() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  };
 
   return (
-    <div
-      id="contact"
-      className="relative flex flex-col overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white text-slate-950 transition-colors duration-500 dark:bg-gradient-to-b dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 dark:text-white"
-    >
-      {/* Animated Background Elements */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/4 top-1/4 h-64 w-64 rounded-full bg-[#24375a]/10 blur-3xl animate-pulse dark:bg-[#24375a]/20 md:h-96 md:w-96"></div>
 
-        <div
-          className="absolute bottom-1/4 right-1/4 h-64 w-64 rounded-full bg-[#91BF48]/10 blur-3xl animate-pulse dark:bg-[#91BF48]/10 md:h-96 md:w-96"
-          style={{ animationDelay: "1s" }}
-        ></div>
+<section
+id="contact"
+className="
+relative
+overflow-hidden
+bg-[#08101F]
 
-        <div
-          className="absolute left-1/2 top-1/2 h-48 w-48 rounded-full bg-[#4a5f8a]/10 blur-3xl animate-pulse dark:bg-[#4a5f8a]/15 md:h-64 md:w-64"
-          style={{ animationDelay: "2s" }}
-        ></div>
-      </div>
+px-5
+py-20
 
-      {/* Grid Pattern Overlay */}
-      <div className="contact-grid pointer-events-none absolute inset-0 opacity-70 dark:opacity-100"></div>
+sm:px-8
+lg:px-12
+lg:py-32
+"
+>
 
-      {/* Contact Section */}
-      <section className="relative flex flex-1 items-center justify-center px-4 pb-20 pt-24 sm:px-6 md:px-8 lg:px-16">
-        <div className="relative z-10 w-full max-w-6xl text-center">
-          {/* Badge */}
-          <div className="mb-8 inline-flex animate-fade-in items-center gap-2 rounded-full border border-[#91BF48]/25 bg-[#91BF48]/10 px-4 py-2 text-sm font-black uppercase tracking-wider text-[#4b7a16] shadow-sm backdrop-blur-sm dark:border-[#24375a]/50 dark:bg-[#24375a]/30 dark:text-[#91BF48]">
-            <Send size={16} className="animate-pulse" />
-            Get in Touch
-          </div>
 
-          {/* Main Heading */}
-          <h2 className="mb-6 animate-fade-in text-4xl font-black leading-[1.1] tracking-tight animation-delay-200 sm:text-5xl md:text-6xl lg:text-7xl">
-            <span className="text-slate-950 dark:text-white">LETS</span>
-            <br />
-            <span className="animate-gradient bg-gradient-to-r from-[#24375a] via-[#4a5f8a] to-[#91BF48] bg-clip-text text-transparent">
-              CONNECT
-            </span>
-          </h2>
+<div
+className="
+absolute
+right-0
+top-0
 
-          {/* Subheading */}
-          <p className="mx-auto mb-12 max-w-2xl animate-fade-in text-base leading-relaxed text-slate-600 animation-delay-400 dark:text-gray-400 sm:text-lg md:mb-16 md:text-xl">
-            Reach out to discuss how our{" "}
-            <span className="font-bold text-[#91BF48]">
-              AI-powered solutions
-            </span>{" "}
-            can transform your business.
-          </p>
+h-[500px]
+w-[500px]
 
-          {/* Contact Content */}
-          <div className="grid gap-8 animate-fade-in animation-delay-600 md:grid-cols-2 md:gap-12">
-            {/* Contact Info */}
-            <div className="space-y-5 text-left sm:space-y-6">
-              <div className="group rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#24375a] hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 dark:hover:border-[#91BF48]">
-                <div className="flex items-start gap-4">
-                  <div className="rounded-full border border-slate-200 bg-slate-50 p-3 transition-all duration-300 group-hover:border-[#91BF48] dark:border-gray-700 dark:bg-gray-800/60">
-                    <Mail size={24} className="text-[#91BF48]" />
-                  </div>
+rounded-full
 
-                  <div>
-                    <h3 className="mb-1 font-black text-slate-950 dark:text-white">
-                      Email
-                    </h3>
-                    <p className="text-sm text-slate-600 dark:text-gray-400 sm:text-base">
-                      info@tokilotech.com
-                    </p>
-                  </div>
-                </div>
-              </div>
+bg-[#91BF48]/20
 
-              <div className="group rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#24375a] hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 dark:hover:border-[#91BF48]">
-                <div className="flex items-start gap-4">
-                  <div className="rounded-full border border-slate-200 bg-slate-50 p-3 transition-all duration-300 group-hover:border-[#91BF48] dark:border-gray-700 dark:bg-gray-800/60">
-                    <Phone size={24} className="text-[#91BF48]" />
-                  </div>
+blur-[120px]
+"
+/>
 
-                  <div>
-                    <h3 className="mb-1 font-black text-slate-950 dark:text-white">
-                      Phone
-                    </h3>
-                    <p className="text-sm text-slate-600 dark:text-gray-400 sm:text-base">
-                      +94 77 123 4567
-                    </p>
-                  </div>
-                </div>
-              </div>
 
-              <div className="group rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#24375a] hover:shadow-xl dark:border-gray-800 dark:bg-gray-900 dark:hover:border-[#91BF48]">
-                <div className="flex items-start gap-4">
-                  <div className="rounded-full border border-slate-200 bg-slate-50 p-3 transition-all duration-300 group-hover:border-[#91BF48] dark:border-gray-700 dark:bg-gray-800/60">
-                    <MapPin size={24} className="text-[#91BF48]" />
-                  </div>
 
-                  <div>
-                    <h3 className="mb-1 font-black text-slate-950 dark:text-white">
-                      Address
-                    </h3>
-                    <p className="text-sm leading-relaxed text-slate-600 dark:text-gray-400 sm:text-base">
-                      Tokilo Technologies
-                      <br />
-                      Sri Lanka
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+<div
+className="
+relative
+mx-auto
+max-w-7xl
+"
+>
 
-            {/* Contact Form */}
-            <form
-              onSubmit={handleSubmit}
-              className="rounded-[2rem] border border-slate-200 bg-white p-5 text-left shadow-xl shadow-slate-200/60 dark:border-gray-800 dark:bg-gray-900 dark:shadow-black/20 sm:p-6"
-            >
-              <div className="mb-5">
-                <h3 className="text-2xl font-black text-slate-950 dark:text-white">
-                  Send a Message
-                </h3>
-                <p className="mt-2 text-sm text-slate-600 dark:text-gray-400">
-                  Tell us about your project or idea. We will get back to you
-                  soon.
-                </p>
-              </div>
 
-              <div className="space-y-5">
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  className="w-full rounded-full border border-slate-300 bg-white px-6 py-4 text-slate-950 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-[#91BF48] dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:placeholder:text-gray-500"
-                />
 
-                <input
-                  type="email"
-                  placeholder="Your Email"
-                  className="w-full rounded-full border border-slate-300 bg-white px-6 py-4 text-slate-950 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-[#91BF48] dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:placeholder:text-gray-500"
-                />
+<div
+className="
+mx-auto
+max-w-3xl
+text-center
+"
+>
 
-                <textarea
-                  placeholder="Your Message"
-                  className="h-40 w-full resize-none rounded-3xl border border-slate-300 bg-white px-6 py-4 text-slate-950 outline-none transition-all duration-300 placeholder:text-slate-400 focus:border-[#91BF48] dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:placeholder:text-gray-500"
-                />
 
-                <button
-                  type="submit"
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#24375a] to-[#4a5f8a] px-8 py-4 font-black text-white shadow-lg shadow-[#24375a]/20 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-[#24375a]/40"
-                >
-                  Send Message
-                  <Send size={18} />
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+<div
+className="
+inline-flex
+items-center
+gap-2
 
-        {/* Floating Elements */}
-        <div className="pointer-events-none absolute inset-0 hidden md:block">
-          <div className="absolute left-10 top-1/4 h-20 w-20 rotate-12 animate-float rounded-lg border-2 border-[#24375a]/15 dark:border-[#24375a]/30"></div>
+rounded-full
 
-          <div className="absolute right-10 top-1/3 h-16 w-16 animate-float-delayed rounded-full border-2 border-[#91BF48]/25 dark:border-[#91BF48]/30"></div>
+border
+border-[#91BF48]/30
 
-          <div className="absolute bottom-1/4 left-20 h-12 w-12 rotate-45 animate-float rounded-lg bg-gradient-to-br from-[#24375a]/10 to-[#4a5f8a]/10 dark:from-[#24375a]/20 dark:to-[#4a5f8a]/20"></div>
+bg-[#91BF48]/10
 
-          <div className="absolute bottom-1/3 right-20 h-24 w-24 rotate-6 animate-float-delayed rounded-lg border-2 border-[#4a5f8a]/20 dark:border-[#4a5f8a]/30"></div>
-        </div>
-      </section>
+px-4
+py-2
 
-      {/* Footer */}
-      <footer className="relative border-t border-slate-200 bg-white/95 py-12 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/95">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-12">
-            {/* Company Info */}
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center group">
-                <div className="relative">
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#24375a] to-[#4a5f8a] opacity-50 blur-md transition-opacity duration-300 group-hover:opacity-75"></div>
+text-xs
+font-black
+uppercase
+tracking-[0.15em]
 
-                  <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#24375a] to-[#4a5f8a] transition-transform duration-300 group-hover:scale-110">
-                    <svg
-                      className="h-6 w-6 text-white"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                      <path d="M2 17l10 5 10-5" />
-                      <path d="M2 12l10 5 10-5" />
-                    </svg>
-                  </div>
-                </div>
+text-[#b8dc82]
+"
+>
 
-                <div className="ml-3">
-                  <div className="text-lg font-black tracking-wide text-slate-950 transition-colors duration-300 group-hover:text-[#91BF48] dark:text-white">
-                    TOKILO TECHNOLOGIES
-                  </div>
+<Sparkles size={15}/>
 
-                  <div className="text-xs font-medium tracking-wider text-[#91BF48]">
-                    AI & SOFTWARE SOLUTIONS
-                  </div>
-                </div>
-              </div>
+Contact Tokilo
 
-              <p className="text-sm leading-relaxed text-slate-600 dark:text-gray-400">
-                Harnessing AI to drive innovation and transform businesses
-                worldwide.
-              </p>
-            </div>
+</div>
 
-            {/* Social Media */}
-            <div className="flex flex-col gap-4">
-              <h3 className="text-lg font-black text-slate-950 dark:text-white">
-                Follow Us
-              </h3>
 
-              <div className="flex gap-4">
-                <a
-                  href="https://twitter.com"
-                  aria-label="Twitter"
-                  className="rounded-full border border-slate-200 bg-slate-50 p-2 transition-all duration-300 hover:border-[#91BF48] hover:bg-white dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800"
-                >
-                  <Twitter size={20} className="text-[#91BF48]" />
-                </a>
 
-                <a
-                  href="https://linkedin.com"
-                  aria-label="LinkedIn"
-                  className="rounded-full border border-slate-200 bg-slate-50 p-2 transition-all duration-300 hover:border-[#91BF48] hover:bg-white dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800"
-                >
-                  <Linkedin size={20} className="text-[#91BF48]" />
-                </a>
 
-                <a
-                  href="https://github.com"
-                  aria-label="GitHub"
-                  className="rounded-full border border-slate-200 bg-slate-50 p-2 transition-all duration-300 hover:border-[#91BF48] hover:bg-white dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800"
-                >
-                  <Github size={20} className="text-[#91BF48]" />
-                </a>
+<h2
+className="
+mt-6
 
-                <a
-                  href="https://facebook.com"
-                  aria-label="Facebook"
-                  className="rounded-full border border-slate-200 bg-slate-50 p-2 transition-all duration-300 hover:border-[#91BF48] hover:bg-white dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-gray-800"
-                >
-                  <Facebook size={20} className="text-[#91BF48]" />
-                </a>
-              </div>
-            </div>
+text-4xl
+font-black
+tracking-tight
 
-            {/* Partners */}
-            <div className="flex flex-col gap-4">
-              <h3 className="text-lg font-black text-slate-950 dark:text-white">
-                Our Partners
-              </h3>
+text-white
 
-              <div className="flex flex-wrap gap-3">
-                {["Google Cloud", "AWS", "Microsoft Azure", "OpenAI"].map(
-                  (partner) => (
-                    <div
-                      key={partner}
-                      className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-600 transition-colors duration-300 hover:text-[#91BF48] dark:border-gray-700 dark:bg-gray-800/60 dark:text-gray-300"
-                    >
-                      {partner}
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
-          </div>
+sm:text-6xl
+"
+>
 
-          {/* Bottom Bar */}
-          <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 text-sm text-slate-500 dark:border-gray-800 dark:text-gray-500 md:flex-row">
-            <div>
-              © {currentYear} Tokilo Technologies. All rights reserved.
-            </div>
+Let&apos;s build something
 
-            <div className="flex flex-wrap justify-center gap-5 sm:gap-6">
-              <a
-                href="/privacy"
-                className="transition-colors duration-300 hover:text-[#91BF48]"
-              >
-                Privacy Policy
-              </a>
+<span
+className="
+block
+text-[#91BF48]
+"
+>
 
-              <a
-                href="/terms"
-                className="transition-colors duration-300 hover:text-[#91BF48]"
-              >
-                Terms of Service
-              </a>
+amazing together
 
-              <a
-                href="/cookies"
-                className="transition-colors duration-300 hover:text-[#91BF48]"
-              >
-                Cookie Policy
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+</span>
 
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(2.5rem);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
 
-        .animate-fade-in {
-          animation: fadeIn 1000ms ease-out forwards;
-        }
+</h2>
 
-        .animation-delay-200 {
-          animation-delay: 200ms;
-        }
 
-        .animation-delay-400 {
-          animation-delay: 400ms;
-        }
 
-        .animation-delay-600 {
-          animation-delay: 600ms;
-        }
 
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0px) rotate(12deg);
-          }
-          50% {
-            transform: translateY(-20px) rotate(12deg);
-          }
-        }
+<p
+className="
+mt-5
 
-        @keyframes float-delayed {
-          0%,
-          100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-25px);
-          }
-        }
+text-base
+leading-7
 
-        @keyframes gradient {
-          0%,
-          100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-        }
+text-slate-300
+"
+>
 
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
+Have an idea, product requirement, or digital
+challenge? Our team is ready to help you create
+the right solution.
 
-        .animate-float-delayed {
-          animation: float-delayed 8s ease-in-out infinite;
-          animation-delay: 1s;
-        }
+</p>
 
-        .animate-gradient {
-          background-size: 200% 200%;
-          animation: gradient 8s ease infinite;
-        }
 
-        .contact-grid {
-          background-image: linear-gradient(
-              rgba(36, 55, 90, 0.06) 1px,
-              transparent 1px
-            ),
-            linear-gradient(
-              90deg,
-              rgba(36, 55, 90, 0.06) 1px,
-              transparent 1px
-            );
-          background-size: 50px 50px;
-        }
+</div>
 
-        :global(html.dark) .contact-grid {
-          background-image: linear-gradient(
-              rgba(255, 255, 255, 0.05) 1px,
-              transparent 1px
-            ),
-            linear-gradient(
-              90deg,
-              rgba(255, 255, 255, 0.05) 1px,
-              transparent 1px
-            );
-        }
-      `}</style>
-    </div>
+
+
+
+
+
+<div
+className="
+mt-14
+
+grid
+
+gap-8
+
+lg:grid-cols-[0.8fr_1.2fr]
+"
+>
+
+
+
+
+{/* CONTACT INFO */}
+
+<div
+className="
+rounded-[2rem]
+
+border
+
+border-white/10
+
+bg-white/[0.05]
+
+p-7
+
+backdrop-blur-xl
+"
+>
+
+
+<h3
+className="
+text-2xl
+font-black
+text-white
+"
+>
+
+Talk with us
+
+</h3>
+
+
+
+<p
+className="
+mt-3
+
+text-sm
+leading-6
+
+text-slate-300
+"
+>
+
+Discuss your software, AI, or digital
+transformation project.
+
+</p>
+
+
+
+
+<div
+className="
+mt-8
+
+space-y-4
+"
+>
+
+
+<div
+className="
+flex
+items-center
+gap-4
+
+rounded-2xl
+
+border
+
+border-white/10
+
+bg-white/[0.04]
+
+p-4
+"
+>
+
+
+<div
+className="
+flex
+h-12
+w-12
+
+items-center
+justify-center
+
+rounded-xl
+
+bg-[#91BF48]
+
+text-[#17233d]
+"
+>
+
+<Phone size={22}/>
+
+</div>
+
+
+<div>
+
+<p
+className="
+text-xs
+font-bold
+uppercase
+
+text-slate-400
+"
+>
+
+Phone
+
+</p>
+
+
+<p
+className="
+mt-1
+
+font-bold
+
+text-white
+"
+>
+
++94 705373833
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div
+className="
+flex
+items-center
+gap-4
+
+rounded-2xl
+
+border
+
+border-white/10
+
+bg-white/[0.04]
+
+p-4
+"
+>
+
+
+<div
+className="
+flex
+h-12
+w-12
+
+items-center
+justify-center
+
+rounded-xl
+
+bg-[#91BF48]
+
+text-[#17233d]
+"
+>
+
+<Mail size={22}/>
+
+</div>
+
+
+
+<div>
+
+<p
+className="
+text-xs
+font-bold
+uppercase
+
+text-slate-400
+"
+>
+
+Email
+
+</p>
+
+
+<p
+className="
+mt-1
+
+break-all
+
+font-bold
+
+text-white
+"
+>
+
+mubassirnasar@gmail.com
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+<div
+className="
+mt-8
+"
+>
+
+
+<p
+className="
+text-sm
+font-black
+
+uppercase
+
+tracking-wider
+
+text-[#91BF48]
+"
+>
+
+We build
+
+</p>
+
+
+
+<div
+className="
+mt-4
+
+grid
+
+grid-cols-2
+
+gap-3
+"
+>
+
+
+{
+services.map((service)=>{
+
+const Icon = service.icon;
+
+
+return (
+
+<div
+key={service.title}
+
+className="
+rounded-xl
+
+border
+
+border-white/10
+
+p-3
+
+text-sm
+
+font-bold
+
+text-white
+"
+>
+
+<Icon
+size={18}
+className="
+mb-2
+text-[#91BF48]
+"
+/>
+
+
+{service.title}
+
+
+</div>
+
+
+);
+
+
+})
+}
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+{/* FORM */}
+
+
+<form
+className="
+rounded-[2rem]
+
+bg-white
+
+p-7
+
+shadow-2xl
+"
+>
+
+
+<h3
+className="
+text-2xl
+
+font-black
+
+text-[#17233d]
+"
+>
+
+Start your project
+
+</h3>
+
+
+
+<p
+className="
+mt-2
+
+text-sm
+
+text-slate-500
+"
+>
+
+Tell us about your requirements.
+
+</p>
+
+
+
+
+
+<div
+className="
+mt-6
+
+space-y-4
+"
+>
+
+
+<input
+placeholder="Your name"
+
+className="
+w-full
+
+rounded-xl
+
+border
+
+border-slate-200
+
+px-4
+
+py-3
+
+outline-none
+
+focus:border-[#91BF48]
+"
+/>
+
+
+
+
+<input
+placeholder="Email address"
+
+className="
+w-full
+
+rounded-xl
+
+border
+
+border-slate-200
+
+px-4
+
+py-3
+
+outline-none
+
+focus:border-[#91BF48]
+"
+/>
+
+
+
+
+
+<select
+
+className="
+w-full
+
+rounded-xl
+
+border
+
+border-slate-200
+
+px-4
+
+py-3
+
+text-slate-500
+
+outline-none
+
+focus:border-[#91BF48]
+"
+
+>
+
+<option>
+Select service
+</option>
+
+<option>
+Web Application
+</option>
+
+<option>
+Mobile Application
+</option>
+
+<option>
+AI Solution
+</option>
+
+<option>
+Cloud System
+</option>
+
+</select>
+
+
+
+
+
+<textarea
+
+placeholder="Tell us about your project"
+
+rows={5}
+
+className="
+w-full
+
+rounded-xl
+
+border
+
+border-slate-200
+
+px-4
+
+py-3
+
+outline-none
+
+focus:border-[#91BF48]
+"
+
+/>
+
+
+
+
+<button
+
+type="submit"
+
+className="
+group
+
+flex
+
+w-full
+
+items-center
+
+justify-center
+
+gap-2
+
+rounded-xl
+
+bg-[#17233d]
+
+py-4
+
+font-black
+
+text-white
+
+transition
+
+hover:bg-[#263859]
+"
+
+>
+
+Send inquiry
+
+<ArrowRight
+size={18}
+
+className="
+transition
+
+group-hover:translate-x-1
+"
+/>
+
+
+</button>
+
+
+
+</div>
+
+
+</form>
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
   );
+
 }

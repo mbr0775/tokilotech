@@ -1,344 +1,301 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { ArrowRight, CheckCircle, Target, Zap, Users } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  BrainCircuit,
+  CheckCircle2,
+  Code2,
+  Compass,
+  Layers3,
+  Rocket,
+  ShieldCheck,
+  Sparkles,
+  Workflow,
+} from "lucide-react";
 
-const stats = [
-  { value: "150+", label: "Projects Completed", icon: CheckCircle },
-  { value: "50+", label: "Happy Clients", icon: Users },
-  { value: "10+", label: "Years Experience", icon: Target },
-  { value: "24/7", label: "Support Available", icon: Zap },
+const principles = [
+  {
+    icon: Compass,
+    number: "01",
+    title: "Understand the real problem",
+    description:
+      "We begin with your users, business goals, and operational challenges before choosing the technology.",
+  },
+  {
+    icon: Layers3,
+    number: "02",
+    title: "Design the right system",
+    description:
+      "We turn requirements into a clear product experience, dependable architecture, and practical delivery plan.",
+  },
+  {
+    icon: Rocket,
+    number: "03",
+    title: "Build, launch, and improve",
+    description:
+      "We deliver in focused stages, test carefully, and keep improving the product after launch.",
+  },
 ];
 
-const images = [
+const strengths = [
   {
-    src: "https://images.unsplash.com/photo-1516321310766-61f6f8c0b51f?w=1200",
-    alt: "Team collaboration",
+    icon: Code2,
+    title: "Product-minded engineering",
+    description:
+      "Web, mobile, backend, and cloud systems designed around real business outcomes.",
   },
   {
-    src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200",
-    alt: "Business meeting",
+    icon: BrainCircuit,
+    title: "Practical AI",
+    description:
+      "Intelligent automation and data-driven features that solve useful, measurable problems.",
   },
   {
-    src: "https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?w=1200",
-    alt: "Innovative workspace",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1200",
-    alt: "Professional strategy",
+    icon: ShieldCheck,
+    title: "Built for growth",
+    description:
+      "Maintainable foundations that can evolve as your users, team, and operations expand.",
   },
 ];
 
 export default function About() {
   const [isVisible, setIsVisible] = useState(false);
-  const [currentImage, setCurrentImage] = useState(0);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const currentSection = sectionRef.current;
+    const section = sectionRef.current;
+
+    if (!section) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+          observer.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.12 }
     );
 
-    if (currentSection) {
-      observer.observe(currentSection);
-    }
+    observer.observe(section);
 
-    return () => {
-      if (currentSection) {
-        observer.unobserve(currentSection);
-      }
-
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
-
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      setCurrentImage((previousImage) => (previousImage + 1) % images.length);
-    }, 5000);
-
-    return () => window.clearInterval(interval);
-  }, []);
-
-  const goToSlide = (index: number) => {
-    setCurrentImage(index);
-  };
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <section
       ref={sectionRef}
       id="about"
-      className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white px-4 py-16 text-slate-950 transition-colors duration-500 dark:bg-gradient-to-b dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 dark:text-white sm:px-6 sm:py-20 md:px-8 md:py-24 lg:px-16"
+      className="relative isolate overflow-hidden bg-[#f8fafc] px-5 py-20 text-slate-950 transition-colors duration-300 dark:bg-[#0a0f1c] dark:text-white sm:px-8 sm:py-24 lg:px-10 lg:py-32 xl:px-14"
     >
-      {/* Background Glow */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute right-1/4 top-1/4 h-64 w-64 rounded-full bg-[#24375a]/10 blur-3xl animate-pulse dark:bg-[#24375a]/20 md:h-96 md:w-96"></div>
-
-        <div
-          className="absolute bottom-1/3 left-1/3 h-64 w-64 rounded-full bg-[#91BF48]/10 blur-3xl animate-pulse dark:bg-[#91BF48]/10 md:h-96 md:w-96"
-          style={{ animationDelay: "1s" }}
-        ></div>
+      {/* Background decoration */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        <div className="absolute -right-32 top-20 h-80 w-80 rounded-full bg-[#91BF48]/10 blur-3xl dark:bg-[#91BF48]/[0.08]" />
+        <div className="absolute -left-28 bottom-16 h-72 w-72 rounded-full bg-[#17233d]/[0.08] blur-3xl dark:bg-white/[0.04]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(23,35,61,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(23,35,61,0.035)_1px,transparent_1px)] bg-[size:42px_42px] [mask-image:linear-gradient(to_bottom,transparent,black_22%,black_80%,transparent)] dark:bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        {/* Section Header */}
-        <div
-          className={`mb-12 text-center transition-all duration-1000 sm:mb-16 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
-        >
-          <div className="mb-3 inline-block sm:mb-4">
-            <span className="rounded-full border border-[#91BF48]/25 bg-[#91BF48]/10 px-3 py-1.5 text-xs font-black uppercase tracking-wider text-[#4b7a16] shadow-sm backdrop-blur-sm dark:border-[#24375a]/50 dark:bg-[#24375a]/30 dark:text-[#91BF48] sm:px-4 sm:py-2">
-              About Us
-            </span>
-          </div>
-
-          <h2 className="mb-4 px-2 text-3xl font-black leading-tight sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl">
-            About{" "}
-            <span className="bg-gradient-to-r from-[#24375a] via-[#4a5f8a] to-[#91BF48] bg-clip-text text-transparent">
-              Tokilo Technologies
-            </span>
-          </h2>
-
-          <p className="mx-auto max-w-3xl px-4 text-base leading-relaxed text-slate-600 dark:text-gray-400 sm:text-lg md:text-xl">
-            Building the future of intelligent software solutions with
-            innovation and excellence.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
-          {/* Left Content */}
+        {/* Main story */}
+        <div className="grid items-center gap-14 lg:grid-cols-[0.92fr_1.08fr] lg:gap-20">
           <div
-            className={`transition-all delay-200 duration-1000 ${
+            className={`transition-all duration-1000 ${
               isVisible
-                ? "translate-x-0 opacity-100"
-                : "-translate-x-10 opacity-0"
+                ? "translate-y-0 opacity-100"
+                : "translate-y-8 opacity-0"
             }`}
           >
-            <div className="space-y-4 sm:space-y-6">
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-[#24375a] hover:shadow-xl dark:border-gray-800 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:hover:border-[#24375a] sm:p-8">
-                <h3 className="mb-3 text-xl font-black text-slate-950 dark:text-white sm:mb-4 sm:text-2xl">
-                  Our Mission
-                </h3>
-
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-gray-400 sm:text-base">
-                  Tokilo Technologies is an emerging AI and software development
-                  company dedicated to creating intelligent digital solutions.
-                  We help businesses automate operations, improve
-                  decision-making, and deliver exceptional customer experiences
-                  through cutting-edge technology.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-[#24375a] hover:shadow-xl dark:border-gray-800 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:hover:border-[#24375a] sm:p-8">
-                <h3 className="mb-3 text-xl font-black text-slate-950 dark:text-white sm:mb-4 sm:text-2xl">
-                  What We Do
-                </h3>
-
-                <p className="mb-3 text-sm leading-relaxed text-slate-600 dark:text-gray-400 sm:mb-4 sm:text-base">
-                  We offer end-to-end software services including web
-                  applications, mobile apps, backend systems, and secure
-                  database integration using React.js, ASP.NET, MySQL, and
-                  PostgreSQL.
-                </p>
-
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-gray-400 sm:text-base">
-                  Our focus extends to AI technologies like machine learning,
-                  data analytics, and intelligent automation that solve
-                  real-world business challenges.
-                </p>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col flex-wrap gap-3 pt-2 sm:flex-row sm:gap-4 sm:pt-4">
-                <button
-                  type="button"
-                  onClick={() => scrollToSection("contact")}
-                  className="group flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#24375a] to-[#4a5f8a] px-6 py-3 text-sm font-black text-white shadow-lg shadow-[#24375a]/20 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#24375a]/30 sm:px-8 sm:py-4 sm:text-base"
-                >
-                  Get Started
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 sm:h-5 sm:w-5" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => scrollToSection("services")}
-                  className="rounded-full border-2 border-slate-300 bg-white px-6 py-3 text-sm font-black text-slate-900 shadow-sm transition-all duration-300 hover:scale-105 hover:border-[#91BF48] hover:bg-[#91BF48]/10 dark:border-gray-700 dark:bg-transparent dark:text-white dark:hover:border-[#91BF48] dark:hover:bg-[#91BF48]/10 sm:px-8 sm:py-4 sm:text-base"
-                >
-                  Learn More
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Slideshow */}
-          <div
-            className={`relative transition-all delay-400 duration-1000 ${
-              isVisible
-                ? "translate-x-0 opacity-100"
-                : "translate-x-10 opacity-0"
-            }`}
-          >
-            <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-2xl shadow-slate-200/70 dark:border-gray-800 dark:bg-gray-900 dark:shadow-[#24375a]/20">
-              {images.map((image, index) => (
-                <div
-                  key={image.src}
-                  className={`absolute inset-0 transition-opacity duration-1000 ${
-                    index === currentImage ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    priority={index === 0}
-                    className="object-cover"
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent"></div>
-                </div>
-              ))}
-
-              <div className="absolute bottom-0 left-0 right-0 translate-y-full p-4 transition-transform duration-500 group-hover:translate-y-0 sm:p-6">
-                <p className="text-base font-black text-white sm:text-lg">
-                  {images[currentImage].alt}
-                </p>
-              </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#91BF48]/35 bg-[#91BF48]/10 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-[#5e8728] dark:text-[#b8dc82]">
+              <Sparkles size={15} aria-hidden="true" />
+              About Tokilo
             </div>
 
-            {/* Dot Navigation */}
-            <div className="mt-4 flex justify-center gap-2 sm:mt-6 sm:gap-3">
-              {images.map((image, index) => (
-                <button
-                  key={image.src}
-                  type="button"
-                  onClick={() => goToSlide(index)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    index === currentImage
-                      ? "w-8 bg-[#24375a] dark:bg-[#91BF48]"
-                      : "w-2 bg-slate-300 hover:bg-slate-400 dark:bg-gray-700 dark:hover:bg-gray-600"
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                ></button>
-              ))}
+            <h2 className="mt-7 max-w-3xl text-[clamp(2.6rem,5vw,5.25rem)] font-black leading-[0.96] tracking-[-0.06em] text-[#17233d] dark:text-white">
+              Technology should make
+              <span className="mt-2 block font-serif font-medium italic tracking-[-0.045em] text-[#91BF48]">
+                growth feel simpler.
+              </span>
+            </h2>
+
+            <div className="mt-7 max-w-2xl space-y-5 text-base font-medium leading-7 text-slate-600 sm:text-lg sm:leading-8 dark:text-slate-300">
+              <p>
+                Tokilo Technologies is an emerging software and AI company
+                creating digital products for startups, small businesses, and
+                growing brands.
+              </p>
+
+              <p>
+                We combine product thinking, user-focused design, and dependable
+                engineering to build websites, mobile applications, backend
+                systems, automation tools, and intelligent software that solve
+                real operational problems.
+              </p>
             </div>
-          </div>
-        </div>
 
-        {/* Stats Section */}
-        <div
-          className={`mt-12 transition-all delay-600 duration-1000 sm:mt-16 md:mt-20 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
-        >
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 md:gap-6">
-            {stats.map((stat, index) => {
-              const IconComponent = stat.icon;
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={() => scrollToSection("projects")}
+                className="group inline-flex min-h-14 items-center justify-center gap-2 rounded-xl bg-[#17233d] px-6 text-sm font-black text-white shadow-[0_14px_35px_rgba(23,35,61,0.18)] transition duration-300 hover:-translate-y-1 hover:bg-[#213151] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#17233d]/20 dark:bg-[#91BF48] dark:text-[#17233d] dark:hover:bg-[#9dcc52]"
+              >
+                See what we build
+                <ArrowUpRight
+                  size={18}
+                  className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  aria-hidden="true"
+                />
+              </button>
 
-              return (
-                <div
-                  key={stat.label}
-                  className="group rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-[#24375a] hover:shadow-xl hover:shadow-[#24375a]/10 dark:border-gray-800 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:hover:border-[#24375a] dark:hover:shadow-[#24375a]/20 sm:p-6"
-                  style={{
-                    animation: isVisible
-                      ? `fadeInUp 0.6s ease-out ${index * 0.1}s both`
-                      : "none",
-                  }}
-                >
-                  <div className="mb-2 flex items-center gap-2 sm:mb-3 sm:gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#24375a] to-[#4a5f8a] transition-transform duration-300 group-hover:scale-110 sm:h-10 sm:w-10">
-                      <IconComponent className="h-4 w-4 text-white sm:h-5 sm:w-5" />
-                    </div>
-                  </div>
-
-                  <h3 className="mb-1 text-2xl font-black text-slate-950 transition-colors duration-300 group-hover:text-[#24375a] dark:text-white dark:group-hover:text-[#91BF48] sm:mb-2 sm:text-3xl md:text-4xl">
-                    {stat.value}
-                  </h3>
-
-                  <p className="text-xs leading-tight text-slate-600 dark:text-gray-400 sm:text-sm">
-                    {stat.label}
-                  </p>
-
-                  <div className="mt-3 h-1 w-0 rounded-full bg-gradient-to-r from-[#24375a] to-[#91BF48] transition-all duration-500 group-hover:w-full sm:mt-4"></div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Vision Section */}
-        <div
-          className={`relative mt-12 overflow-hidden rounded-2xl bg-gradient-to-r from-[#24375a] to-[#4a5f8a] p-6 shadow-2xl shadow-[#24375a]/20 transition-all delay-800 duration-1000 sm:mt-16 sm:p-10 md:mt-20 md:p-12 ${
-            isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
-          }`}
-        >
-          <div className="bg-grid-pattern absolute inset-0 opacity-10"></div>
-
-          <div className="relative z-10 text-center">
-            <h3 className="mb-3 text-2xl font-black text-white sm:mb-4 sm:text-3xl md:text-4xl">
-              Our Vision for the Future
-            </h3>
-
-            <p className="mx-auto mb-6 max-w-3xl px-2 text-sm leading-relaxed text-gray-200 sm:mb-8 sm:text-base md:text-lg">
-              We plan to expand into AI-driven enterprise solutions including
-              predictive analytics, chatbot systems, and computer vision
-              applications. Our commitment is to become a trusted technology
-              partner for businesses embracing digital transformation.
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={() => scrollToSection("contact")}
-                className="rounded-full bg-white px-6 py-3 text-base font-black text-[#24375a] shadow-xl transition-all duration-300 hover:scale-105 hover:bg-gray-100 sm:px-8 sm:py-4 sm:text-lg"
+                className="group inline-flex min-h-14 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white/75 px-6 text-sm font-black text-[#17233d] backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-[#17233d] hover:bg-white focus:outline-none focus-visible:ring-4 focus-visible:ring-slate-300/40 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:border-white/40 dark:hover:bg-white/10"
               >
-                Join Our Journey
+                Talk to our team
+                <ArrowRight
+                  size={18}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
               </button>
             </div>
           </div>
+
+          {/* Process visual */}
+          <div
+            className={`relative transition-all delay-150 duration-1000 ${
+              isVisible
+                ? "translate-y-0 opacity-100"
+                : "translate-y-10 opacity-0"
+            }`}
+          >
+            <div className="absolute -right-8 -top-8 h-40 w-40 rounded-full bg-[#91BF48] opacity-90 sm:h-48 sm:w-48" />
+            <div className="absolute -bottom-6 -left-6 h-24 w-24 rotate-12 rounded-[1.8rem] border border-[#17233d]/10 bg-white/70 backdrop-blur-md dark:border-white/10 dark:bg-white/5" />
+
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#17233d] p-5 shadow-[0_35px_90px_rgba(23,35,61,0.22)] sm:p-7 lg:p-8">
+              <div className="absolute right-0 top-0 h-56 w-56 rounded-full bg-[#91BF48]/15 blur-3xl" />
+
+              <div className="relative">
+                <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-6">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.17em] text-[#b8dc82]">
+                      Our delivery approach
+                    </p>
+                    <h3 className="mt-2 text-2xl font-black tracking-[-0.035em] text-white sm:text-3xl">
+                      From idea to useful product
+                    </h3>
+                  </div>
+
+                  <div className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#91BF48] text-[#17233d] sm:flex">
+                    <Workflow size={24} aria-hidden="true" />
+                  </div>
+                </div>
+
+                <div className="mt-5 space-y-3">
+                  {principles.map((principle) => {
+                    const Icon = principle.icon;
+
+                    return (
+                      <article
+                        key={principle.number}
+                        className="group grid grid-cols-[auto_1fr] gap-4 rounded-2xl border border-white/10 bg-white/[0.055] p-4 transition duration-300 hover:-translate-y-0.5 hover:border-[#91BF48]/40 hover:bg-white/[0.085] sm:p-5"
+                      >
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#91BF48] text-[#17233d] shadow-lg shadow-black/10">
+                          <Icon size={22} aria-hidden="true" />
+                        </div>
+
+                        <div>
+                          <div className="flex items-center justify-between gap-4">
+                            <h4 className="text-base font-black text-white sm:text-lg">
+                              {principle.title}
+                            </h4>
+                            <span className="text-xs font-black tracking-[0.12em] text-white/35">
+                              {principle.number}
+                            </span>
+                          </div>
+
+                          <p className="mt-2 text-sm font-medium leading-6 text-slate-300">
+                            {principle.description}
+                          </p>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-[#91BF48]/25 bg-[#91BF48]/10 p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle2
+                      size={21}
+                      className="shrink-0 text-[#b8dc82]"
+                      aria-hidden="true"
+                    />
+                    <p className="text-sm font-bold text-white">
+                      Clear communication throughout every stage.
+                    </p>
+                  </div>
+
+                  <span className="text-xs font-black uppercase tracking-[0.13em] text-[#b8dc82]">
+                    MBR Group company
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Strengths */}
+        <div
+          className={`mt-16 grid gap-4 transition-all delay-300 duration-1000 sm:mt-20 md:grid-cols-3 ${
+            isVisible
+              ? "translate-y-0 opacity-100"
+              : "translate-y-10 opacity-0"
+          }`}
+        >
+          {strengths.map((strength) => {
+            const Icon = strength.icon;
+
+            return (
+              <article
+                key={strength.title}
+                className="group rounded-[1.6rem] border border-slate-200 bg-white/80 p-6 shadow-[0_12px_35px_rgba(23,35,61,0.055)] backdrop-blur-sm transition duration-300 hover:-translate-y-1.5 hover:border-[#91BF48]/45 hover:shadow-[0_20px_50px_rgba(23,35,61,0.10)] dark:border-white/10 dark:bg-white/[0.04] dark:shadow-none"
+              >
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#91BF48]/15 text-[#688f31] transition duration-300 group-hover:bg-[#91BF48] group-hover:text-[#17233d] dark:text-[#b8dc82]">
+                  <Icon size={23} aria-hidden="true" />
+                </div>
+
+                <h3 className="mt-6 text-xl font-black tracking-[-0.025em] text-[#17233d] dark:text-white">
+                  {strength.title}
+                </h3>
+
+                <p className="mt-3 text-sm font-medium leading-6 text-slate-600 dark:text-slate-300">
+                  {strength.description}
+                </p>
+              </article>
+            );
+          })}
         </div>
       </div>
 
       <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(40px);
+        @media (prefers-reduced-motion: reduce) {
+          section *,
+          section *::before,
+          section *::after {
+            scroll-behavior: auto !important;
+            transition-duration: 0.01ms !important;
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .bg-grid-pattern {
-          background-image: linear-gradient(
-              rgba(255, 255, 255, 0.12) 1px,
-              transparent 1px
-            ),
-            linear-gradient(
-              90deg,
-              rgba(255, 255, 255, 0.12) 1px,
-              transparent 1px
-            );
-          background-size: 20px 20px;
         }
       `}</style>
     </section>

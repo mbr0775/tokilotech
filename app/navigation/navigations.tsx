@@ -2,12 +2,15 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 import {
   Menu,
   X,
   Moon,
   Sun,
   ArrowUpRight,
+  LogIn,
 } from "lucide-react";
 
 import { useTheme } from "../theme-provider";
@@ -45,6 +48,8 @@ const navItems = [
 export default function Navigation() {
 
 
+  const router = useRouter();
+
   const {
     theme,
     toggleTheme,
@@ -54,105 +59,93 @@ export default function Navigation() {
 
   const [
     mobileOpen,
-    setMobileOpen,
+    setMobileOpen
   ] = useState(false);
 
 
 
   const [
     activeSection,
-    setActiveSection,
+    setActiveSection
   ] = useState("home");
 
 
 
 
 
-  useEffect(()=>{
+useEffect(()=>{
 
 
-    const handleScroll = ()=>{
+const handleScroll = ()=>{
 
 
-      let current =
-        "home";
+let current = "home";
 
 
-      navItems.forEach((item)=>{
+navItems.forEach((item)=>{
 
 
-        const section =
-          document.getElementById(
-            item.sectionId
-          );
-
-
-        if(section){
-
-          if(
-            window.scrollY >
-            section.offsetTop - 180
-          ){
-
-            current =
-              item.sectionId;
-
-          }
-
-        }
-
-
-      });
+const section =
+document.getElementById(item.sectionId);
 
 
 
-      setActiveSection(current);
+if(section && window.scrollY >= section.offsetTop - 200){
+
+current = item.sectionId;
+
+}
 
 
-    };
+});
+
+
+setActiveSection(current);
+
+
+};
 
 
 
-    window.addEventListener(
-      "scroll",
-      handleScroll
-    );
+window.addEventListener(
+"scroll",
+handleScroll
+);
 
 
-    return ()=>{
+return ()=>{
 
-      window.removeEventListener(
-        "scroll",
-        handleScroll
-      );
+window.removeEventListener(
+"scroll",
+handleScroll
+);
 
-    };
+};
 
 
-  },[]);
+},[]);
 
 
 
 
 
 
-  const scrollToSection = (
-    id:string
-  )=>{
+const scrollToSection = (
+id:string
+)=>{
 
 
-    setMobileOpen(false);
+setMobileOpen(false);
 
 
-    document
-      .getElementById(id)
-      ?.scrollIntoView({
-        behavior:"smooth",
-      });
+document
+.getElementById(id)
+?.scrollIntoView({
+behavior:"smooth"
+});
 
 
-  };
-
+};
 
 
 
@@ -168,8 +161,10 @@ top-0
 left-0
 right-0
 z-50
+
 px-3
 pt-3
+
 sm:px-5
 "
 >
@@ -178,11 +173,13 @@ sm:px-5
 <nav
 className="
 mx-auto
+
 max-w-[1400px]
 
 rounded-2xl
 
 border
+
 border-slate-200/70
 
 bg-white/90
@@ -194,7 +191,6 @@ shadow-[0_15px_40px_rgba(23,35,61,0.12)]
 dark:border-white/10
 
 dark:bg-[#0b1120]/90
-
 "
 >
 
@@ -203,6 +199,7 @@ dark:bg-[#0b1120]/90
 <div
 className="
 grid
+
 grid-cols-[1fr_auto]
 
 items-center
@@ -211,11 +208,16 @@ min-h-[62px]
 
 px-3
 
+
 lg:flex
+
 lg:justify-between
+
 lg:px-5
 "
 >
+
+
 
 
 
@@ -234,6 +236,7 @@ overflow-hidden
 rounded-2xl
 
 border
+
 border-slate-200
 
 bg-white
@@ -241,7 +244,6 @@ bg-white
 shadow-sm
 
 dark:border-white/10
-
 "
 
 >
@@ -252,7 +254,9 @@ className="
 relative
 
 flex
+
 items-center
+
 justify-center
 
 
@@ -260,9 +264,7 @@ h-12
 
 w-[175px]
 
-
 sm:w-[220px]
-
 "
 >
 
@@ -285,7 +287,6 @@ object-contain
 p-2
 
 scale-[1.8]
-
 "
 
 />
@@ -301,7 +302,9 @@ scale-[1.8]
 
 
 
-{/* DESKTOP MENU */}
+
+
+{/* DESKTOP LINKS */}
 
 <div
 className="
@@ -338,11 +341,12 @@ text-sm
 
 font-bold
 
+
 transition
 
 
 ${
-activeSection===item.sectionId
+activeSection === item.sectionId
 
 ?
 
@@ -377,7 +381,9 @@ activeSection===item.sectionId
 
 
 
-{/* RIGHT BUTTONS */}
+
+
+{/* ACTION AREA */}
 
 <div
 className="
@@ -389,6 +395,68 @@ gap-2
 "
 >
 
+
+
+{/* LOGIN */}
+
+<button
+
+onClick={()=>router.push("/login")}
+
+className="
+hidden
+
+lg:flex
+
+items-center
+
+gap-2
+
+rounded-full
+
+border
+
+border-slate-200
+
+bg-white
+
+px-5
+
+py-2.5
+
+text-sm
+
+font-bold
+
+text-[#17233d]
+
+transition
+
+hover:border-[#91BF48]
+
+dark:border-white/10
+
+dark:bg-white/[0.05]
+
+dark:text-white
+"
+
+>
+
+
+<LogIn size={16}/>
+
+Login
+
+
+</button>
+
+
+
+
+
+
+{/* THEME */}
 
 <button
 
@@ -412,7 +480,6 @@ border
 border-slate-200
 
 dark:border-white/10
-
 "
 
 >
@@ -439,6 +506,8 @@ theme==="dark"
 
 
 
+{/* MOBILE MENU */}
+
 <button
 
 onClick={()=>setMobileOpen(!mobileOpen)}
@@ -464,7 +533,6 @@ text-white
 
 
 lg:hidden
-
 "
 
 >
@@ -492,9 +560,7 @@ mobileOpen
 
 
 
-
 </div>
-
 
 
 
@@ -506,6 +572,7 @@ mobileOpen
 {/* MOBILE MENU */}
 
 {
+
 mobileOpen &&
 
 <div
@@ -574,7 +641,6 @@ activeSection===item.sectionId
 
 {item.label}
 
-
 </button>
 
 
@@ -583,14 +649,16 @@ activeSection===item.sectionId
 }
 
 
+
 </div>
+
 
 
 
 
 <button
 
-onClick={()=>scrollToSection("contact")}
+onClick={()=>router.push("/login")}
 
 className="
 mt-3
@@ -605,14 +673,15 @@ justify-center
 
 gap-2
 
-
 rounded-xl
 
-bg-[#91BF48]
+border
 
+border-slate-200
+
+bg-white
 
 py-3
-
 
 text-sm
 
@@ -620,12 +689,61 @@ font-black
 
 text-[#17233d]
 
+dark:border-white/10
+
+dark:bg-white/[0.05]
+
+dark:text-white
 "
 
 >
 
 
-Start a project
+<LogIn size={16}/>
+
+Login
+
+</button>
+
+
+
+
+
+
+<button
+
+onClick={()=>scrollToSection("contact")}
+
+className="
+mt-2
+
+flex
+
+w-full
+
+items-center
+
+justify-center
+
+gap-2
+
+rounded-xl
+
+bg-[#91BF48]
+
+py-3
+
+text-sm
+
+font-black
+
+text-[#17233d]
+"
+
+>
+
+
+Start Project
 
 <ArrowUpRight size={16}/>
 
@@ -645,7 +763,6 @@ Start a project
 
 
 </header>
-
 
 );
 

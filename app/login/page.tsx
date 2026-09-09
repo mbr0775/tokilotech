@@ -1,157 +1,245 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Lock, Mail, Sparkles } from "lucide-react";
 import { supabase } from "../../lib/supabaseClient";
 
 const ADMIN_EMAIL = "mubassirnasar@gmail.com";
+const ADMIN_PROJECT_ADD_ROUTE = "/admin/projects/add";
 
 export default function LoginPage() {
   const router = useRouter();
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async (event: React.FormEvent) => {
+  useEffect(() => {
+    let isMounted = true;
+
+    const redirectExistingSession = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!isMounted) return;
+
+      if (user?.email?.toLowerCase() === ADMIN_EMAIL) {
+        router.replace(ADMIN_PROJECT_ADD_ROUTE);
+        router.refresh();
+        return;
+      }
+
+      setCheckingSession(false);
+    };
+
+    redirectExistingSession();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [router]);
+
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const enteredEmail = email.trim().toLowerCase();
+    const normalizedEmail = email.trim().toLowerCase();
 
     setError("");
+    setLoading(true);
 
-    if (!enteredEmail) {
-      setError("Please enter your email address.");
-      return;
+    try {
+      const { data, error: signInError } =
+        await supabase.auth.signInWithPassword({
+          email: normalizedEmail,
+          password,
+        });
+
+      if (signInError) {
+        throw signInError;
+      }
+
+      const signedInEmail = data.user?.email?.toLowerCase();
+
+      if (signedInEmail === ADMIN_EMAIL) {
+        router.replace(ADMIN_PROJECT_ADD_ROUTE);
+        router.refresh();
+        return;
+      }
+
+      // A valid non-admin account can continue to the public website.
+      router.replace("/");
+      router.refresh();
+    } catch (loginError) {
+      setError(
+        loginError instanceof Error
+          ? loginError.message
+          : "Invalid email or password."
+      );
+    } finally {
+      setLoading(false);
     }
-
-    if (!password) {
-      setError("Please enter your password.");
-      return;
-    }
-
-    setIsLoading(true);
-
-    const { error: loginError } = await supabase.auth.signInWithPassword({
-      email: enteredEmail,
-      password,
-    });
-
-    setIsLoading(false);
-
-    if (loginError) {
-      setError(loginError.message);
-      return;
-    }
-
-    if (enteredEmail === ADMIN_EMAIL) {
-      router.push("/admin/projects");
-      return;
-    }
-
-    router.push("/");
   };
 
+  if (checkingSession) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-[#f8fafc] p-5 dark:bg-[#08101F]">
+        <div className="rounded-2xl bg-white px-6 py-4 font-bold text-[#17233d] shadow-xl dark:bg-[#0b1120] dark:text-white">
+          Checking your session...
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-950 dark:bg-gray-950 dark:text-white sm:py-12">
-      <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-md items-center justify-center">
-        <div className="w-full">
-          <button
-            type="button"
-            onClick={() => router.push("/")}
-            className="mb-8 inline-flex items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-[#24375a] dark:text-gray-400 dark:hover:text-white"
-          >
-            <ArrowLeft size={18} />
-            Back to Website
-          </button>
+    <main className="flex min-h-screen items-center justify-center bg-[#f8fafc] p-5 dark:bg-[#08101F]">
+      <div className="grid w-full max-w-6xl overflow-hidden rounded-[2rem] bg-white shadow-[0_30px_80px_rgba(23,35,61,0.18)] dark:bg-[#0b1120] lg:grid-cols-2">
+        <div className="relative hidden overflow-hidden bg-[#17233d] p-12 lg:flex lg:flex-col lg:justify-between">
+          <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-[#91BF48]/20 blur-3xl" />
 
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-2xl dark:border-gray-800 dark:bg-gray-900 sm:p-8">
-            <div className="mb-8 text-center">
-              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#24375a] to-[#4a5f8a] text-white shadow-lg shadow-[#24375a]/20">
-                <Lock size={30} />
+          <div>
+            <div className="inline-flex rounded-2xl bg-white p-3">
+              <Image
+                src="/tokilotechlogo.png"
+                width={220}
+                height={60}
+                alt="Tokilo Technologies"
+                className="h-12 w-auto object-contain"
+                priority
+              />
+            </div>
+
+            <h1 className="mt-12 text-5xl font-black leading-tight text-white">
+              Build smarter
+              <span className="block text-[#91BF48]">digital solutions</span>
+            </h1>
+
+            <p className="mt-6 max-w-md text-lg leading-8 text-slate-300">
+              Welcome to Tokilo Technologies. Create intelligent software, AI
+              solutions, and scalable digital products.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              "AI Powered Development",
+              "Web & Mobile Applications",
+              "Cloud Technology",
+            ].map((item) => (
+              <div key={item} className="flex items-center gap-3 text-white">
+                <Sparkles className="text-[#91BF48]" />
+                {item}
               </div>
+            ))}
+          </div>
+        </div>
 
-              <h1 className="text-3xl font-black sm:text-4xl">
-                Login Account
-              </h1>
-
-              <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-gray-400">
-                Login to access Tokilo Technologies updates and project features.
+        <div className="flex items-center justify-center p-8 sm:p-12">
+          <div className="w-full max-w-md">
+            <div className="mb-8">
+              <h2 className="text-4xl font-black text-[#17233d] dark:text-white">
+                Welcome back
+              </h2>
+              <p className="mt-3 text-slate-500 dark:text-slate-300">
+                Login to continue your Tokilo journey.
               </p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-5">
-              <label className="block">
-                <span className="mb-2 flex items-center gap-2 text-sm font-bold">
-                  <Mail size={16} />
+              <div>
+                <label
+                  htmlFor="email"
+                  className="mb-2 block text-sm font-bold text-[#17233d] dark:text-white"
+                >
                   Email Address
-                </span>
-
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  placeholder="Enter your email"
-                  className="w-full rounded-2xl border border-slate-300 bg-white px-5 py-3.5 text-slate-950 outline-none transition focus:border-[#91BF48] dark:border-gray-700 dark:bg-gray-950 dark:text-white"
-                />
-              </label>
-
-              <label className="block">
-                <span className="mb-2 flex items-center gap-2 text-sm font-bold">
-                  <Lock size={16} />
-                  Password
-                </span>
-
+                </label>
                 <div className="relative">
+                  <Mail
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    size={18}
+                  />
                   <input
-                    type={showPassword ? "text" : "password"}
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    placeholder="Enter your email"
+                    autoComplete="email"
                     required
+                    className="w-full rounded-xl border border-slate-200 py-4 pl-12 pr-4 outline-none focus:border-[#91BF48] dark:border-white/10 dark:bg-white/5 dark:text-white"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="password"
+                  className="mb-2 block text-sm font-bold text-[#17233d] dark:text-white"
+                >
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    size={18}
+                  />
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     placeholder="Enter password"
-                    className="w-full rounded-2xl border border-slate-300 bg-white px-5 py-3.5 pr-14 text-slate-950 outline-none transition focus:border-[#91BF48] dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+                    autoComplete="current-password"
+                    required
+                    className="w-full rounded-xl border border-slate-200 py-4 pl-12 pr-12 outline-none focus:border-[#91BF48] dark:border-white/10 dark:bg-white/5 dark:text-white"
                   />
-
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 transition hover:text-[#24375a] dark:text-gray-400 dark:hover:text-white"
-                    aria-label="Show or hide password"
+                    onClick={() => setShowPassword((current) => !current)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
-                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
-              </label>
+              </div>
 
               {error && (
-                <p className="rounded-2xl bg-red-50 p-4 text-sm font-semibold text-red-600 dark:bg-red-950/40 dark:text-red-300">
+                <p
+                  role="alert"
+                  className="rounded-lg bg-red-50 p-3 text-sm font-bold text-red-600 dark:bg-red-950/40 dark:text-red-300"
+                >
                   {error}
                 </p>
               )}
 
               <button
                 type="submit"
-                disabled={isLoading}
-                className="w-full rounded-2xl bg-gradient-to-r from-[#24375a] to-[#4a5f8a] px-5 py-4 font-black text-white shadow-lg shadow-[#24375a]/20 transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60"
+                disabled={loading}
+                className="group flex w-full items-center justify-center gap-2 rounded-xl bg-[#91BF48] py-4 font-black text-[#17233d] transition hover:bg-[#9dcc52] disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {isLoading ? "Logging in..." : "Login"}
+                {loading ? "Signing in..." : "Login"}
+                {!loading && (
+                  <ArrowRight
+                    size={18}
+                    className="transition group-hover:translate-x-1"
+                  />
+                )}
               </button>
-
-              <p className="text-center text-sm text-slate-600 dark:text-gray-400">
-                No account yet?{" "}
-                <button
-                  type="button"
-                  onClick={() => router.push("/register")}
-                  className="font-bold text-[#24375a] hover:underline dark:text-[#91BF48]"
-                >
-                  Register here
-                </button>
-              </p>
             </form>
+
+            <button
+              type="button"
+              onClick={() => router.push("/forgot-password")}
+              className="mt-6 w-full text-center text-sm font-bold text-[#17233d] hover:text-[#91BF48] dark:text-white"
+            >
+              Forgot password?
+            </button>
           </div>
         </div>
       </div>

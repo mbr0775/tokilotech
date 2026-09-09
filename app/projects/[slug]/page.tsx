@@ -2,7 +2,17 @@
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, Github, ImageIcon } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  CalendarDays,
+  ExternalLink,
+  Github,
+  ImageIcon,
+  Layers3,
+  Sparkles,
+  UserRound,
+} from "lucide-react";
 import { supabase } from "../../../lib/supabaseClient";
 import ProjectGallery from "./ProjectGallery";
 
@@ -24,7 +34,9 @@ type Project = {
   live_url: string | null;
   github_url: string | null;
   cover_url: string | null;
+  is_featured: boolean;
   is_published: boolean;
+  created_at: string;
   project_media?: ProjectMedia[];
 };
 
@@ -51,56 +63,75 @@ export default async function ProjectDetailsPage({
   }
 
   const project = data as Project;
-
   const sortedMedia = [...(project.project_media || [])].sort(
     (a, b) => (a.sort_order || 0) - (b.sort_order || 0)
   );
-
   const coverImage = project.cover_url || sortedMedia[0]?.media_url || "";
+  const galleryMedia = [...sortedMedia];
+
+  if (
+    coverImage &&
+    !galleryMedia.some((media) => media.media_url === coverImage)
+  ) {
+    galleryMedia.unshift({
+      id: `cover-${project.id}`,
+      media_url: coverImage,
+      media_type: "image",
+      alt_text: `${project.title} cover`,
+      sort_order: -1,
+    });
+  }
+
+  const publishedDate = project.created_at
+    ? new Intl.DateTimeFormat("en", {
+        month: "short",
+        year: "numeric",
+      }).format(new Date(project.created_at))
+    : "Recently";
 
   return (
-    <main className="min-h-screen bg-white text-slate-950 dark:bg-gray-950 dark:text-white">
-      {/* Project Hero */}
-      <section className="relative overflow-hidden px-4 pb-12 pt-6 sm:px-6 lg:px-8 lg:pb-16">
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute right-10 top-20 h-64 w-64 rounded-full bg-[#24375a]/10 blur-3xl"></div>
-          <div className="absolute bottom-10 left-0 h-64 w-64 rounded-full bg-[#91BF48]/10 blur-3xl"></div>
-        </div>
+    <main className="min-h-screen overflow-hidden bg-[#f7f9fc] text-slate-950 transition-colors dark:bg-[#080c14] dark:text-white">
+      <section className="relative isolate px-4 pb-14 pt-5 sm:px-6 lg:px-8 lg:pb-20">
+        <div className="pointer-events-none absolute inset-0 -z-20 bg-[linear-gradient(to_right,rgba(36,55,90,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(36,55,90,0.05)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)]" />
+        <div className="pointer-events-none absolute -right-44 top-10 -z-10 h-[34rem] w-[34rem] rounded-full bg-[#91BF48]/10 blur-[120px]" />
+        <div className="pointer-events-none absolute -left-44 bottom-0 -z-10 h-[32rem] w-[32rem] rounded-full bg-[#24375a]/15 blur-[120px]" />
 
-        <div className="relative z-10 mx-auto max-w-6xl">
-          <Link
-            href="/#projects"
-            className="mb-8 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 shadow-sm transition hover:border-[#24375a] hover:text-[#24375a] dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-[#91BF48] dark:hover:text-[#91BF48]"
-          >
-            <ArrowLeft size={17} />
-            Back to Projects
-          </Link>
+        <div className="mx-auto max-w-7xl">
+          <div className="flex items-center justify-between gap-4 py-3">
+            <Link
+              href="/#projects"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-4 py-2.5 text-sm font-black text-slate-700 shadow-sm backdrop-blur-xl transition hover:-translate-x-1 hover:border-[#24375a] hover:text-[#24375a] dark:border-white/10 dark:bg-white/[0.05] dark:text-slate-300 dark:hover:border-[#91BF48] dark:hover:text-[#a8d663]"
+            >
+              <ArrowLeft size={17} />
+              All projects
+            </Link>
 
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-            {/* Left Content Card */}
-            <div className="rounded-[2rem] border border-slate-200 bg-white/90 p-6 shadow-xl shadow-slate-200/60 backdrop-blur-md dark:border-gray-800 dark:bg-gray-900/90 dark:shadow-black/20 sm:p-8">
-              <span className="mb-5 inline-flex rounded-full bg-[#91BF48]/15 px-4 py-2 text-xs font-black uppercase tracking-widest text-[#4b7a16] dark:text-[#91BF48]">
-                {project.category}
-              </span>
+            <span className="hidden text-xs font-bold uppercase tracking-[0.18em] text-slate-400 sm:block">
+              Tokilo Technologies / Case Study
+            </span>
+          </div>
 
-              <h1 className="text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">
+          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+            <div>
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="rounded-full bg-[#91BF48]/15 px-4 py-2 text-xs font-black uppercase tracking-[0.17em] text-[#4b7a16] dark:text-[#a8d663]">
+                  {project.category}
+                </span>
+                {project.is_featured && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-xs font-black uppercase tracking-[0.17em] text-slate-600 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300">
+                    <Sparkles size={13} /> Featured work
+                  </span>
+                )}
+              </div>
+
+              <h1 className="mt-6 max-w-5xl text-4xl font-black leading-[0.98] tracking-[-0.045em] sm:text-6xl lg:text-7xl xl:text-[5.25rem]">
                 {project.title}
               </h1>
 
-              <p className="mt-5 text-base leading-relaxed text-slate-600 dark:text-gray-400 sm:text-lg">
-                {project.description || "Project details will be updated soon."}
+              <p className="mt-6 max-w-3xl text-base leading-8 text-slate-600 dark:text-slate-400 sm:text-lg">
+                {project.description ||
+                  "Project details and case study information will be available soon."}
               </p>
-
-              {project.client_name && (
-                <div className="mt-6 rounded-3xl border border-slate-200 bg-slate-50 p-5 dark:border-gray-800 dark:bg-gray-950">
-                  <p className="text-xs font-black uppercase tracking-widest text-slate-500 dark:text-gray-400">
-                    Client
-                  </p>
-                  <p className="mt-1 text-xl font-black">
-                    {project.client_name}
-                  </p>
-                </div>
-              )}
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 {project.live_url && (
@@ -108,10 +139,9 @@ export default async function ProjectDetailsPage({
                     href={project.live_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#24375a] to-[#4a5f8a] px-6 py-3.5 text-sm font-black text-white shadow-lg shadow-[#24375a]/20 transition hover:scale-105"
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#24375a] px-6 py-3.5 text-sm font-black text-white shadow-lg shadow-[#24375a]/20 transition hover:-translate-y-0.5 hover:bg-[#304976]"
                   >
-                    Visit Live Project
-                    <ExternalLink size={17} />
+                    View live project <ExternalLink size={17} />
                   </a>
                 )}
 
@@ -120,73 +150,134 @@ export default async function ProjectDetailsPage({
                     href={project.github_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-3.5 text-sm font-black text-slate-800 transition hover:border-[#91BF48] hover:text-[#91BF48] dark:border-gray-700 dark:bg-gray-950 dark:text-white"
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white/80 px-6 py-3.5 text-sm font-black text-slate-800 shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-[#91BF48] hover:text-[#4b7a16] dark:border-white/10 dark:bg-white/[0.05] dark:text-white dark:hover:text-[#a8d663]"
                   >
-                    GitHub
-                    <Github size={17} />
+                    View source <Github size={17} />
                   </a>
                 )}
               </div>
             </div>
 
-            {/* Right Image Card */}
-            <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-100 shadow-2xl shadow-slate-300/50 dark:border-gray-800 dark:bg-gray-900 dark:shadow-black/30">
-              {coverImage ? (
-                <div>
-                  <a href={coverImage} target="_blank" rel="noreferrer">
-                    <img
-                      src={coverImage}
-                      alt={project.title}
-                      className="h-[280px] w-full bg-slate-100 object-contain p-3 transition hover:scale-[1.02] dark:bg-gray-900 sm:h-[360px] lg:h-[430px]"
-                    />
-                  </a>
+            <aside className="rounded-[1.75rem] border border-white/80 bg-white/80 p-5 shadow-[0_25px_70px_-38px_rgba(15,23,42,0.45)] backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.045] lg:sticky lg:top-6">
+              <p className="px-1 text-xs font-black uppercase tracking-[0.18em] text-slate-400">
+                Project overview
+              </p>
 
-                  <div className="border-t border-slate-200 bg-white p-4 text-center dark:border-gray-800 dark:bg-gray-950">
-                    <a
-                      href={coverImage}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 px-5 py-2.5 text-xs font-black text-slate-700 transition hover:border-[#24375a] hover:text-[#24375a] dark:border-gray-700 dark:text-gray-300 dark:hover:border-[#91BF48] dark:hover:text-[#91BF48]"
-                    >
-                      View Full Image
-                      <ExternalLink size={14} />
-                    </a>
+              <dl className="mt-4 divide-y divide-slate-200/80 dark:divide-white/10">
+                <div className="flex items-center gap-4 py-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#24375a]/10 text-[#24375a] dark:bg-white/10 dark:text-white">
+                    <UserRound size={18} />
+                  </span>
+                  <div>
+                    <dt className="text-xs font-bold uppercase tracking-[0.12em] text-slate-400">
+                      Client
+                    </dt>
+                    <dd className="mt-1 font-black">
+                      {project.client_name || "Confidential client"}
+                    </dd>
                   </div>
                 </div>
+
+                <div className="flex items-center gap-4 py-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#24375a]/10 text-[#24375a] dark:bg-white/10 dark:text-white">
+                    <Layers3 size={18} />
+                  </span>
+                  <div>
+                    <dt className="text-xs font-bold uppercase tracking-[0.12em] text-slate-400">
+                      Gallery
+                    </dt>
+                    <dd className="mt-1 font-black">
+                      {galleryMedia.length} media item
+                      {galleryMedia.length === 1 ? "" : "s"}
+                    </dd>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 py-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#24375a]/10 text-[#24375a] dark:bg-white/10 dark:text-white">
+                    <CalendarDays size={18} />
+                  </span>
+                  <div>
+                    <dt className="text-xs font-bold uppercase tracking-[0.12em] text-slate-400">
+                      Published
+                    </dt>
+                    <dd className="mt-1 font-black">{publishedDate}</dd>
+                  </div>
+                </div>
+              </dl>
+            </aside>
+          </div>
+
+          <div className="group relative mt-10 overflow-hidden rounded-[2rem] border border-white/80 bg-slate-200 shadow-[0_35px_100px_-45px_rgba(15,23,42,0.6)] dark:border-white/10 dark:bg-white/5 lg:mt-14">
+            <div className="aspect-[16/9] min-h-[280px] max-h-[720px] w-full">
+              {coverImage ? (
+                <img
+                  src={coverImage}
+                  alt={project.title}
+                  className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.02]"
+                />
               ) : (
-                <div className="flex h-[280px] items-center justify-center sm:h-[360px] lg:h-[430px]">
-                  <ImageIcon size={50} className="text-slate-400" />
+                <div className="flex h-full min-h-[360px] items-center justify-center text-slate-400">
+                  <ImageIcon size={56} />
                 </div>
               )}
             </div>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/35 via-transparent to-transparent" />
+            {coverImage && (
+              <a
+                href={coverImage}
+                target="_blank"
+                rel="noreferrer"
+                className="absolute bottom-5 right-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-slate-950/50 px-4 py-2.5 text-xs font-black text-white backdrop-blur-xl transition hover:bg-white hover:text-slate-950"
+              >
+                Open cover <ArrowUpRight size={15} />
+              </a>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Project Gallery */}
-      <section className="px-4 pb-20 pt-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <section className="px-4 pb-24 sm:px-6 lg:px-8 lg:pb-32">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 grid gap-5 lg:grid-cols-[1fr_0.65fr] lg:items-end">
             <div>
-              <p className="text-sm font-black uppercase tracking-widest text-[#91BF48]">
-                Project Gallery
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-[#4b7a16] dark:text-[#a8d663]">
+                Visual walkthrough
               </p>
-
-              <h2 className="mt-2 text-3xl font-black sm:text-4xl">
-                Screenshots, Mockups & Videos
+              <h2 className="mt-3 text-3xl font-black tracking-[-0.035em] sm:text-5xl">
+                Explore the project experience.
               </h2>
             </div>
-
-            <p className="max-w-md text-sm leading-relaxed text-slate-500 dark:text-gray-400">
-              Explore uploaded project visuals, mockups, screenshots, and demo
-              videos. Click any image to view it fully.
-              <span className="mt-2 block text-xs font-bold text-[#91BF48]">
-                Use the arrow buttons to view next or previous image.
-              </span>
+            <p className="max-w-xl text-sm leading-7 text-slate-500 dark:text-slate-400 lg:justify-self-end">
+              Browse the uploaded screens, mockups and videos. Use the
+              thumbnails, arrow keys or full-screen viewer for a closer look.
             </p>
           </div>
 
-          <ProjectGallery media={sortedMedia} projectTitle={project.title} />
+          <ProjectGallery media={galleryMedia} projectTitle={project.title} />
+
+          <div className="mt-14 overflow-hidden rounded-[2rem] bg-[#24375a] p-7 text-white shadow-[0_30px_80px_-40px_rgba(36,55,90,0.9)] sm:p-10">
+            <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-[#a8d663]">
+                  Build with Tokilo
+                </p>
+                <h2 className="mt-3 max-w-2xl text-3xl font-black tracking-[-0.03em] sm:text-4xl">
+                  Ready to create your next digital product?
+                </h2>
+                <p className="mt-3 max-w-xl text-sm leading-7 text-white/65 sm:text-base">
+                  Tell us about your idea, business goal or workflow challenge.
+                  We&apos;ll help shape the right solution.
+                </p>
+              </div>
+              <Link
+                href="/shedule_contact"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#91BF48] px-6 py-4 text-sm font-black text-[#172033] transition hover:-translate-y-0.5 hover:bg-[#a8d663]"
+              >
+                Start your project <ArrowUpRight size={18} />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </main>

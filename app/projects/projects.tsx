@@ -9,55 +9,18 @@ import {
   FolderKanban,
   ImageIcon,
   Layers3,
-  Loader2,
   Search,
   Sparkles,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 
-type ProjectCategory =
-  | "All"
-  | "Website"
-  | "Mobile App"
-  | "AI Solution"
-  | "Dashboard"
-  | "Branding"
-  | "Mockup";
-
-type ProjectMedia = {
-  id: string;
-  media_url: string;
-  media_type: "image" | "video" | "mockup";
-  alt_text: string | null;
-  sort_order: number | null;
-};
-
-type Project = {
-  id: string;
-  title: string;
-  slug: string;
-  category: Exclude<ProjectCategory, "All">;
-  client_name: string | null;
-  description: string | null;
-  live_url: string | null;
-  github_url: string | null;
-  cover_url: string | null;
-  is_featured: boolean;
-  is_published: boolean;
-  created_at: string;
-  project_media?: ProjectMedia[];
-};
-
-const projectCategories: ProjectCategory[] = [
-  "All",
-  "Website",
-  "Mobile App",
-  "AI Solution",
-  "Dashboard",
-  "Branding",
-  "Mockup",
-];
+import {
+  SHOWCASE_SELECT,
+  showcaseToProject,
+  type Project,
+  type ShowcaseRow,
+} from "../../lib/project-showcase";
 
 function ProjectSkeleton({ featured = false }: { featured?: boolean }) {
   return (
@@ -82,34 +45,34 @@ function ProjectSkeleton({ featured = false }: { featured?: boolean }) {
 }
 
 export default function Projects() {
-  const [activeCategory, setActiveCategory] = useState<ProjectCategory>("All");
+  const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
 
     const loadProjects = async () => {
       setLoading(true);
+      setLoadError("");
 
       const { data, error } = await supabase
-        .from("projects")
-        .select("*, project_media(*)")
-        .eq("is_published", true)
+        .from("project_showcase")
+        .select(SHOWCASE_SELECT)
+        .eq("is_active", true)
+        .order("sort_order")
         .order("created_at", { ascending: false });
 
       if (!isMounted) return;
 
       if (error) {
-        console.error("Project loading error:", error.message);
+        setLoadError("We could not load the projects. Please try again.");
         setProjects([]);
       } else {
-        const orderedProjects = ((data as Project[]) || []).sort((a, b) => {
-          if (a.is_featured === b.is_featured) return 0;
-          return a.is_featured ? -1 : 1;
-        });
-        setProjects(orderedProjects);
+        setProjects((data as unknown as ShowcaseRow[]).map(showcaseToProject));
       }
 
       setLoading(false);
@@ -120,28 +83,19 @@ export default function Projects() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [reload]);
 
-  const categoryCounts = useMemo(() => {
-    return projectCategories.reduce<Record<ProjectCategory, number>>(
-      (counts, category) => {
-        counts[category] =
-          category === "All"
-            ? projects.length
-            : projects.filter((project) => project.category === category).length;
-        return counts;
-      },
-      {
-        All: 0,
-        Website: 0,
-        "Mobile App": 0,
-        "AI Solution": 0,
-        Dashboard: 0,
-        Branding: 0,
-        Mockup: 0,
-      }
-    );
-  }, [projects]);
+  const projectCategories = useMemo(
+    () => ["All", ...new Set(projects.map((project) => project.category))],
+    [projects]
+  );
+  const categoryCounts = useMemo(
+    () => Object.fromEntries(projectCategories.map((category) => [
+      category,
+      category === "All" ? projects.length : projects.filter((p) => p.category === category).length,
+    ])),
+    [projectCategories, projects]
+  );
 
   const filteredProjects = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -282,7 +236,14 @@ export default function Projects() {
           )}
         </div>
 
-        {loading ? (
+        {loadError ? (
+          <div role="alert" className="mt-8 rounded-2xl border border-red-200 bg-white p-8 text-center dark:border-red-900 dark:bg-white/5">
+            <p>{loadError}</p>
+            <button type="button" onClick={() => setReload((value) => value + 1)} className="mt-4 rounded-xl bg-[#91BF48] px-5 py-3 font-bold text-[#172033]">
+              Try again
+            </button>
+          </div>
+        ) : loading ? (
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <ProjectSkeleton featured />
             <ProjectSkeleton />

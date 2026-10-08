@@ -17,43 +17,9 @@ import {
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "../../../lib/supabaseClient";
+import { SHOWCASE_SELECT, showcaseToProject, type Project, type ShowcaseRow } from "../../../lib/project-showcase";
 
 const ADMIN_EMAIL = "mubassirnasar@gmail.com";
-
-type ProjectMedia = {
-  id: string;
-  media_url: string;
-  media_type: "image" | "video" | "mockup";
-  alt_text: string | null;
-  sort_order: number | null;
-};
-
-type Project = {
-  id: string;
-  title: string;
-  slug: string;
-  category: string;
-  client_name: string | null;
-  description: string | null;
-  live_url: string | null;
-  github_url: string | null;
-  cover_url: string | null;
-  is_featured: boolean;
-  is_published: boolean;
-  created_at: string;
-  project_media?: ProjectMedia[];
-};
-
-function getStoragePathFromPublicUrl(url: string) {
-  const marker = "/storage/v1/object/public/project-media/";
-  const parts = url.split(marker);
-
-  if (parts.length < 2) {
-    return null;
-  }
-
-  return decodeURIComponent(parts[1]);
-}
 
 export default function ProjectMaintenancePage() {
   const router = useRouter();
@@ -72,15 +38,16 @@ export default function ProjectMaintenancePage() {
     setError("");
 
     const { data, error: projectError } = await supabase
-      .from("projects")
-      .select("*, project_media(*)")
+      .from("project_showcase")
+      .select(SHOWCASE_SELECT)
+      .order("sort_order")
       .order("created_at", { ascending: false });
 
     if (projectError) {
       setError(projectError.message);
       setProjects([]);
     } else {
-      setProjects((data as Project[]) || []);
+      setProjects((data as unknown as ShowcaseRow[]).map(showcaseToProject));
     }
 
     setLoadingProjects(false);
@@ -91,7 +58,7 @@ export default function ProjectMaintenancePage() {
       const { data } = await supabase.auth.getUser();
       const currentUser = data.user;
 
-      if (!currentUser || currentUser.email !== ADMIN_EMAIL) {
+      if (!currentUser || currentUser.email?.toLowerCase() !== ADMIN_EMAIL) {
         router.push("/login");
         return;
       }
@@ -145,7 +112,7 @@ export default function ProjectMaintenancePage() {
 
   const handleDeleteProject = async (project: Project) => {
     const confirmed = window.confirm(
-      `Are you sure you want to delete "${project.title}"? This action cannot be undone.`
+      `Remove "${project.title}" from the website and mobile showcase? This action cannot be undone.`
     );
 
     if (!confirmed) {
@@ -156,27 +123,16 @@ export default function ProjectMaintenancePage() {
     setError("");
 
     try {
-      const mediaUrls = [
-        project.cover_url,
-        ...(project.project_media || []).map((media) => media.media_url),
-      ].filter(Boolean) as string[];
-
-      const storagePaths = Array.from(
-        new Set(
-          mediaUrls
-            .map((url) => getStoragePathFromPublicUrl(url))
-            .filter(Boolean) as string[]
-        )
-      );
-
-      if (storagePaths.length > 0) {
-        await supabase.storage.from("project-media").remove(storagePaths);
-      }
+      // Remove the showcase and its gallery records. Uploaded files and the
+      // linked portfolio may also be used elsewhere in the mobile application.
+      const { error: mediaError } = await supabase.from("project_images")
+        .delete().eq("showcase_id", project.id);
+      if (mediaError) throw mediaError;
 
       const { error: deleteError } = await supabase
-        .from("projects")
+        .from("project_showcase")
         .delete()
-        .eq("id", project.id);
+        .eq("id", project.id).select("id").single();
 
       if (deleteError) {
         throw deleteError;

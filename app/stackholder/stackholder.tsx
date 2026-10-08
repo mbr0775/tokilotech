@@ -234,7 +234,7 @@ overflow-hidden
 
 <Image
 
-src="/images/ceo.png"
+src="/mubassir.png"
 
 alt="Abul Naser Mubassir Founder and CEO"
 

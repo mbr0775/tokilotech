@@ -29,8 +29,8 @@ export default function LoginPage() {
 
       if (!isMounted) return;
 
-      if (user?.email?.toLowerCase() === ADMIN_EMAIL) {
-        router.replace(ADMIN_PROJECT_ADD_ROUTE);
+      if (user) {
+        router.replace(user.email?.toLowerCase() === ADMIN_EMAIL ? ADMIN_PROJECT_ADD_ROUTE : "/");
         router.refresh();
         return;
       }
@@ -146,7 +146,7 @@ export default function LoginPage() {
                 Welcome back
               </h2>
               <p className="mt-3 text-slate-500 dark:text-slate-300">
-                Login to continue your Tokilo journey.
+                Sign in with your Tokilo website or mobile app account.
               </p>
             </div>
 

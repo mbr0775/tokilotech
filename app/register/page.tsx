@@ -13,8 +13,6 @@ import {
 } from "lucide-react";
 import { supabase } from "../../lib/supabaseClient";
 
-const ADMIN_EMAIL = "mubassirnasar@gmail.com";
-
 export default function RegisterPage() {
   const router = useRouter();
 
@@ -41,35 +39,36 @@ export default function RegisterPage() {
 
     setIsLoading(true);
 
-    const role = enteredEmail === ADMIN_EMAIL ? "admin" : "user";
-
-    const { error: signUpError } = await supabase.auth.signUp({
-      email: enteredEmail,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-          role,
+    try {
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: enteredEmail,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/login`,
+          data: {
+            full_name: fullName.trim(),
+          },
         },
-      },
-    });
+      });
 
-    setIsLoading(false);
+      if (signUpError) {
+        throw signUpError;
+      }
 
-    if (signUpError) {
-      setError(signUpError.message);
-      return;
+      if (data.session) {
+        router.replace("/");
+        return;
+      }
+      setMessage("Please check your email to confirm your account. You can then sign in on the website or mobile app.");
+
+      setFullName("");
+      setEmail("");
+      setPassword("");
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Unable to create your account. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-
-    setMessage(
-      role === "admin"
-        ? "Admin account created. Please check your email, then login."
-        : "Account created successfully. Please check your email, then login."
-    );
-
-    setFullName("");
-    setEmail("");
-    setPassword("");
   };
 
   return (
@@ -98,9 +97,9 @@ export default function RegisterPage() {
 
               <div className="rounded-3xl border border-white/15 bg-white/10 p-5 backdrop-blur-md">
                 <p className="text-sm font-semibold text-white/80">
-                  Admin access is automatic for
+                  One account for Tokilo
                 </p>
-                <p className="mt-1 text-lg font-bold">{ADMIN_EMAIL}</p>
+                <p className="mt-1 text-lg font-bold">Use the same email and password on our website and mobile app.</p>
               </div>
             </div>
           </div>

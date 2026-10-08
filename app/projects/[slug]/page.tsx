@@ -13,32 +13,11 @@ import {
   Sparkles,
   UserRound,
 } from "lucide-react";
-import { supabase } from "../../../lib/supabaseClient";
+import { supabasePublic } from "../../../lib/supabasePublicClient";
+import { SHOWCASE_SELECT, isShowcaseId, showcaseToProject, type ShowcaseRow } from "../../../lib/project-showcase";
 import ProjectGallery from "./ProjectGallery";
 
-type ProjectMedia = {
-  id: string;
-  media_url: string;
-  media_type: "image" | "video" | "mockup";
-  alt_text: string | null;
-  sort_order: number | null;
-};
-
-type Project = {
-  id: string;
-  title: string;
-  slug: string;
-  category: string;
-  client_name: string | null;
-  description: string | null;
-  live_url: string | null;
-  github_url: string | null;
-  cover_url: string | null;
-  is_featured: boolean;
-  is_published: boolean;
-  created_at: string;
-  project_media?: ProjectMedia[];
-};
+export const dynamic = "force-dynamic";
 
 type ProjectDetailsPageProps = {
   params: Promise<{
@@ -51,18 +30,22 @@ export default async function ProjectDetailsPage({
 }: ProjectDetailsPageProps) {
   const { slug } = await params;
 
-  const { data, error } = await supabase
-    .from("projects")
-    .select("*, project_media(*)")
-    .eq("slug", slug)
-    .eq("is_published", true)
+  if (!isShowcaseId(slug)) notFound();
+
+  const { data, error } = await supabasePublic
+    .from("project_showcase")
+    .select(SHOWCASE_SELECT)
+    .eq("id", slug)
+    .eq("is_active", true)
     .single();
 
-  if (error || !data) {
-    notFound();
+  if (error) {
+    if (error.code === "PGRST116") notFound();
+    throw new Error("Unable to load the project showcase.");
   }
+  if (!data) notFound();
 
-  const project = data as Project;
+  const project = showcaseToProject(data as unknown as ShowcaseRow);
   const sortedMedia = [...(project.project_media || [])].sort(
     (a, b) => (a.sort_order || 0) - (b.sort_order || 0)
   );

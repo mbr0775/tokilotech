@@ -127,7 +127,7 @@ export default function HomeScreen() {
   return (
     <>
       <section id="home" aria-labelledby="hero-heading" aria-roledescription="carousel" className={styles.hero}>
-        <div className={styles.background} aria-hidden="true">
+        <div className={styles.background} aria-hidden="true" data-scroll-depth="hero">
           {!reducedMotion && <video ref={videoRef} className={styles.backgroundVideo} src="/media/hero-liquid-metal.mp4" poster="/media/hero-liquid-metal.jpg" autoPlay muted loop playsInline preload="metadata" />}
         </div>
         <div className={styles.content}>
@@ -153,14 +153,14 @@ export default function HomeScreen() {
       </section>
       <div className={summaryStyles.summary}>
         <div className={summaryStyles.inner}>
-          <div className={summaryStyles.copy}>
+          <div className={summaryStyles.copy} data-scroll-reveal="left">
             <span className={summaryStyles.service}><ServiceIcon size={18} strokeWidth={1.5} aria-hidden="true" />{slide.service}</span>
             <p className={summaryStyles.description}>{slide.description}</p>
             <ul className={summaryStyles.capabilities} aria-label={`${slide.service} capabilities`}>
               {slide.capabilities.map((capability) => <li key={capability}><Check size={14} strokeWidth={1.5} aria-hidden="true" />{capability}</li>)}
             </ul>
           </div>
-          <div className={summaryStyles.actions}>
+          <div className={summaryStyles.actions} data-scroll-reveal="right" data-scroll-delay="1">
             <p>Your partner in digital growth.</p>
             <div className={summaryStyles.links}>
               <a href="#projects" className={summaryStyles.primaryLink}>Explore our work<ArrowUpRight size={18} aria-hidden="true" /></a>

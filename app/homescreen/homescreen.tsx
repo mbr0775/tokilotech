@@ -1,302 +1,174 @@
 "use client";
 
 import Image from "next/image";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  BrainCircuit,
-  CheckCircle2,
-  Code2,
-  Layers3,
-  Sparkles,
-} from "lucide-react";
+import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { ArrowDown, ArrowRight, ArrowUpRight, BrainCircuit, Check, Cloud, Code2, Megaphone, Pause, Play, Smartphone } from "lucide-react";
+import styles from "./hero.module.css";
+import summaryStyles from "./summary.module.css";
 
-const capabilities = [
-  "Web & mobile products",
-  "AI-powered automation",
-  "Scalable cloud systems",
-];
+const SLIDE_DURATION = 3000;
+const slides = [
+  {
+    service: "Web development",
+    heading: ["Big ideas.", "Beautifully built."],
+    headingScale: 1,
+    description:
+      "From your first idea to your next big leap. We craft fast, beautiful websites that turn visitors into customers and move your business forward.",
+    action: "Let’s build your website",
+    capabilities: ["Custom websites", "E-commerce", "Web applications"],
+    image: "1498050108023-c5249f4df085",
+    alt: "Laptop and workspace for website development",
+    icon: Code2,
+    cardTitle: "Designed to make an impact.",
+    cardText: "Thoughtful design. Powerful engineering.",
+    badge: "From concept to launch",
+  },
+  {
+    service: "Digital marketing",
+    heading: ["Your brand. More", "reach. Real growth."],
+    headingScale: 1,
+    description:
+      "Reach the right people, tell your story, and turn attention into action. We help your business grow with creative campaigns and clear digital strategy.",
+    action: "Let’s grow your brand",
+    capabilities: ["Social media", "SEO & content", "Paid campaigns"],
+    image: "1460925895917-afdab827c52f",
+    alt: "Marketing analytics and performance charts on a laptop",
+    icon: Megaphone,
+    cardTitle: "Make your brand impossible to miss.",
+    cardText: "Creative campaigns. Meaningful connections.",
+    badge: "Built for your next audience",
+  },
+  {
+    service: "Mobile app development",
+    heading: ["Your idea.", "Everywhere. In an app."],
+    headingScale: 0.9,
+    description:
+      "Put your business in your customers’ hands. We build intuitive mobile apps with seamless experiences that people love to use, wherever they go.",
+    action: "Let’s create your app",
+    capabilities: ["iOS & Android", "Intuitive UI/UX", "Connected experiences"],
+    image: "1512941937669-90a1b58e7e9c",
+    alt: "Smartphone displaying mobile applications",
+    icon: Smartphone,
+    cardTitle: "Great experiences, on the go.",
+    cardText: "Made for real people. Ready for everyday life.",
+    badge: "From first tap to lasting impact",
+  },
+  {
+    service: "Artificial intelligence",
+    heading: ["Work smarter.", "Think bigger. With AI."],
+    headingScale: 1,
+    description:
+      "Turn possibility into practical tools. We create AI solutions and intelligent automation that simplify your work and help your business do more.",
+    action: "Let’s explore AI",
+    capabilities: ["AI assistants", "Smart automation", "Intelligent tools"],
+    image: "1677442136019-21780ecad995",
+    alt: "Abstract visualization of artificial intelligence and connected data",
+    icon: BrainCircuit,
+    cardTitle: "A little more intelligent.",
+    cardText: "Practical AI. Powerful possibilities.",
+    badge: "AI that works for you",
+  },
+  {
+    service: "Cloud & backend",
+    heading: ["Strong roots. Room", "to grow. In the cloud."],
+    headingScale: 0.88,
+    description:
+      "Build on a foundation that grows with you. We create reliable backends, connected APIs, and cloud infrastructure to keep your business moving.",
+    action: "Let’s build your foundation",
+    capabilities: ["Cloud infrastructure", "API development", "Scalable systems"],
+    image: "1558494949-ef010cbdcc31",
+    alt: "Server racks supporting cloud infrastructure",
+    icon: Cloud,
+    cardTitle: "Ready for what comes next.",
+    cardText: "Reliable systems. Space to scale.",
+    badge: "Built to grow with your business",
+  },
+] as const;
+
+const imageUrl = (photo: string) =>
+  `https://images.unsplash.com/photo-${photo}?auto=format&fit=crop&w=1200&q=80`;
+
+function subscribeToMotion(callback: () => void) {
+  const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+  preference.addEventListener("change", callback);
+  return () => preference.removeEventListener("change", callback);
+}
+
+const getReducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export default function HomeScreen() {
-  const scrollToSection = (sectionId: string) => {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
-  };
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const reducedMotion = useSyncExternalStore(subscribeToMotion, getReducedMotion, () => false);
+  const slide = slides[activeIndex];
+  const ServiceIcon = slide.icon;
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (paused || reducedMotion) video.pause();
+    else void video.play().catch(() => {});
+  }, [paused, reducedMotion]);
+
+  useEffect(() => {
+    if (paused || reducedMotion) return;
+    let timer: ReturnType<typeof setInterval> | undefined;
+    const updateTimer = () => {
+      clearInterval(timer);
+      if (!document.hidden) timer = setInterval(() => setActiveIndex((index) => (index + 1) % slides.length), SLIDE_DURATION);
+    };
+    updateTimer();
+    document.addEventListener("visibilitychange", updateTimer);
+    return () => { clearInterval(timer); document.removeEventListener("visibilitychange", updateTimer); };
+  }, [paused, reducedMotion, activeIndex]);
 
   return (
-    <section
-      id="home"
-      className="relative isolate min-h-[760px] overflow-hidden bg-[#91BF48] pt-24 text-slate-950 dark:bg-[#789f3f] dark:text-white lg:min-h-screen lg:pt-0"
-    >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.42),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(23,35,61,0.15),_transparent_35%)]" />
-
-      {/* Desktop organic white panel */}
-      <svg
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block"
-        viewBox="0 0 1440 820"
-        preserveAspectRatio="none"
-      >
-        <path
-          className="fill-[#f8fafc] dark:fill-[#0a0f1c]"
-          d="M0 0H825C840 96 834 166 792 229C744 301 700 348 722 402C747 462 868 472 936 520C1007 570 1032 657 1108 718C1157 757 1210 789 1266 820H0V0Z"
-        />
-      </svg>
-
-      {/* Mobile light background area */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[58%] bg-[#f8fafc] dark:bg-[#0a0f1c] lg:hidden" />
-
-      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-6rem)] max-w-7xl items-center gap-10 px-5 pb-14 pt-10 sm:px-8 lg:min-h-screen lg:grid-cols-[1.02fr_0.98fr] lg:gap-8 lg:px-10 lg:pb-0 lg:pt-0">
-        {/* Left content */}
-        <div className="max-w-2xl animate-hero-copy lg:pb-14">
-          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-[#91BF48]/35 bg-[#91BF48]/10 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-[#527b1f] dark:border-white/15 dark:bg-white/5 dark:text-[#d9f7a3]">
-            <Sparkles size={15} aria-hidden="true" />
-            Software & AI Partner
+    <>
+      <section id="home" aria-labelledby="hero-heading" aria-roledescription="carousel" className={styles.hero}>
+        <div className={styles.background} aria-hidden="true">
+          {!reducedMotion && <video ref={videoRef} className={styles.backgroundVideo} src="/media/hero-liquid-metal.mp4" poster="/media/hero-liquid-metal.jpg" autoPlay muted loop playsInline preload="metadata" />}
+        </div>
+        <div className={styles.content}>
+          <div key={slide.service} className={styles.copy} aria-live="off">
+            <span className={styles.eyebrow}>{slide.service} · TOKILO TECHNOLOGIES</span>
+            <h1 id="hero-heading" className={styles.heading} style={{ "--heading-scale": slide.headingScale } as CSSProperties}>{slide.heading.map((line) => <span key={line}>{line}</span>)}</h1>
+            <a href="#contact" className={styles.primaryButton}><ArrowRight size={22} aria-hidden="true" />{slide.action}</a>
           </div>
-
-          <h1 className="max-w-[760px] text-[clamp(3.25rem,6vw,6.6rem)] font-black leading-[0.92] tracking-[-0.065em] text-[#16213a] dark:text-white">
-            We build digital
-            <span className="mt-2 block font-serif font-medium italic tracking-[-0.055em] text-[#91BF48]">
-              products that grow.
-            </span>
-          </h1>
-
-          <p className="mt-7 max-w-xl text-base font-medium leading-7 text-slate-600 sm:text-lg sm:leading-8 dark:text-slate-300">
-            Tokilo Technologies creates modern websites, mobile applications,
-            intelligent automation, and dependable software systems for
-            ambitious businesses.
-          </p>
-
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <button
-              type="button"
-              onClick={() => scrollToSection("projects")}
-              className="group inline-flex min-h-14 items-center justify-center gap-2 rounded-xl bg-[#91BF48] px-6 text-sm font-black text-[#17233d] shadow-[0_14px_30px_rgba(145,191,72,0.28)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_35px_rgba(145,191,72,0.42)]"
-            >
-              Explore our projects
-              <ArrowUpRight
-                size={18}
-                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                aria-hidden="true"
-              />
-            </button>
-
-            <button
-              type="button"
-              onClick={() => scrollToSection("contact")}
-              className="group inline-flex min-h-14 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white/70 px-6 text-sm font-black text-[#17233d] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate-400 hover:bg-white/90"
-            >
-              Start a project
-              <ArrowRight
-                size={18}
-                className="transition-transform duration-300 group-hover:translate-x-1"
-                aria-hidden="true"
-              />
-            </button>
-          </div>
-
-          <div className="mt-10 grid max-w-xl gap-3 sm:grid-cols-3">
-            {capabilities.map((capability) => (
-              <div
-                key={capability}
-                className="flex items-center gap-2 text-sm font-bold text-slate-600 dark:text-slate-300"
-              >
-                <CheckCircle2
-                  size={18}
-                  className="shrink-0 text-[#91BF48]"
-                  aria-hidden="true"
-                />
-                {capability}
-              </div>
-            ))}
+          <a href="#services" className={styles.serviceCard} aria-label={`Explore ${slide.service} services`}>
+            <div className={styles.cardImage}><Image key={slide.image} src={imageUrl(slide.image)} alt={slide.alt} fill unoptimized sizes="(max-width: 600px) 110px, 11vw" className={styles.servicePhoto} /></div>
+            <div className={styles.cardCopy}>
+              <span className={styles.cardEyebrow}><ServiceIcon size={18} aria-hidden="true" />{slide.service}</span>
+              <strong>{slide.cardTitle}</strong><p>{slide.cardText}</p>
+              <span className={styles.cardFootnote}>{slide.badge}<ArrowUpRight size={18} aria-hidden="true" /></span>
+            </div>
+          </a>
+          <div className={styles.slideControls} aria-label="Hero slideshow controls">
+            <div className={styles.slideIndicators}>{slides.map((item, index) => <button key={item.service} type="button" onClick={() => setActiveIndex(index)} className={styles.slideIndicator} aria-label={`Show ${item.service}`} aria-current={index === activeIndex ? "true" : undefined}><span key={`${activeIndex}-${paused}-${reducedMotion}`} className={styles.indicatorFill} style={{ animation: paused || reducedMotion ? "none" : undefined }} /></button>)}</div>
+            {!reducedMotion && <button type="button" className={styles.pauseButton} onClick={() => setPaused((value) => !value)} aria-label={paused ? "Play hero slideshow" : "Pause hero slideshow"}>{paused ? <Play size={13} aria-hidden="true" /> : <Pause size={13} aria-hidden="true" />}{paused ? "Play" : "Pause"}</button>}
+            <span className={styles.slideCount}>{String(activeIndex + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span>
           </div>
         </div>
-
-        {/* Right visual */}
-        <div className="relative mx-auto flex w-full max-w-[650px] items-center justify-center pb-4 pt-12 sm:pt-16 lg:min-h-[680px] lg:pb-0 lg:pt-10">
-          <div className="absolute left-[6%] top-[14%] h-28 w-28 rounded-full border border-white/40 shadow-[0_10px_30px_rgba(255,255,255,0.25)]" />
-          <div className="absolute bottom-[15%] right-[5%] h-16 w-16 rotate-12 rounded-[1.35rem] border border-[#17233d]/15 bg-white/20 backdrop-blur" />
-          <div className="absolute right-[10%] top-[7%] h-5 w-5 rounded-full bg-white/[0.08] shadow-lg" />
-          <div className="absolute left-[10%] top-[30%] h-14 w-14 rounded-full bg-[#91BF48]/25 blur-2xl" />
-          <div className="absolute bottom-[15%] left-[8%] h-20 w-20 rounded-full bg-[#17233d]/10 blur-3xl" />
-
-          <div className="relative w-full animate-hero-visual [perspective:1600px]">
-            <div className="scene-3d relative mx-auto w-[88%]">
-              <div className="card-3d relative mx-auto w-full overflow-hidden rounded-[2rem] border border-white/[0.55] bg-white/[0.88] p-3 shadow-[0_35px_90px_rgba(23,35,61,0.25)] backdrop-blur-xl sm:p-4">
-                <div className="absolute inset-x-6 top-3 h-8 rounded-full bg-white/40 blur-md" />
-
-                <div className="rounded-[1.45rem] border border-slate-200 bg-[#f8fafc] p-4 sm:p-5 dark:border-white/10 dark:bg-[#0b1220]">
-                  <div className="mb-5 flex items-center justify-between border-b border-slate-200 pb-4 dark:border-white/10">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#17233d] shadow-md shadow-[#17233d]/20">
-                        <Image
-                          src="/tokilotechlogo.png"
-                          alt="Tokilo Technologies"
-                          width={34}
-                          height={34}
-                          className="h-8 w-8 object-contain"
-                          priority
-                        />
-                      </div>
-                      <div>
-                        <p className="text-sm font-black text-[#17233d] dark:text-white">
-                          Tokilo Workspace
-                        </p>
-                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                          Product delivery dashboard
-                        </p>
-                      </div>
-                    </div>
-                    <div className="hidden rounded-full bg-[#91BF48]/15 px-3 py-1.5 text-[11px] font-black text-[#557c23] sm:block dark:text-[#b9dd82]">
-                      Live project
-                    </div>
-                  </div>
-
-                  <div className="grid gap-4 sm:grid-cols-[1.25fr_0.75fr]">
-                    <div className="rounded-2xl bg-[#17233d] p-5 text-white shadow-xl shadow-[#17233d]/30">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-xs font-bold uppercase tracking-[0.14em] text-white/[0.55]">
-                            Delivery progress
-                          </p>
-                          <p className="mt-2 text-4xl font-black tracking-tight">
-                            84%
-                          </p>
-                        </div>
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#91BF48] text-[#17233d] shadow-[0_10px_20px_rgba(145,191,72,0.3)]">
-                          <Layers3 size={24} aria-hidden="true" />
-                        </div>
-                      </div>
-
-                      <div className="mt-7 h-2 overflow-hidden rounded-full bg-white/15">
-                        <div className="h-full w-[84%] rounded-full bg-[#91BF48] shadow-[0_0_18px_rgba(145,191,72,0.7)]" />
-                      </div>
-
-                      <div className="mt-6 grid grid-cols-2 gap-3">
-                        <div className="rounded-xl bg-white/[0.08] p-3 shadow-inner shadow-white/5">
-                          <p className="text-[11px] font-semibold text-white/[0.55]">
-                            Features
-                          </p>
-                          <p className="mt-1 text-lg font-black">24</p>
-                        </div>
-                        <div className="rounded-xl bg-white/[0.08] p-3 shadow-inner shadow-white/5">
-                          <p className="text-[11px] font-semibold text-white/[0.55]">
-                            Sprint
-                          </p>
-                          <p className="mt-1 text-lg font-black">06</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid gap-4">
-                      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-slate-200/70 dark:border-white/10 dark:bg-white/5 dark:shadow-none">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#91BF48]/15 text-[#6f982f] dark:text-[#b8dc82]">
-                          <BrainCircuit size={21} aria-hidden="true" />
-                        </div>
-                        <p className="mt-4 text-sm font-black text-[#17233d] dark:text-white">
-                          AI automation
-                        </p>
-                        <p className="mt-1 text-xs font-medium leading-5 text-slate-500 dark:text-slate-400">
-                          Faster workflows with intelligent tools.
-                        </p>
-                      </div>
-
-                      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-slate-200/70 dark:border-white/10 dark:bg-white/5 dark:shadow-none">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#17233d]/[0.08] text-[#17233d] dark:bg-white/10 dark:text-white">
-                          <Code2 size={21} aria-hidden="true" />
-                        </div>
-                        <p className="mt-4 text-sm font-black text-[#17233d] dark:text-white">
-                          Product engineering
-                        </p>
-                        <p className="mt-1 text-xs font-medium leading-5 text-slate-500 dark:text-slate-400">
-                          Reliable web, mobile, and backend delivery.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating project card */}
-              <div className="floating-card absolute -bottom-8 left-0 hidden w-52 rounded-2xl border border-white/[0.60] bg-white/[0.95] p-4 shadow-[0_20px_50px_rgba(23,35,61,0.2)] backdrop-blur-xl sm:block dark:border-white/10 dark:bg-slate-900/80">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#91BF48] text-[#17233d] shadow-[0_10px_18px_rgba(145,191,72,0.35)]">
-                    <Sparkles size={21} aria-hidden="true" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                      Built for growth
-                    </p>
-                    <p className="text-sm font-black text-[#17233d] dark:text-white">
-                      Fast. Smart. Scalable.
-                    </p>
-                  </div>
-                </div>
-              </div>
+      </section>
+      <div className={summaryStyles.summary}>
+        <div className={summaryStyles.inner}>
+          <div className={summaryStyles.copy}>
+            <span className={summaryStyles.service}><ServiceIcon size={18} strokeWidth={1.5} aria-hidden="true" />{slide.service}</span>
+            <p className={summaryStyles.description}>{slide.description}</p>
+            <ul className={summaryStyles.capabilities} aria-label={`${slide.service} capabilities`}>
+              {slide.capabilities.map((capability) => <li key={capability}><Check size={14} strokeWidth={1.5} aria-hidden="true" />{capability}</li>)}
+            </ul>
+          </div>
+          <div className={summaryStyles.actions}>
+            <p>Your partner in digital growth.</p>
+            <div className={summaryStyles.links}>
+              <a href="#projects" className={summaryStyles.primaryLink}>Explore our work<ArrowUpRight size={18} aria-hidden="true" /></a>
+              <a href="#about" className={summaryStyles.secondaryLink}>Discover Tokilo<ArrowDown size={18} aria-hidden="true" /></a>
             </div>
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes hero-copy {
-          from {
-            opacity: 0;
-            transform: translateY(28px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes hero-visual {
-          from {
-            opacity: 0;
-            transform: translateY(30px) scale(0.96) rotateX(12deg);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1) rotateX(0deg);
-          }
-        }
-
-        .animate-hero-copy {
-          animation: hero-copy 800ms cubic-bezier(0.22, 1, 0.36, 1) both;
-        }
-
-        .animate-hero-visual {
-          animation: hero-visual 900ms 120ms cubic-bezier(0.22, 1, 0.36, 1)
-            both;
-        }
-
-        .scene-3d {
-          transform-style: preserve-3d;
-        }
-
-        .card-3d {
-          transform: rotateX(10deg) rotateY(-14deg) translateZ(24px);
-          box-shadow: 0 35px 80px rgba(23, 35, 61, 0.22),
-            0 18px 30px rgba(23, 35, 61, 0.12),
-            inset 0 1px 0 rgba(255, 255, 255, 0.8);
-        }
-
-        .floating-card {
-          transform: rotateX(14deg) rotateY(16deg) translateZ(56px);
-          box-shadow: 0 22px 45px rgba(23, 35, 61, 0.2);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .animate-hero-copy,
-          .animate-hero-visual {
-            animation: none;
-          }
-
-          .card-3d,
-          .floating-card {
-            transform: none;
-          }
-        }
-      `}</style>
-    </section>
+    </>
   );
 }

@@ -118,7 +118,7 @@ export default function ContactSchedule() {
             Schedule a <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#24375a] to-[#91BF48]">Consultation</span>
           </h1>
           <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto">
-            Let's discuss how we can help transform your business with our innovative solutions
+            Let&apos;s discuss how we can help transform your business with our innovative solutions
           </p>
         </div>
 
@@ -265,7 +265,7 @@ export default function ContactSchedule() {
                   </div>
                   <h3 className="text-3xl font-bold text-white mb-4">Thank You!</h3>
                   <p className="text-gray-400 text-lg">
-                    We've received your consultation request. Our team will contact you shortly.
+                    We&apos;ve received your consultation request. Our team will contact you shortly.
                   </p>
                 </div>
               ) : (

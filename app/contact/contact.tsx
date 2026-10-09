@@ -23,7 +23,7 @@ export default function Contact() {
   return (
     <section id="contact" aria-labelledby="contact-heading" className={`${styles.section} ${styles.surface}`}>
       <div className={`${styles.container} ${styles.contactGrid}`}>
-        <div>
+        <div data-scroll-reveal="left">
           <span className={styles.eyebrow}>Contact Tokilo</span>
           <h2 id="contact-heading" className={styles.heading}>Let&apos;s build something <span>amazing together</span></h2>
           <p className={styles.intro}>Have an idea, product requirement, or digital challenge? Our team is ready to help you create the right solution.</p>
@@ -37,7 +37,7 @@ export default function Contact() {
             <div className={styles.buildServices}>{services.map((service) => { const Icon = service.icon; return <span key={service.title}><Icon size={15} aria-hidden="true" />{service.title}</span>; })}</div>
           </div>
         </div>
-        <form className={styles.form} onSubmit={sendInquiry}>
+        <form className={styles.form} onSubmit={sendInquiry} data-scroll-reveal="right" data-scroll-delay="1">
           <h3>Start your project</h3><p>Tell us about your requirements.</p>
           <div className={styles.fields}>
             <label className={styles.field} htmlFor="contact-name">Your name *<input id="contact-name" name="name" autoComplete="name" placeholder="Your name" required /></label>

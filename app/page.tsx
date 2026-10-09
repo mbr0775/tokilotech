@@ -7,11 +7,12 @@ import Services from "./services/services";
 import Projects from "./projects/projects";
 import Contact from "./contact/contact";
 import Footer from "./footer";
+import ScrollExperience from "./motion/ScrollExperience";
 import styles from "./design.module.css";
 
 export default function Page() {
   return (
-    <div className={styles.site}>
+    <ScrollExperience className={styles.site}>
       <Navigation />
       <main>
         <HomeScreen />
@@ -22,6 +23,6 @@ export default function Page() {
         <Contact />
       </main>
       <Footer />
-    </div>
+    </ScrollExperience>
   );
 }

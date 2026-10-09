@@ -57,7 +57,7 @@ export default function About() {
         <p>Tokilo Technologies is an emerging software and AI company creating digital products for startups, small businesses, and growing brands.</p>
         <p>We combine product thinking, user-focused design, and dependable engineering to build websites, mobile applications, backend systems, automation tools, and intelligent software that solve real operational problems.</p>
       </div>
-      <div className={styles.visual}>
+      <div className={styles.visual} data-scroll-reveal="depth">
         <div className={styles.visualMedia}>
           <Image
             src="/media/tokilo-about-visual.png"
@@ -65,6 +65,7 @@ export default function About() {
             fill
             sizes="(max-width: 600px) calc(100vw - 36px), (max-width: 1100px) calc(100vw - 44px), 96vw"
             className={styles.visualImage}
+            data-scroll-depth="visual"
           />
           <span className={styles.visualLabel}>About Tokilo</span>
         </div>
@@ -75,15 +76,15 @@ export default function About() {
       </div>
 
       <div className={styles.process}>
-        <div className={styles.processHeader}>
+        <div className={styles.processHeader} data-scroll-reveal="down">
           <span className={styles.eyebrow}>Our delivery approach</span>
           <h3>From idea to useful product</h3>
         </div>
         <div className={styles.steps}>
-          {principles.map((principle) => {
+          {principles.map((principle, index) => {
             const Icon = principle.icon;
             return (
-              <article key={principle.number} className={styles.step}>
+              <article key={principle.number} className={styles.step} data-scroll-reveal="up" data-scroll-delay={index}>
                 <div className={styles.stepMark}>
                   <span className={styles.number}>{principle.number}</span>
                   <Icon size={30} strokeWidth={1} aria-hidden="true" />
@@ -94,14 +95,14 @@ export default function About() {
             );
           })}
         </div>
-        <p className={styles.processFoot}><CheckCircle2 size={17} aria-hidden="true" />Clear communication throughout every stage.</p>
+        <p className={styles.processFoot} data-scroll-reveal="up"><CheckCircle2 size={17} aria-hidden="true" />Clear communication throughout every stage.</p>
       </div>
 
       <div className={styles.strengths}>
-        {strengths.map((strength) => {
+        {strengths.map((strength, index) => {
           const Icon = strength.icon;
           return (
-            <article key={strength.title} className={styles.strength}>
+            <article key={strength.title} className={styles.strength} data-scroll-reveal={["left", "up", "right"][index]} data-scroll-delay={index}>
               <div className={styles.strengthIcon}><Icon size={25} strokeWidth={1.2} aria-hidden="true" /></div>
               <div><h3>{strength.title}</h3><p>{strength.description}</p></div>
             </article>

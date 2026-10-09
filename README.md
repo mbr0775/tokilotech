@@ -95,6 +95,20 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Homepage scroll motion
+
+`app/motion/ScrollExperience.tsx` enhances existing homepage markup with scroll
+entrances and a reading-progress line, using the installed Framer Motion package
+for scroll values. Mark an element with `data-scroll-reveal="left"`, `"right"`,
+`"up"`, `"down"`, or `"depth"`; optional `data-scroll-delay="1"` or `"2"`
+staggers cards. Each entrance plays once. Dynamically loaded project cards and
+service filters are supported without changing their data or interactions.
+
+The hero background and About visual use modest parallax on larger screens with
+a fine pointer. Small screens use shorter entrances. Reduced-motion preferences
+disable the effects, and keyboard focus reveals a pending interactive element
+immediately. Content is visible in server HTML, without JavaScript, and in print.
+
 ## Verification
 
 Run `npx tsc --noEmit`, `npm run build`, and `npm run lint`.

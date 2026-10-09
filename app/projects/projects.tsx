@@ -83,17 +83,17 @@ export default function Projects() {
     <section id="projects" aria-labelledby="projects-heading" className={styles.section}>
       <div className={styles.container}>
         <div className={styles.sectionHeader}>
-          <div>
+          <div data-scroll-reveal="left">
             <span className={styles.eyebrow}>Selected Work</span>
             <h2 id="projects-heading" className={styles.heading}>Digital products built to feel <span>clear, useful and memorable.</span></h2>
             <p className={styles.intro}>Explore websites, mobile applications, dashboards, AI solutions, brand experiences and product mockups created for growing businesses.</p>
           </div>
-          <div className={styles.stats}>
+          <div className={styles.stats} data-scroll-reveal="right" data-scroll-delay="1">
             <div className={styles.stat}><strong>{projects.length}</strong><span>Projects</span></div>
             <div className={styles.stat}><strong>{projects.filter((project) => project.is_featured).length}</strong><span>Featured</span></div>
           </div>
         </div>
-        <div className={styles.filters}>
+        <div className={styles.filters} data-scroll-reveal="up">
           <div className={styles.filterButtons} role="group" aria-label="Project categories">
             {projectCategories.map((category) => <button key={category} type="button" aria-pressed={activeCategory === category} aria-controls="project-results" onClick={() => setActiveCategory(category)} className={styles.filter}>{category}<span className={styles.filterCount}>{categoryCounts[category]}</span></button>)}
           </div>
@@ -119,7 +119,7 @@ export default function Projects() {
                 const sortedMedia = [...(project.project_media || [])].sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
                 const coverImage = project.cover_url || sortedMedia[0]?.media_url || "";
                 return (
-                  <article key={project.id} className={`${styles.projectCard} ${index === 0 ? styles.leadProject : ""}`}>
+                  <article key={project.id} className={`${styles.projectCard} ${index === 0 ? styles.leadProject : ""}`} data-scroll-reveal={index === 0 ? "depth" : "up"} data-scroll-delay={index % 3}>
                     <Link href={`/projects/${project.slug}`} aria-label={`View ${project.title}`} className={styles.projectCover}>
                       {coverImage ? <img src={coverImage} alt={project.title} loading="lazy" /> : <div className={styles.imagePlaceholder}><ImageIcon size={48} aria-hidden="true" /></div>}
                       <div className={styles.projectTags}><span>{project.category}</span>{project.is_featured && <span>Featured</span>}</div>
@@ -140,7 +140,7 @@ export default function Projects() {
             </div>
           )}
         </div>
-        {!loading && projects.length > 0 && <div className={styles.projectCta}>
+        {!loading && projects.length > 0 && <div className={styles.projectCta} data-scroll-reveal="up">
           <div><h3>Have a project in mind?</h3><p>Let&apos;s turn your idea into a useful digital product.</p></div>
           <Link href="/shedule_contact" className={styles.pill}><ArrowUpRight size={17} aria-hidden="true" />Start a conversation</Link>
         </div>}

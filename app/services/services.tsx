@@ -150,20 +150,20 @@ export default function Services() {
     <section id="services" aria-labelledby="services-heading" className={`${styles.section} ${styles.surface}`}>
       <div className={styles.container}>
         <div className={styles.sectionHeader}>
-          <div><span className={styles.eyebrow}>Our Services</span><h2 id="services-heading" className={styles.heading}>Our Services</h2></div>
-          <p className={styles.intro}>Comprehensive technology solutions designed to transform your business and drive innovation.</p>
+          <div data-scroll-reveal="left"><span className={styles.eyebrow}>Our Services</span><h2 id="services-heading" className={styles.heading}>Our Services</h2></div>
+          <p className={styles.intro} data-scroll-reveal="right" data-scroll-delay="1">Comprehensive technology solutions designed to transform your business and drive innovation.</p>
         </div>
-        <div className={styles.serviceFilters} role="group" aria-label="Service categories">
+        <div className={styles.serviceFilters} role="group" aria-label="Service categories" data-scroll-reveal="up">
           {categories.map((category) => {
             const Icon = category.icon;
             return <button key={category.id} type="button" onClick={() => setActiveCategory(category.id)} aria-pressed={activeCategory === category.id} aria-controls="service-results" className={styles.filter}><Icon size={15} aria-hidden="true" />{category.label}</button>;
           })}
         </div>
         <div id="service-results" className={styles.serviceGrid}>
-          {filteredServices.map((service) => {
+          {filteredServices.map((service, index) => {
             const Icon = service.icon;
             return (
-              <article key={service.id} className={styles.serviceCard}>
+              <article key={service.id} className={styles.serviceCard} data-scroll-reveal="depth" data-scroll-delay={index % 3}>
                 <div className={styles.serviceTop}><Icon size={34} strokeWidth={1} aria-hidden="true" /><span>{String(service.id).padStart(2, "0")}</span></div>
                 <h3>{service.title}</h3><p>{service.description}</p>
                 <ul className={styles.features}>{service.features.map((feature) => <li key={feature}>{feature}</li>)}</ul>
@@ -171,7 +171,7 @@ export default function Services() {
             );
           })}
         </div>
-        <div className={styles.serviceCta}>
+        <div className={styles.serviceCta} data-scroll-reveal="up">
           <div><h3>Ready to Transform Your Business?</h3><p>Let us discuss how our solutions can help you achieve your goals.</p></div>
           <Link href="/shedule_contact" className={styles.pill}><ArrowRight size={17} aria-hidden="true" />Schedule a Consultation</Link>
         </div>

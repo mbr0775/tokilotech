@@ -13,11 +13,11 @@ export default function Stakeholders() {
     <section id="team" aria-labelledby="team-heading" className={styles.section}>
       <div className={styles.container}>
         <div className={styles.leadership}>
-          <div className={styles.portrait}>
+          <div className={styles.portrait} data-scroll-reveal="left">
             <Image src="/mubassir.png" alt="Abul Naser Mubassir Founder and CEO" fill sizes="(max-width: 600px) 100vw, 50vw" />
             <span className={styles.portraitTag}><Award size={16} aria-hidden="true" />Visionary Leadership</span>
           </div>
-          <div className={styles.leaderInfo}>
+          <div className={styles.leaderInfo} data-scroll-reveal="right" data-scroll-delay="1">
             <span className={styles.eyebrow}>Leadership</span>
             <h2 id="team-heading" className={styles.heading}>Building technology <span>with vision</span></h2>
             <p className={styles.intro}>Driven by innovation, AI, and engineering to create scalable digital products.</p>
@@ -26,9 +26,9 @@ export default function Stakeholders() {
           </div>
         </div>
         <div className={styles.teamGrid}>
-          {teamMembers.map((member) => {
+          {teamMembers.map((member, index) => {
             const Icon = member.icon;
-            return <article key={member.name} className={styles.teamCard}><Icon size={32} strokeWidth={1} aria-hidden="true" /><h4>{member.name}</h4><p>{member.role}</p></article>;
+            return <article key={member.name} className={styles.teamCard} data-scroll-reveal="up" data-scroll-delay={index}><Icon size={32} strokeWidth={1} aria-hidden="true" /><h4>{member.name}</h4><p>{member.role}</p></article>;
           })}
         </div>
       </div>

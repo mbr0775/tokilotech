@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { 
   Calendar, 
   Clock, 
@@ -70,7 +71,7 @@ export default function ContactSchedule() {
       role: 'Software Engineer',
       email: 'john@company.com',
       phone: '+1 (234) 567-8901',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+      image: '/media/testimonials/portrait-1.jpg',
       linkedin: '#',
       twitter: '#'
     },
@@ -79,7 +80,7 @@ export default function ContactSchedule() {
       role: 'Designer',
       email: 'sarah@company.com',
       phone: '+1 (234) 567-8902',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
+      image: '/media/testimonials/portrait-2.jpg',
       linkedin: '#',
       twitter: '#'
     },
@@ -88,7 +89,7 @@ export default function ContactSchedule() {
       role: 'Marketing Team Lead',
       email: 'michael@company.com',
       phone: '+1 (234) 567-8903',
-      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+      image: '/media/testimonials/portrait-3.jpg',
       linkedin: '#',
       twitter: '#'
     }
@@ -178,9 +179,12 @@ export default function ContactSchedule() {
                   <div key={index} className="group">
                     <div className="flex items-start gap-4">
                       <div className="relative">
-                        <img 
+                        <Image
                           src={member.image} 
                           alt={member.name}
+                          width={64}
+                          height={64}
+                          sizes="64px"
                           className="w-16 h-16 rounded-full object-cover border-2 border-[#24375a]/50 group-hover:border-[#91BF48] transition-all duration-300"
                         />
                         <div className="absolute inset-0 w-16 h-16 rounded-full bg-[#24375a]/0 group-hover:bg-[#24375a]/20 transition-all duration-300"></div>

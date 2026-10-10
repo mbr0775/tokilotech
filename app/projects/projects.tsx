@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import { SHOWCASE_SELECT, showcaseToProject, type Project, type ShowcaseRow } from "../../lib/project-showcase";
 import styles from "../design.module.css";
+import MotionSurface from "../motion/MotionSurface";
 
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -119,7 +120,7 @@ export default function Projects() {
                 const sortedMedia = [...(project.project_media || [])].sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
                 const coverImage = project.cover_url || sortedMedia[0]?.media_url || "";
                 return (
-                  <article key={project.id} className={`${styles.projectCard} ${index === 0 ? styles.leadProject : ""}`} data-scroll-reveal={index === 0 ? "depth" : "up"} data-scroll-delay={index % 3}>
+                  <MotionSurface key={project.id} className={`${styles.projectCard} ${index === 0 ? styles.leadProject : ""}`} delay={(index % 3) * 0.07}>
                     <Link href={`/projects/${project.slug}`} aria-label={`View ${project.title}`} className={styles.projectCover}>
                       {coverImage ? <img src={coverImage} alt={project.title} loading="lazy" /> : <div className={styles.imagePlaceholder}><ImageIcon size={48} aria-hidden="true" /></div>}
                       <div className={styles.projectTags}><span>{project.category}</span>{project.is_featured && <span>Featured</span>}</div>
@@ -134,7 +135,7 @@ export default function Projects() {
                         {project.live_url && <a href={project.live_url} target="_blank" rel="noreferrer" aria-label={`Open live ${project.title} project`} className={styles.liveLink}><ExternalLink size={16} aria-hidden="true" /></a>}
                       </div>
                     </div>
-                  </article>
+                  </MotionSurface>
                 );
               })}
             </div>

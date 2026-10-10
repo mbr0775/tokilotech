@@ -1,0 +1,5 @@
+.surface { transform-origin: center; }
+
+@media (prefers-reduced-motion: reduce), print {
+  .surface { opacity: 1 !important; transform: none !important; }
+}

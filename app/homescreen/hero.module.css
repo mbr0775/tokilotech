@@ -2,8 +2,7 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
-  height: 66.118vw;
-  min-height: 760px;
+  height: auto;
   background: #010101;
   color: #fff;
   font-family: "Tokilo Helvetica", Arial, Helvetica, sans-serif;
@@ -11,8 +10,8 @@
 .background { position: absolute; inset: -8%; z-index: 0; background: url('/media/hero-liquid-metal.jpg') center / cover; opacity: .84; overflow: hidden; pointer-events: none; }
 .backgroundVideo { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .shade { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(110deg, #03070bc9 0%, #03070b40 65%, #03070b12), linear-gradient(0deg, #03070b88, transparent 45%); }
-.content { position: relative; z-index: 3; width: 100%; height: 100%; }
-.copyPlane { position: absolute; top: 8.5068vw; left: 1.8585vw; right: 1.8585vw; transform-origin: 35% 35%; }
+.content { position: relative; z-index: 3; display: flex; flex-direction: column; gap: clamp(28px, 2.5vw, 48px); width: 100%; padding: clamp(124px, 8.5068vw, 164px) 1.8585vw 32px; }
+.copyPlane { position: relative; transform-origin: 35% 35%; }
 .copy { position: relative; }
 .depthOrbits { position: absolute; z-index: 2; top: 31%; right: 6%; width: 40vw; height: 40vw; max-width: 750px; max-height: 750px; pointer-events: none; perspective: 1000px; opacity: .58; }
 .orbitRing, .orbitInner { position: absolute; inset: 0; border: 1px solid #e2f2fa66; border-top: 3px solid #f2f9ffb0; border-radius: 50%; box-shadow: 0 -3px 20px #c7e8ff18, inset 0 1px 3px #fff6; transform: rotateX(66deg) rotateY(-18deg) rotateZ(-20deg); }
@@ -24,7 +23,7 @@
 .primaryButton { display: inline-flex; align-items: center; gap: .55vw; min-height: clamp(50px, 3.4375vw, 68px); margin-top: .58vw; padding: .35vw 1.05vw .35vw .3vw; border: 1px solid #010101; border-radius: 999px; background: #fff; color: #010101; font-size: clamp(15px, 1.09375vw, 22px); line-height: 1.3; text-transform: uppercase; text-decoration: none; transition: background .2s; }
 .primaryButton svg { flex: 0 0 auto; width: clamp(36px, 2.34375vw, 46px); height: clamp(36px, 2.34375vw, 46px); padding: .5vw; border-radius: 50%; background: #010101; color: #fff; stroke-width: 1; }
 .primaryButton:hover { background: #d6dde0; }
-.serviceCard { position: absolute; display: grid; grid-template-columns: 10.9375vw 1fr; gap: 1.4vw; right: 1.893vw; bottom: 1.94vw; width: 33.39vw; min-height: 13.6vw; padding: 1.04vw; border: 1px solid #ffffffb3; border-radius: 1.85vw; background: #fffffff5; color: #010101; text-decoration: none; box-shadow: 0 22px 60px #02081245, 0 1px 0 #fff inset; transition: box-shadow .25s, background .25s; }
+.serviceCard { position: relative; align-self: flex-end; display: grid; grid-template-columns: 10.9375vw 1fr; gap: 1.4vw; width: 33.39vw; min-height: 13.6vw; padding: 1.04vw; border: 1px solid #ffffffb3; border-radius: 1.85vw; background: #fffffff5; color: #010101; text-decoration: none; box-shadow: 0 22px 60px #02081245, 0 1px 0 #fff inset; transition: box-shadow .25s, background .25s; }
 .serviceCard:hover { background: #fff; box-shadow: 0 30px 80px #02081270, 0 1px 0 #fff inset; }
 .cardImage { position: relative; min-height: 11.45vw; border-radius: 1.2vw; overflow: hidden; background: #a5bdc1; }
 .servicePhoto { object-fit: cover; }
@@ -42,7 +41,8 @@
 .indicatorFill { position: absolute; height: 2px; inset: 14px 0; width: 0; background: #fff; }
 .slideIndicator[aria-current='true'] .indicatorFill { width: 100%; transform-origin: left; animation: progress 6s linear both; }
 .pauseButton { display: flex; align-items: center; gap: 6px; min-height: 30px; border: 0; background: none; color: #fff; font-size: 12px; cursor: pointer; }
-.slideCount { font-size: 11px; }
+.slideCount { font-size: 11px; font-variant-numeric: tabular-nums; }
+.slideCountVisual { display: inline-flex; align-items: center; white-space: pre; }
 .scrollCue { position: absolute; left: 50%; bottom: 30px; display: inline-flex; align-items: center; gap: 8px; color: #ffffffb3; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; transform: translateX(-50%); }
 .scrollCue:hover { color: #fff; }
 .serviceSummary { display: flex; justify-content: space-between; align-items: center; gap: 60px; padding: 36px 1.8585vw; border-bottom: 1px solid #a6acae; background: var(--surface, #d6dde0); color: var(--ink, #010101); font-family: "Tokilo Helvetica", Arial, Helvetica, sans-serif; }
@@ -57,8 +57,7 @@
 .hero :is(a, button):focus-visible, .serviceSummary a:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
 @keyframes progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @media (max-width: 1100px) {
-  .hero { min-height: 730px; }
-  .copyPlane { top: 135px; }
+  .content { padding-top: 124px; }
   .serviceCard { width: 43vw; grid-template-columns: 13vw 1fr; min-height: 200px; padding: 14px; gap: 18px; border-radius: 25px; }
   .cardImage { min-height: 170px; border-radius: 16px; }
   .cardEyebrow { font-size: 13px; }
@@ -68,24 +67,21 @@
   .serviceSummary { gap: 30px; padding: 30px 22px; }
 }
 @media (max-width: 850px) {
-  .hero { min-height: 800px; }
-  .copyPlane { top: 130px; left: 22px; right: 22px; }
+  .content { padding: 116px 22px 80px; gap: 32px; }
   .depthOrbits, .scrollCue { display: none; }
   .heading { font-size: calc(8.3vw * var(--heading-scale, 1)); }
-  .serviceCard { right: 22px; bottom: 80px; width: 440px; max-width: calc(100% - 44px); grid-template-columns: 135px 1fr; }
+  .serviceCard { width: 440px; max-width: 100%; grid-template-columns: 135px 1fr; }
   .cardImage { min-height: 180px; }
   .slideControls { left: 22px; bottom: 24px; }
   .primaryButton { gap: 10px; margin-top: 24px; padding: 6px 18px 6px 6px; }
   .primaryButton svg { padding: 8px; }
 }
 @media (max-width: 600px) {
-  .hero { height: auto; min-height: 800px; }
-  .content { display: flex; flex-direction: column; min-height: 800px; padding: 125px 18px 80px; }
-  .copyPlane { position: relative; inset: auto; }
+  .content { padding: 112px 18px 76px; gap: 32px; }
   .heading { font-size: clamp(38px, 9vw, 56px); line-height: 1.04; }
   .heading span { white-space: normal; }
   .primaryButton { font-size: 13px; min-height: 50px; margin-top: 25px; }
-  .serviceCard { position: relative; right: auto; bottom: auto; width: 100%; max-width: 100%; grid-template-columns: 96px 1fr; margin-top: auto; padding: 14px; gap: 14px; min-height: 195px; border-radius: 26px; }
+  .serviceCard { position: relative; right: auto; bottom: auto; width: 100%; max-width: 100%; grid-template-columns: 96px 1fr; margin-top: 0; padding: 14px; gap: 14px; min-height: 195px; border-radius: 26px; }
   .cardImage { min-height: 165px; border-radius: 18px; }
   .cardEyebrow { font-size: 10px; gap: 6px; }
   .cardEyebrow svg { width: 15px; }

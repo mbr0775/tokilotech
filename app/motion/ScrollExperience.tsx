@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { MotionConfig, motion, useMotionValueEvent, useScroll, useSpring } from "framer-motion";
 import { useCallback, useEffect, useRef, type ReactNode } from "react";
 import { setupScrollReveals } from "../../lib/scroll-reveals";
 import styles from "./scroll.module.css";
@@ -16,6 +16,7 @@ export default function ScrollExperience({
   const depthTargets = useRef<HTMLElement[]>([]);
   const depthEnabled = useRef(false);
   const { scrollY, scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 180, damping: 30, restDelta: 0.001 });
 
   const updateDepth = useCallback(() => {
     if (!depthEnabled.current) return;
@@ -61,9 +62,11 @@ export default function ScrollExperience({
   }, [updateDepth]);
 
   return (
-    <div ref={root} className={`${className} ${styles.scene}`}>
-      <motion.div aria-hidden="true" className={styles.progress} style={{ scaleX: scrollYProgress }} />
-      {children}
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div ref={root} className={`${className} ${styles.scene}`}>
+        <motion.div aria-hidden="true" className={styles.progress} style={{ scaleX: progress }} />
+        {children}
+      </div>
+    </MotionConfig>
   );
 }

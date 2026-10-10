@@ -13,19 +13,19 @@ const stats = [
 
 const images = [
   {
-    src: "https://images.unsplash.com/photo-1516321310766-61f6f8c0b51f?w=1200",
-    alt: "Team collaboration",
+    src: "/media/services/web-development.jpg",
+    alt: "Web development workspace with a laptop",
   },
   {
-    src: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200",
+    src: "/media/about/business-meeting.jpg",
     alt: "Business meeting",
   },
   {
-    src: "https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?w=1200",
+    src: "/media/about/innovative-workspace.jpg",
     alt: "Innovative workspace",
   },
   {
-    src: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1200",
+    src: "/media/about/professional-strategy.jpg",
     alt: "Professional strategy",
   },
 ];

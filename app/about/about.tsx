@@ -1,31 +1,8 @@
 import Image from "next/image";
-import { ArrowRight, ArrowUpRight, BrainCircuit, CheckCircle2, Code2, Compass, Layers3, Rocket, ShieldCheck } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BrainCircuit, Code2, ShieldCheck } from "lucide-react";
+import DeliveryApproach from "./DeliveryApproach";
 import ui from "../design.module.css";
 import styles from "./about.module.css";
-
-const principles = [
-  {
-    icon: Compass,
-    number: "01",
-    title: "Understand the real problem",
-    description:
-      "We begin with your users, business goals, and operational challenges before choosing the technology.",
-  },
-  {
-    icon: Layers3,
-    number: "02",
-    title: "Design the right system",
-    description:
-      "We turn requirements into a clear product experience, dependable architecture, and practical delivery plan.",
-  },
-  {
-    icon: Rocket,
-    number: "03",
-    title: "Build, launch, and improve",
-    description:
-      "We deliver in focused stages, test carefully, and keep improving the product after launch.",
-  },
-];
 
 const strengths = [
   {
@@ -75,28 +52,7 @@ export default function About() {
         </div>
       </div>
 
-      <div className={styles.process}>
-        <div className={styles.processHeader} data-scroll-reveal="down">
-          <span className={styles.eyebrow}>Our delivery approach</span>
-          <h3>From idea to useful product</h3>
-        </div>
-        <div className={styles.steps}>
-          {principles.map((principle, index) => {
-            const Icon = principle.icon;
-            return (
-              <article key={principle.number} className={styles.step} data-scroll-reveal="up" data-scroll-delay={index}>
-                <div className={styles.stepMark}>
-                  <span className={styles.number}>{principle.number}</span>
-                  <Icon size={30} strokeWidth={1} aria-hidden="true" />
-                </div>
-                <h4>{principle.title}</h4>
-                <p>{principle.description}</p>
-              </article>
-            );
-          })}
-        </div>
-        <p className={styles.processFoot} data-scroll-reveal="up"><CheckCircle2 size={17} aria-hidden="true" />Clear communication throughout every stage.</p>
-      </div>
+      <DeliveryApproach />
 
       <div className={styles.strengths}>
         {strengths.map((strength, index) => {

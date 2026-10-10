@@ -23,6 +23,8 @@
 }
 
 html {
+  /* Motion measures hero offsets against the document scroll container. */
+  position: relative;
   scroll-behavior: smooth;
 }
 
@@ -31,6 +33,7 @@ html {
 }
 
 body {
+  position: relative;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-bd-sans), Arial, Helvetica, sans-serif;

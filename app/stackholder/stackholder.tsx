@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Award, Code2, Palette, Rocket } from "lucide-react";
 import styles from "../design.module.css";
+import MotionSurface from "../motion/MotionSurface";
 
 const teamMembers = [
   { name: "Technology Team", role: "Software Engineering", icon: Code2 },
@@ -13,10 +14,10 @@ export default function Stakeholders() {
     <section id="team" aria-labelledby="team-heading" className={styles.section}>
       <div className={styles.container}>
         <div className={styles.leadership}>
-          <div className={styles.portrait} data-scroll-reveal="left">
+          <MotionSurface as="div" className={styles.portrait}>
             <Image src="/mubassir.png" alt="Abul Naser Mubassir Founder and CEO" fill sizes="(max-width: 600px) 100vw, 50vw" />
             <span className={styles.portraitTag}><Award size={16} aria-hidden="true" />Visionary Leadership</span>
-          </div>
+          </MotionSurface>
           <div className={styles.leaderInfo} data-scroll-reveal="right" data-scroll-delay="1">
             <span className={styles.eyebrow}>Leadership</span>
             <h2 id="team-heading" className={styles.heading}>Building technology <span>with vision</span></h2>
@@ -28,7 +29,7 @@ export default function Stakeholders() {
         <div className={styles.teamGrid}>
           {teamMembers.map((member, index) => {
             const Icon = member.icon;
-            return <article key={member.name} className={styles.teamCard} data-scroll-reveal="up" data-scroll-delay={index}><Icon size={32} strokeWidth={1} aria-hidden="true" /><h4>{member.name}</h4><p>{member.role}</p></article>;
+            return <MotionSurface key={member.name} className={styles.teamCard} delay={index * 0.07}><Icon size={32} strokeWidth={1} aria-hidden="true" /><h4>{member.name}</h4><p>{member.role}</p></MotionSurface>;
           })}
         </div>
       </div>

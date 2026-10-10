@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Code, Smartphone, Database, Brain, BarChart3, Zap, MessageSquare, Eye, TrendingUp, Cpu, type LucideIcon, ArrowRight } from "lucide-react";
 import styles from "../design.module.css";
+import MotionSurface from "../motion/MotionSurface";
 
 type ServiceCategory = "software" | "ai" | "enterprise";
 
@@ -163,11 +164,11 @@ export default function Services() {
           {filteredServices.map((service, index) => {
             const Icon = service.icon;
             return (
-              <article key={service.id} className={styles.serviceCard} data-scroll-reveal="depth" data-scroll-delay={index % 3}>
+              <MotionSurface key={service.id} className={styles.serviceCard} delay={(index % 3) * 0.07}>
                 <div className={styles.serviceTop}><Icon size={34} strokeWidth={1} aria-hidden="true" /><span>{String(service.id).padStart(2, "0")}</span></div>
                 <h3>{service.title}</h3><p>{service.description}</p>
                 <ul className={styles.features}>{service.features.map((feature) => <li key={feature}>{feature}</li>)}</ul>
-              </article>
+              </MotionSurface>
             );
           })}
         </div>

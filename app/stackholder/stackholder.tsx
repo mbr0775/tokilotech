@@ -21,7 +21,7 @@ export default function Stakeholders() {
             <span className={styles.eyebrow}>Leadership</span>
             <h2 id="team-heading" className={styles.heading}>Building technology <span>with vision</span></h2>
             <p className={styles.intro}>Driven by innovation, AI, and engineering to create scalable digital products.</p>
-            <h3>Abul Naser Mubassir</h3><p className={styles.leaderRole}>Founder &amp; CEO</p>
+            <h3>Abdul Naser Mubassir</h3><p className={styles.leaderRole}>Founder &amp; CEO</p>
             <p>Leading Tokilo Technologies in building AI-powered software solutions and scalable digital products.</p>
           </div>
         </div>

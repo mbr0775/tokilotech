@@ -1,12 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { ArrowDown, ArrowRight, ArrowUpRight, BrainCircuit, Check, Cloud, Code2, Megaphone, Pause, Play, Smartphone } from "lucide-react";
 import styles from "./hero.module.css";
 import summaryStyles from "./summary.module.css";
+import { useHeroParallax } from "./use-hero-parallax";
 
-const SLIDE_DURATION = 3000;
+const SLIDE_DURATION = 6000;
 const slides = [
   {
     service: "Web development",
@@ -97,58 +99,83 @@ function subscribeToMotion(callback: () => void) {
 const getReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+function subscribeToVisibility(callback: () => void) {
+  document.addEventListener("visibilitychange", callback);
+  return () => document.removeEventListener("visibilitychange", callback);
+}
+
+const getPageVisible = () => !document.hidden;
+
 export default function HomeScreen() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const reducedMotion = useSyncExternalStore(subscribeToMotion, getReducedMotion, () => false);
+  const [heroVisible, setHeroVisible] = useState(true);
+  const [videoFailed, setVideoFailed] = useState(false);
+  // Server HTML uses the poster. Video starts only after checking the preference.
+  const reducedMotion = useSyncExternalStore(subscribeToMotion, getReducedMotion, () => true);
+  const pageVisible = useSyncExternalStore(subscribeToVisibility, getPageVisible, () => true);
   const slide = slides[activeIndex];
   const ServiceIcon = slide.icon;
+  const heroRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const animate = !paused && !reducedMotion && heroVisible && pageVisible;
+  const parallax = useHeroParallax(heroRef, animate);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero || !("IntersectionObserver" in window)) return;
+    const observer = new IntersectionObserver(([entry]) => setHeroVisible(entry.isIntersecting));
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    if (paused || reducedMotion) video.pause();
+    if (!animate) video.pause();
     else void video.play().catch(() => {});
-  }, [paused, reducedMotion]);
+  }, [animate, videoFailed]);
 
   useEffect(() => {
-    if (paused || reducedMotion) return;
-    let timer: ReturnType<typeof setInterval> | undefined;
-    const updateTimer = () => {
-      clearInterval(timer);
-      if (!document.hidden) timer = setInterval(() => setActiveIndex((index) => (index + 1) % slides.length), SLIDE_DURATION);
-    };
-    updateTimer();
-    document.addEventListener("visibilitychange", updateTimer);
-    return () => { clearInterval(timer); document.removeEventListener("visibilitychange", updateTimer); };
-  }, [paused, reducedMotion, activeIndex]);
+    if (!animate) return;
+    const timer = setInterval(() => setActiveIndex((index) => (index + 1) % slides.length), SLIDE_DURATION);
+    return () => clearInterval(timer);
+  }, [animate, activeIndex]);
 
   return (
     <>
-      <section id="home" aria-labelledby="hero-heading" aria-roledescription="carousel" className={styles.hero}>
-        <div className={styles.background} aria-hidden="true" data-scroll-depth="hero">
-          {!reducedMotion && <video ref={videoRef} className={styles.backgroundVideo} src="/media/hero-liquid-metal.mp4" poster="/media/hero-liquid-metal.jpg" autoPlay muted loop playsInline preload="metadata" />}
-        </div>
+      <section ref={heroRef} id="home" aria-labelledby="hero-heading" aria-roledescription="carousel" className={styles.hero} data-hero-motion={parallax.active ? "active" : "static"} onPointerMove={parallax.movePointer} onPointerLeave={parallax.resetPointer} onFocusCapture={parallax.resetPointer}>
+        <motion.div className={styles.background} aria-hidden="true" style={parallax.background}>
+          {!reducedMotion && !videoFailed && <video ref={videoRef} className={styles.backgroundVideo} src="/media/hero-liquid-metal-parallax.mp4" poster="/media/hero-liquid-metal.jpg" autoPlay={animate} muted loop playsInline preload="none" onError={() => setVideoFailed(true)} />}
+        </motion.div>
+        <div className={styles.shade} aria-hidden="true" />
+        <motion.div className={styles.depthOrbits} aria-hidden="true" style={parallax.orbit}>
+          <span className={styles.orbitRing} />
+          <span className={styles.orbitInner} />
+          <span className={styles.orbitGlow} />
+        </motion.div>
         <div className={styles.content}>
-          <div key={slide.service} className={styles.copy} aria-live="off">
+          <motion.div className={styles.copyPlane} style={parallax.copy}>
+            <div key={slide.service} className={styles.copy} aria-live="off">
             <span className={styles.eyebrow}>{slide.service} · TOKILO TECHNOLOGIES</span>
             <h1 id="hero-heading" className={styles.heading} style={{ "--heading-scale": slide.headingScale } as CSSProperties}>{slide.heading.map((line) => <span key={line}>{line}</span>)}</h1>
             <a href="#contact" className={styles.primaryButton}><ArrowRight size={22} aria-hidden="true" />{slide.action}</a>
-          </div>
-          <a href="#services" className={styles.serviceCard} aria-label={`Explore ${slide.service} services`}>
+            </div>
+          </motion.div>
+          <motion.a href="#services" className={styles.serviceCard} aria-label={`Explore ${slide.service} services`} style={parallax.card}>
             <div className={styles.cardImage}><Image key={slide.image} src={imageUrl(slide.image)} alt={slide.alt} fill unoptimized sizes="(max-width: 600px) 110px, 11vw" className={styles.servicePhoto} /></div>
             <div className={styles.cardCopy}>
               <span className={styles.cardEyebrow}><ServiceIcon size={18} aria-hidden="true" />{slide.service}</span>
               <strong>{slide.cardTitle}</strong><p>{slide.cardText}</p>
               <span className={styles.cardFootnote}>{slide.badge}<ArrowUpRight size={18} aria-hidden="true" /></span>
             </div>
-          </a>
+          </motion.a>
           <div className={styles.slideControls} aria-label="Hero slideshow controls">
-            <div className={styles.slideIndicators}>{slides.map((item, index) => <button key={item.service} type="button" onClick={() => setActiveIndex(index)} className={styles.slideIndicator} aria-label={`Show ${item.service}`} aria-current={index === activeIndex ? "true" : undefined}><span key={`${activeIndex}-${paused}-${reducedMotion}`} className={styles.indicatorFill} style={{ animation: paused || reducedMotion ? "none" : undefined }} /></button>)}</div>
-            {!reducedMotion && <button type="button" className={styles.pauseButton} onClick={() => setPaused((value) => !value)} aria-label={paused ? "Play hero slideshow" : "Pause hero slideshow"}>{paused ? <Play size={13} aria-hidden="true" /> : <Pause size={13} aria-hidden="true" />}{paused ? "Play" : "Pause"}</button>}
+            <div className={styles.slideIndicators}>{slides.map((item, index) => <button key={item.service} type="button" onClick={() => setActiveIndex(index)} className={styles.slideIndicator} aria-label={`Show ${item.service}`} aria-current={index === activeIndex ? "true" : undefined}><span key={`${activeIndex}-${animate}`} className={styles.indicatorFill} style={{ animation: !animate ? "none" : undefined }} /></button>)}</div>
+            {!reducedMotion && <button type="button" className={styles.pauseButton} onClick={() => setPaused((value) => !value)} aria-label={paused ? "Play hero animation" : "Pause hero animation"}>{paused ? <Play size={13} aria-hidden="true" /> : <Pause size={13} aria-hidden="true" />}{paused ? "Play" : "Pause"}</button>}
             <span className={styles.slideCount}>{String(activeIndex + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span>
           </div>
+          <a href="#about" className={styles.scrollCue}><ArrowDown size={14} aria-hidden="true" />Scroll to explore</a>
         </div>
       </section>
       <div className={summaryStyles.summary}>

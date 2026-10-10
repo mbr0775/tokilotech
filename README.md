@@ -109,6 +109,23 @@ a fine pointer. Small screens use shorter entrances. Reduced-motion preferences
 disable the effects, and keyboard focus reveals a pending interactive element
 immediately. Content is visible in server HTML, without JavaScript, and in print.
 
+### Hero video and 3D parallax
+
+The hero uses the repository's liquid-metal footage, compressed into
+`public/media/hero-liquid-metal-parallax.mp4` (H.264, 720p, 24 fps, no audio,
+fast-start MP4). Its existing JPEG poster remains the fallback. The video,
+headline and service card move at different scroll depths; spring-smoothed
+pointer motion adds restrained perspective on larger screens with a mouse.
+Decorative orbital rings reinforce the depth without covering the content.
+
+`app/homescreen/use-hero-parallax.ts` owns hero transforms separately from the
+page's reveal observer. The pause button stops the video, slideshow and parallax.
+Video and slides also pause outside the viewport or in a hidden tab.
+Reduced-motion visitors get the poster and static content, including before
+hydration. Touch and narrow screens retain their normal layout without pointer
+or scroll parallax. Service slides rotate every six seconds and can be selected
+manually.
+
 ## Verification
 
 Run `npx tsc --noEmit`, `npm run build`, and `npm run lint`.

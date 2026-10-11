@@ -18,7 +18,7 @@ const getMotion = () => window.matchMedia(MOTION_QUERY).matches;
 const getTilt = () => window.matchMedia(TILT_QUERY).matches;
 const serverPreference = () => false;
 
-/** Server-visible content with a one-time entrance and optional pointer depth. */
+/** Server-visible content with a repeatable entrance and optional pointer depth. */
 export default function MotionSurface({ children, className, as = "article", delay = 0 }: {
   children: ReactNode;
   className?: string;
@@ -26,8 +26,8 @@ export default function MotionSurface({ children, className, as = "article", del
   delay?: number;
 }) {
   const ref = useRef<HTMLElement & HTMLDivElement>(null);
-  const entered = useRef(false);
-  const inView = useInView(ref, { once: true, margin: "0px 0px -40px 0px" });
+  // Keep the 24px entrance transform inside the observer's bounds at the edge.
+  const inView = useInView(ref, { margin: "60px" });
   const motionEnabled = useSyncExternalStore(subscribe, getMotion, serverPreference);
   const tiltEnabled = useSyncExternalStore(subscribe, getTilt, serverPreference);
   const controls = useAnimationControls();
@@ -35,13 +35,11 @@ export default function MotionSurface({ children, className, as = "article", del
   const rotateY = useSpring(0, spring);
 
   useEffect(() => {
-    if (!motionEnabled) {
+    if (!motionEnabled || !inView || ref.current?.contains(document.activeElement)) {
       controls.stop();
       controls.set({ opacity: 1, y: 0 });
       return;
     }
-    if (!inView || entered.current) return;
-    entered.current = true;
     void controls.start({
       opacity: [0, 1], y: [24, 0],
       transition: { duration: 0.55, delay: Math.min(delay, 0.2), ease: [0.22, 1, 0.36, 1] },
@@ -79,7 +77,6 @@ export default function MotionSurface({ children, className, as = "article", del
       onFocusCapture={() => {
         controls.stop();
         controls.set({ opacity: 1, y: 0 });
-        entered.current = true;
         reset();
       }}>
       {children}

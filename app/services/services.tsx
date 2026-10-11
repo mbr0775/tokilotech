@@ -2,7 +2,20 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Code, Smartphone, Database, Brain, BarChart3, Zap, MessageSquare, Eye, TrendingUp, Cpu, type LucideIcon, ArrowRight } from "lucide-react";
+import {
+  Code,
+  Smartphone,
+  Database,
+  Brain,
+  BarChart3,
+  Zap,
+  MessageSquare,
+  Eye,
+  TrendingUp,
+  Cpu,
+  type LucideIcon,
+  ArrowRight,
+} from "lucide-react";
 import styles from "../design.module.css";
 import MotionSurface from "../motion/MotionSurface";
 
@@ -131,7 +144,12 @@ const services: Service[] = [
     title: "Computer Vision",
     description:
       "Advanced image and video analysis for intelligent visual processing.",
-    features: ["Object Detection", "Image Recognition", "Video Analysis", "OCR"],
+    features: [
+      "Object Detection",
+      "Image Recognition",
+      "Video Analysis",
+      "OCR",
+    ],
     category: "enterprise",
   },
 ];
@@ -145,36 +163,92 @@ const categories = [
 
 export default function Services() {
   const [activeCategory, setActiveCategory] = useState("all");
-  const filteredServices = activeCategory === "all" ? services : services.filter((service) => service.category === activeCategory);
+  const filteredServices =
+    activeCategory === "all"
+      ? services
+      : services.filter((service) => service.category === activeCategory);
 
   return (
-    <section id="services" aria-labelledby="services-heading" className={`${styles.section} ${styles.surface}`}>
+    <section
+      id="services"
+      aria-labelledby="services-heading"
+      className={`${styles.section} ${styles.surface}`}
+    >
       <div className={styles.container}>
         <div className={styles.sectionHeader}>
-          <div data-scroll-reveal="left"><span className={styles.eyebrow}>Our Services</span><h2 id="services-heading" className={styles.heading}>Our Services</h2></div>
-          <p className={styles.intro} data-scroll-reveal="right" data-scroll-delay="1">Comprehensive technology solutions designed to transform your business and drive innovation.</p>
+          <div data-scroll-reveal="left">
+            <span className={styles.eyebrow}>Our Services</span>
+            <h2 id="services-heading" className={styles.heading}>
+              The right tools.<span>The right experience.</span>
+            </h2>
+          </div>
+          <p
+            className={styles.intro}
+            data-scroll-reveal="right"
+            data-scroll-delay="1"
+          >
+            Purposeful software, practical intelligence, and connected systems.
+            Choose the capabilities that fit your next business challenge.
+          </p>
         </div>
-        <div className={styles.serviceFilters} role="group" aria-label="Service categories" data-scroll-reveal="up">
+        <div
+          className={styles.serviceFilters}
+          role="group"
+          aria-label="Service categories"
+          data-scroll-reveal="up"
+        >
           {categories.map((category) => {
             const Icon = category.icon;
-            return <button key={category.id} type="button" onClick={() => setActiveCategory(category.id)} aria-pressed={activeCategory === category.id} aria-controls="service-results" className={styles.filter}><Icon size={15} aria-hidden="true" />{category.label}</button>;
+            return (
+              <button
+                key={category.id}
+                type="button"
+                onClick={() => setActiveCategory(category.id)}
+                aria-pressed={activeCategory === category.id}
+                aria-controls="service-results"
+                className={styles.filter}
+              >
+                <Icon size={15} aria-hidden="true" />
+                {category.label}
+              </button>
+            );
           })}
         </div>
         <div id="service-results" className={styles.serviceGrid}>
           {filteredServices.map((service, index) => {
             const Icon = service.icon;
             return (
-              <MotionSurface key={service.id} className={styles.serviceCard} delay={(index % 3) * 0.07}>
-                <div className={styles.serviceTop}><Icon size={34} strokeWidth={1} aria-hidden="true" /><span>{String(service.id).padStart(2, "0")}</span></div>
-                <h3>{service.title}</h3><p>{service.description}</p>
-                <ul className={styles.features}>{service.features.map((feature) => <li key={feature}>{feature}</li>)}</ul>
+              <MotionSurface
+                key={service.id}
+                className={styles.serviceCard}
+                delay={(index % 3) * 0.07}
+              >
+                <div className={styles.serviceTop}>
+                  <Icon size={34} strokeWidth={1} aria-hidden="true" />
+                  <span>{String(service.id).padStart(2, "0")}</span>
+                </div>
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
+                <ul className={styles.features}>
+                  {service.features.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
               </MotionSurface>
             );
           })}
         </div>
         <div className={styles.serviceCta} data-scroll-reveal="up">
-          <div><h3>Ready to Transform Your Business?</h3><p>Let us discuss how our solutions can help you achieve your goals.</p></div>
-          <Link href="/shedule_contact" className={styles.pill}><ArrowRight size={17} aria-hidden="true" />Schedule a Consultation</Link>
+          <div>
+            <h3>Find the right starting point.</h3>
+            <p>
+              Let us discuss how our solutions can help you achieve your goals.
+            </p>
+          </div>
+          <Link href="/shedule_contact" className={styles.pill}>
+            <ArrowRight size={17} aria-hidden="true" />
+            Schedule a Consultation
+          </Link>
         </div>
       </div>
     </section>

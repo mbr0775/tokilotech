@@ -7,10 +7,10 @@ export function setupScrollReveals(root: HTMLElement) {
   const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
   const targets = new Set<HTMLElement>();
   let observer: IntersectionObserver | undefined;
+  let exitObserver: IntersectionObserver | undefined;
 
   const show = (element: HTMLElement, immediately = false) => {
     element.dataset.scrollState = immediately ? "complete" : "visible";
-    observer?.unobserve(element);
   };
 
   const register = (element: HTMLElement, addedLater = false) => {
@@ -25,11 +25,12 @@ export function setupScrollReveals(root: HTMLElement) {
       (!addedLater && bounds.top < window.innerHeight * 0.92)
     ) {
       show(element, true);
-      return;
+    } else {
+      element.dataset.scrollState = "waiting";
     }
 
-    element.dataset.scrollState = "waiting";
     observer?.observe(element);
+    exitObserver?.observe(element);
   };
 
   const visit = (node: Element, addedLater = false) => {
@@ -43,6 +44,9 @@ export function setupScrollReveals(root: HTMLElement) {
 
   const startObserver = () => {
     observer?.disconnect();
+    exitObserver?.disconnect();
+    observer = undefined;
+    exitObserver = undefined;
     if (preference.matches) {
       targets.forEach((element) => show(element, true));
       return;
@@ -51,16 +55,30 @@ export function setupScrollReveals(root: HTMLElement) {
     observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          // Also reveal tiles skipped by a fast scroll or a navigation jump.
-          if (entry.isIntersecting || entry.boundingClientRect.bottom <= 0) {
-            show(entry.target as HTMLElement);
+          const element = entry.target as HTMLElement;
+          if (entry.isIntersecting && element.dataset.scrollState === "waiting") {
+            show(element);
           }
         });
       },
       { threshold: 0, rootMargin: "0px 0px -6% 0px" }
     );
+    // Re-arm only after the whole animated element is well outside the viewport.
+    // The buffer prevents transforms at the entry edge from toggling visibility.
+    exitObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const element = entry.target as HTMLElement;
+          if (!entry.isIntersecting && !element.contains(document.activeElement)) {
+            element.dataset.scrollState = "waiting";
+          }
+        });
+      },
+      { threshold: 0, rootMargin: "120px" }
+    );
     targets.forEach((element) => {
-      if (element.dataset.scrollState === "waiting") observer?.observe(element);
+      observer?.observe(element);
+      exitObserver?.observe(element);
     });
   };
 
@@ -75,6 +93,7 @@ export function setupScrollReveals(root: HTMLElement) {
         targets.forEach((element) => {
           if (element === node || node.contains(element)) {
             observer?.unobserve(element);
+            exitObserver?.unobserve(element);
             targets.delete(element);
           }
         });
@@ -112,6 +131,7 @@ export function setupScrollReveals(root: HTMLElement) {
 
   return () => {
     observer?.disconnect();
+    exitObserver?.disconnect();
     mutations.disconnect();
     preference.removeEventListener("change", startObserver);
     root.removeEventListener("focusin", onFocus);

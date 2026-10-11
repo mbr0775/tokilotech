@@ -1,0 +1,5 @@
+.layer { position: absolute; inset: 0; background-position: center; background-size: cover; background-repeat: no-repeat; pointer-events: none; }
+.layer video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.control { position: absolute; z-index: 5; right: clamp(18px, 3vw, 50px); bottom: 12px; display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line, #b4c2cb); border-radius: 999px; background: var(--paper, #fff); color: var(--ink, #17252f); font: inherit; font-size: 10px; cursor: pointer; }
+.control:hover { background: var(--surface, #edf3f6); }
+.control:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }

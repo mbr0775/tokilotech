@@ -2,7 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -32,48 +32,70 @@ export default function ProjectGallery({
 }: ProjectGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   const safeActiveIndex = Math.min(activeIndex, Math.max(media.length - 1, 0));
   const activeMedia = media[safeActiveIndex];
 
-  const goPrevious = () => {
+  const goPrevious = useCallback(() => {
     if (media.length <= 1) return;
     setActiveIndex((current) =>
-      current === 0 ? media.length - 1 : current - 1
+      current === 0 ? media.length - 1 : current - 1,
     );
-  };
+  }, [media.length]);
 
-  const goNext = () => {
+  const goNext = useCallback(() => {
     if (media.length <= 1) return;
     setActiveIndex((current) =>
-      current === media.length - 1 ? 0 : current + 1
+      current === media.length - 1 ? 0 : current + 1,
     );
-  };
+  }, [media.length]);
 
   useEffect(() => {
     if (!isLightboxOpen) return;
 
     const previousOverflow = document.body.style.overflow;
+    const previousFocus =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
     document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setIsLightboxOpen(false);
       if (event.key === "ArrowLeft") goPrevious();
       if (event.key === "ArrowRight") goNext();
+      if (event.key === "Tab") {
+        const controls =
+          dialogRef.current?.querySelectorAll<HTMLButtonElement>("button");
+        if (!controls?.length) return;
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
+      previousFocus?.focus();
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isLightboxOpen, media.length]);
+  }, [isLightboxOpen, goNext, goPrevious]);
 
   if (media.length === 0) {
     return (
       <div className="rounded-[2rem] border border-dashed border-slate-300 bg-white/70 px-6 py-16 text-center shadow-sm dark:border-white/15 dark:bg-white/[0.035]">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#91BF48]/15 text-[#4b7a16] dark:text-[#a8d663]">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#426c9b]/15 text-[#385f8a] dark:text-[#99c4f3]">
           <ImageIcon size={30} />
         </div>
         <h3 className="mt-5 text-2xl font-black">Gallery coming soon</h3>
@@ -85,10 +107,7 @@ export default function ProjectGallery({
     );
   }
 
-  const renderMedia = (
-    item: ProjectMedia,
-    mode: "stage" | "lightbox"
-  ) => {
+  const renderMedia = (item: ProjectMedia, mode: "stage" | "lightbox") => {
     if (item.media_type === "video") {
       return (
         <video
@@ -107,9 +126,7 @@ export default function ProjectGallery({
         src={item.media_url}
         alt={item.alt_text || projectTitle}
         className={`h-full w-full object-contain ${
-          mode === "stage"
-            ? "p-2 sm:p-4"
-            : "max-h-[86vh] max-w-[94vw]"
+          mode === "stage" ? "p-2 sm:p-4" : "max-h-[86vh] max-w-[94vw]"
         }`}
       />
     );
@@ -121,7 +138,7 @@ export default function ProjectGallery({
         <div className="overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-[0_30px_90px_-45px_rgba(15,23,42,0.55)] dark:border-white/10 dark:bg-[#0f1521]">
           <div className="flex items-center justify-between gap-4 border-b border-slate-200/80 px-5 py-4 dark:border-white/10 sm:px-6">
             <div className="min-w-0">
-              <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#4b7a16] dark:text-[#a8d663]">
+              <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#385f8a] dark:text-[#99c4f3]">
                 {activeMedia.media_type}
               </p>
               <p className="mt-1 truncate text-sm font-black sm:text-base">
@@ -134,7 +151,7 @@ export default function ProjectGallery({
                 <button
                   type="button"
                   onClick={() => setIsLightboxOpen(true)}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:border-[#91BF48] hover:bg-[#91BF48]/10 hover:text-[#4b7a16] dark:border-white/10 dark:text-slate-300 dark:hover:text-[#a8d663]"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:border-[#426c9b] hover:bg-[#426c9b]/10 hover:text-[#385f8a] dark:border-white/10 dark:text-slate-300 dark:hover:text-[#99c4f3]"
                   aria-label="Open full-screen viewer"
                 >
                   <Expand size={17} />
@@ -184,7 +201,7 @@ export default function ProjectGallery({
                 href={activeMedia.media_url}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 text-xs font-black text-[#24375a] transition hover:text-[#4b7a16] dark:text-white dark:hover:text-[#a8d663]"
+                className="inline-flex items-center gap-2 text-xs font-black text-[#385f8a] transition hover:text-[#385f8a] dark:text-white dark:hover:text-[#99c4f3]"
               >
                 Open original <ExternalLink size={14} />
               </a>
@@ -211,7 +228,7 @@ export default function ProjectGallery({
                   onClick={() => setActiveIndex(index)}
                   className={`group/thumb relative overflow-hidden rounded-2xl border p-1 text-left transition ${
                     isActive
-                      ? "border-[#91BF48] bg-[#91BF48]/10 shadow-sm"
+                      ? "border-[#426c9b] bg-[#426c9b]/10 shadow-sm"
                       : "border-transparent bg-slate-100 hover:border-slate-300 dark:bg-white/[0.05] dark:hover:border-white/20"
                   }`}
                   aria-label={`Open media ${index + 1}`}
@@ -244,8 +261,9 @@ export default function ProjectGallery({
         </div>
       </div>
 
-      {isLightboxOpen && activeMedia.media_type !== "video" && (
+      {isLightboxOpen && (
         <div
+          ref={dialogRef}
           className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 p-3 backdrop-blur-md sm:p-6"
           role="dialog"
           aria-modal="true"
@@ -253,6 +271,7 @@ export default function ProjectGallery({
           onClick={() => setIsLightboxOpen(false)}
         >
           <button
+            ref={closeRef}
             type="button"
             onClick={() => setIsLightboxOpen(false)}
             className="absolute right-4 top-4 z-20 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-xl transition hover:bg-white hover:text-slate-950 sm:right-6 sm:top-6"
@@ -294,7 +313,8 @@ export default function ProjectGallery({
           >
             {renderMedia(activeMedia, "lightbox")}
             <div className="mt-4 rounded-full border border-white/10 bg-white/10 px-4 py-2 text-center text-xs font-bold text-white/80 backdrop-blur-xl">
-              {activeMedia.alt_text || projectTitle} · {safeActiveIndex + 1} of {media.length}
+              {activeMedia.alt_text || projectTitle} · {safeActiveIndex + 1} of{" "}
+              {media.length}
             </div>
           </div>
         </div>

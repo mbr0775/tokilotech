@@ -46,6 +46,8 @@ export function useHeroParallax(target: RefObject<HTMLElement | null>, enabled: 
   const orbitX = useTransform(() => -x.get() * 32 * strength.get());
   const orbitY = useTransform(() => (y.get() * 20 + scrollYProgress.get() * 80) * strength.get());
   const orbitRotate = useTransform(() => (x.get() * 6 + scrollYProgress.get() * 14) * strength.get());
+  const orbitRotateX = useTransform(() => -y.get() * 5 * strength.get());
+  const orbitRotateY = useTransform(() => x.get() * 8 * strength.get());
 
   function resetPointer() {
     pointerX.set(0);
@@ -67,6 +69,6 @@ export function useHeroParallax(target: RefObject<HTMLElement | null>, enabled: 
     background: { x: backgroundX, y: backgroundY, scale: backgroundScale },
     copy: { x: copyX, y: copyY, rotateX: copyRotateX, rotateY: copyRotateY, transformPerspective: 1400 },
     card: { x: cardX, y: cardY, rotateX: cardRotateX, rotateY: cardRotateY, transformPerspective: 1100 },
-    orbit: { x: orbitX, y: orbitY, rotateZ: orbitRotate },
+    orbit: { x: orbitX, y: orbitY, rotateZ: orbitRotate, rotateX: orbitRotateX, rotateY: orbitRotateY, transformPerspective: 1400 },
   };
 }

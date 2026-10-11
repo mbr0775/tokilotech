@@ -2,18 +2,19 @@
 import type { Metadata } from "next";
 import HomeScreen from "./homescreen/homescreen";
 import About from "./about/about";
-import Navigation from "./navigation/navigations";
 import Stakeholders from "./stackholder/stackholder";
 import Services from "./services/services";
 import Projects from "./projects/projects";
 import Contact from "./contact/contact";
-import Footer from "./footer";
-import ScrollExperience from "./motion/ScrollExperience";
-import styles from "./design.module.css";
+import BuildExperience from "./motion/BuildExperience";
+import PublicShell from "./ui/PublicShell";
+import { getPublicProjects } from "../lib/public-projects";
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Web Development, Mobile Apps & AI | Tokilo Technologies",
-  description: "Tokilo Technologies builds fast websites, mobile apps and practical AI solutions for startups and growing businesses. Explore our services and start your project.",
+  description:
+    "Tokilo Technologies builds fast websites, mobile apps and practical AI solutions for startups and growing businesses. Explore our services and start your project.",
   alternates: { canonical: "/" },
 };
 
@@ -40,20 +41,26 @@ const structuredData = {
   ],
 };
 
-export default function Page() {
+export default async function Page() {
+  const initial = await getPublicProjects();
   return (
-    <ScrollExperience className={styles.site}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
-      <Navigation />
-      <main>
-        <HomeScreen />
-        <About />
-        <Projects />
-        <Services />
-        <Stakeholders />
-        <Contact />
-      </main>
-      <Footer />
-    </ScrollExperience>
+    <PublicShell>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+        }}
+      />
+      <HomeScreen />
+      <About />
+      <Projects
+        initialProjects={initial.projects}
+        initialError={initial.error}
+      />
+      <Services />
+      <BuildExperience />
+      <Stakeholders />
+      <Contact />
+    </PublicShell>
   );
 }

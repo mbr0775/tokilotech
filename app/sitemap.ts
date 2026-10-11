@@ -1,32 +1,32 @@
 import type { MetadataRoute } from "next";
-
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.tokilotech.com";
-
+import { getPublicProjects } from "../lib/public-projects";
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const base = "https://www.tokilotech.com";
+  const { projects } = await getPublicProjects();
+  const paths = [
+    "",
+    "/about",
+    "/services",
+    "/projects",
+    "/shedule_contact",
+    "/privacy-policy",
+    "/terms-and-conditions",
+  ];
   return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/shedule_contact`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
+    ...paths.map((path) => ({
+      url: `${base}${path}`,
+      changeFrequency: (path === "" || path === "/projects"
+        ? "weekly"
+        : "monthly") as "weekly" | "monthly",
+      priority: path === "" ? 1 : 0.7,
+    })),
+    ...projects.map((project) => ({
+      url: `${base}/projects/${project.slug}`,
+      ...(project.created_at
+        ? { lastModified: new Date(project.created_at) }
+        : {}),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
   ];
 }

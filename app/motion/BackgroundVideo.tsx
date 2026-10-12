@@ -13,11 +13,29 @@ function subscribe(callback: () => void) {
     document.removeEventListener("visibilitychange", callback);
   };
 }
-const canPlay = () => !document.hidden && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const canPlay = () =>
+  !document.hidden &&
+  !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** Lazy, decorative footage; all content remains in the surrounding server HTML. */
-export default function BackgroundVideo({ src, poster, label, className, enabled = true, controls = true }: {
-  src: string; poster: string; label: string; className?: string; enabled?: boolean; controls?: boolean;
+export default function BackgroundVideo({
+  src,
+  poster,
+  label,
+  className,
+  enabled = true,
+  controls = true,
+  loop = true,
+  onEnded,
+}: {
+  src: string;
+  poster: string;
+  label: string;
+  className?: string;
+  enabled?: boolean;
+  controls?: boolean;
+  loop?: boolean;
+  onEnded?: () => void;
 }) {
   const layer = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -31,13 +49,24 @@ export default function BackgroundVideo({ src, poster, label, className, enabled
   useEffect(() => {
     const element = layer.current;
     if (!element || !("IntersectionObserver" in window)) return;
-    const preloadObserver = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) { setLoaded(true); preloadObserver.disconnect(); }
-    }, { rootMargin: "120px" });
-    const visibilityObserver = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting));
+    const preloadObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setLoaded(true);
+          preloadObserver.disconnect();
+        }
+      },
+      { rootMargin: "120px" },
+    );
+    const visibilityObserver = new IntersectionObserver(([entry]) =>
+      setVisible(entry.isIntersecting),
+    );
     preloadObserver.observe(element);
     visibilityObserver.observe(element);
-    return () => { preloadObserver.disconnect(); visibilityObserver.disconnect(); };
+    return () => {
+      preloadObserver.disconnect();
+      visibilityObserver.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -45,12 +74,48 @@ export default function BackgroundVideo({ src, poster, label, className, enabled
     if (!element) return;
     if (playing) void element.play().catch(() => {});
     else element.pause();
-  }, [playing, loaded, failed, playbackAllowed]);
+  }, [playing, loaded, failed, playbackAllowed, loop]);
 
-  return <>
-    <div ref={layer} className={`${styles.layer} ${className ?? ""}`} style={{ backgroundImage: `url("${poster}")` }} aria-hidden="true">
-      {loaded && playbackAllowed && !failed && <video ref={video} src={src} poster={poster} autoPlay={playing} muted loop playsInline preload="none" tabIndex={-1} onError={() => setFailed(true)} />}
-    </div>
-    {controls && loaded && playbackAllowed && !failed && <button type="button" className={styles.control} aria-label={`${paused ? "Play" : "Pause"} ${label} background video`} aria-pressed={paused} onClick={() => setPaused((value) => !value)}>{paused ? <Play size={12} aria-hidden="true" /> : <Pause size={12} aria-hidden="true" />}{paused ? "Play background" : "Pause background"}</button>}
-  </>;
+  return (
+    <>
+      <div
+        ref={layer}
+        className={`${styles.layer} ${className ?? ""}`}
+        style={{ backgroundImage: `url("${poster}")` }}
+        aria-hidden="true"
+      >
+        {loaded && playbackAllowed && !failed && (
+          <video
+            ref={video}
+            src={src}
+            poster={poster}
+            autoPlay={playing}
+            muted
+            loop={loop}
+            playsInline
+            preload="none"
+            tabIndex={-1}
+            onEnded={playing ? onEnded : undefined}
+            onError={() => setFailed(true)}
+          />
+        )}
+      </div>
+      {controls && loaded && playbackAllowed && !failed && (
+        <button
+          type="button"
+          className={styles.control}
+          aria-label={`${paused ? "Play" : "Pause"} ${label} background video`}
+          aria-pressed={paused}
+          onClick={() => setPaused((value) => !value)}
+        >
+          {paused ? (
+            <Play size={12} aria-hidden="true" />
+          ) : (
+            <Pause size={12} aria-hidden="true" />
+          )}
+          {paused ? "Play background" : "Pause background"}
+        </button>
+      )}
+    </>
+  );
 }

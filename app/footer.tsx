@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import styles from "./design.module.css";
 export default function Footer() {
   return (
-    <footer className={styles.footer}>
+    <footer className={styles.footer} data-video-background="growth">
       <div className={styles.container}>
         <div className={styles.footerTop} data-scroll-reveal="up">
           <div>

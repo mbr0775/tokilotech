@@ -62,6 +62,7 @@ export default function PolicyPage() {
   return (
     <PublicShell>
       <PageHero
+        showFilm={false}
         eyebrow="Tokilo / Policies"
         title="Privacy Policy"
         accent="Clear by design."

@@ -19,7 +19,7 @@ export default function ContactPage() {
         action="Tell us about your project"
         href="#consultation"
       />
-      <div id="consultation">
+      <div id="consultation" data-video-background="growth">
         <ConsultationForm />
       </div>
     </PublicShell>

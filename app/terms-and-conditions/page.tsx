@@ -69,6 +69,7 @@ export default function PolicyPage() {
   return (
     <PublicShell>
       <PageHero
+        showFilm={false}
         eyebrow="Tokilo / Policies"
         title="Terms & Conditions"
         accent="A shared understanding."

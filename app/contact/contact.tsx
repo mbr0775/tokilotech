@@ -31,6 +31,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
+      data-video-background="growth"
       aria-labelledby="contact-heading"
       className={`${styles.section} ${styles.surface}`}
     >

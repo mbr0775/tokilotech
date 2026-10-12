@@ -599,6 +599,16 @@
   border-radius: 18px;
   text-align: center;
 }
+
+/* Public pages share one moving background; cards keep their readable surfaces. */
+.site {
+  position: relative;
+  isolation: isolate;
+}
+.site > main > section[class],
+.site > footer {
+  background: transparent;
+}
 .notice h3 {
   margin-top: 18px;
   font-size: 24px;

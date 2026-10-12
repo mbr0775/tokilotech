@@ -1,0 +1,74 @@
+.headline {
+  --unfold-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+.line {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 0.22em;
+  padding-block: 0.04em;
+}
+.line[data-alignment="end"] {
+  justify-content: flex-end;
+}
+.line[data-alignment="spread"] {
+  justify-content: space-between;
+}
+.accent {
+  color: var(--accent, #426c9b);
+}
+.word {
+  display: inline-block;
+  white-space: nowrap;
+  perspective: 700px;
+  transform: translate3d(0, 0, 0);
+  transition: none;
+}
+.character {
+  display: inline-block;
+  transform-origin: 50% 85%;
+  opacity: 1;
+  transform: translate3d(0, 0, 0) rotateX(0);
+  transition: none;
+}
+.headline[data-text-enabled="true"][data-text-state="waiting"] .word {
+  transform: translate3d(var(--word-shift, 0px), 0, 0);
+}
+.headline[data-text-enabled="true"][data-text-state="waiting"] .character {
+  opacity: 0;
+  transform: translate3d(0, 0.7em, 0) rotateX(-85deg);
+}
+.headline[data-text-enabled="true"][data-text-state="revealing"] .word {
+  transition: transform 1250ms var(--unfold-ease);
+  transition-delay: calc(80ms + var(--line-order) * 60ms);
+}
+.headline[data-text-enabled="true"][data-text-state="revealing"] .character {
+  transition:
+    transform 950ms var(--unfold-ease),
+    opacity 350ms ease;
+  transition-delay: calc(var(--char-order) * 14ms);
+}
+@media (max-width: 850px) {
+  .line {
+    display: inline;
+    padding: 0;
+  }
+  .headline[data-text-enabled="true"][data-text-state="revealing"] .word {
+    transition: none;
+  }
+  .headline[data-text-enabled="true"][data-text-state="waiting"] .character {
+    transform: translate3d(0, 0.35em, 0) rotateX(-50deg);
+  }
+  .headline[data-text-enabled="true"][data-text-state="revealing"] .character {
+    transition-duration: 650ms, 250ms;
+    transition-delay: calc(var(--char-order) * 9ms);
+  }
+}
+@media (prefers-reduced-motion: reduce), print {
+  .headline .word,
+  .headline .character {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

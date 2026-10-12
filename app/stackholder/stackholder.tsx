@@ -13,6 +13,7 @@ export default function Stakeholders() {
   return (
     <section
       id="team"
+      data-video-background="growth"
       aria-labelledby="team-heading"
       className={styles.section}
     >

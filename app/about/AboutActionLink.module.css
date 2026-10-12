@@ -1,0 +1,123 @@
+.link {
+  --action-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --action-duration: 550ms;
+  min-height: 44px;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.link.pill {
+  min-height: 48px;
+}
+
+.link.text {
+  padding-block: 10px;
+}
+
+.label {
+  display: grid;
+  grid-template-areas: "label";
+  overflow: hidden;
+  padding-block: 0.12em;
+  margin-block: -0.12em;
+  perspective: 700px;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.outgoing,
+.incoming {
+  grid-area: label;
+  display: block;
+  transform-origin: center;
+  backface-visibility: hidden;
+  transition:
+    transform var(--action-duration) var(--action-ease),
+    opacity 350ms var(--action-ease);
+}
+
+.outgoing {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) rotateX(0);
+}
+
+.incoming {
+  opacity: 0;
+  transform: translate3d(0, 110%, 0) rotateX(-65deg);
+}
+
+.arrow {
+  transition: transform var(--action-duration) var(--action-ease);
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--accent, #426c9b);
+  outline-offset: 5px;
+  text-decoration: none;
+}
+
+.link[data-motion-paused="false"]:focus-visible .outgoing {
+  opacity: 0;
+  transform: translate3d(0, -110%, 0) rotateX(65deg);
+}
+
+.link[data-motion-paused="false"]:focus-visible .incoming {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) rotateX(0);
+  transition-delay: 80ms;
+}
+
+.link[data-motion-paused="false"]:focus-visible .arrow {
+  transform: translate3d(2px, -2px, 0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    text-decoration: none;
+  }
+
+  .link[data-motion-paused="false"]:hover .outgoing {
+    opacity: 0;
+    transform: translate3d(0, -110%, 0) rotateX(65deg);
+  }
+
+  .link[data-motion-paused="false"]:hover .incoming {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0);
+    transition-delay: 80ms;
+  }
+
+  .link[data-motion-paused="false"]:hover .arrow {
+    transform: translate3d(2px, -2px, 0);
+  }
+}
+
+.link[data-motion-paused="true"],
+.link[data-motion-paused="true"] .outgoing,
+.link[data-motion-paused="true"] .incoming,
+.link[data-motion-paused="true"] .arrow {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce), print {
+  .link,
+  .link .outgoing,
+  .link .incoming,
+  .link .arrow {
+    transition: none !important;
+  }
+
+  .link .outgoing {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .link .incoming {
+    opacity: 0 !important;
+    transform: none !important;
+  }
+
+  .link .arrow {
+    transform: none !important;
+  }
+}

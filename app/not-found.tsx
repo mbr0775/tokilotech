@@ -9,6 +9,7 @@ export default function NotFound() {
   return (
     <PublicShell>
       <PageHero
+        showFilm={false}
         eyebrow="404 / A different direction"
         title="A little lost?"
         accent="Let's find your way."

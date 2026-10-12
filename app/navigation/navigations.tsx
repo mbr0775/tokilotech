@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Menu, X, Moon, Sun, ArrowUpRight } from "lucide-react";
 import { useTheme } from "../theme-provider";
 import styles from "../design.module.css";
+import { SiteVideoControl } from "../motion/SiteVideo";
 const links = [
   { label: "Work", href: "/projects" },
   { label: "Services", href: "/services" },
@@ -59,6 +60,7 @@ export default function Navigation() {
             ))}
           </div>
           <div className={styles.navActions}>
+            <SiteVideoControl />
             <Link href="/login" className={styles.login}>
               Sign in
             </Link>

@@ -1,11 +1,17 @@
-# Light technology backgrounds
+# Tokilo video backgrounds and concept films
 
-Existing, publicly hosted footage by Chandresh Uike on Pexels; no videos were generated or downloaded into the repository.
+The owner created and supplied five videos in `public/`. The website uses smaller playback copies in `public/media/videos/` and JPEG frames in `public/media/videos/posters/`. Original exports remain unchanged.
 
-- Hero and process: [Futuristic Circuit Board Animation](https://www.pexels.com/video/futuristic-circuit-board-animation-34645150/).
-- Public MP4: https://videos.pexels.com/video-files/34645150/14683913_1920_1080_30fps.mp4 (1920 × 1080, approximately 9.4 MB).
-- Poster: https://images.pexels.com/videos/34645150/3d-abstract-ai-animation-34645150.jpeg?auto=compress&dpr=1&w=1280
-- Growth section reuses the existing [white flowing background](https://www.pexels.com/video/elegant-abstract-white-flowing-background-loop-37014005/) documented in `growth-video.md` (approximately 1.9 MB).
-- [Pexels license](https://www.pexels.com/license/) permits website use; attribution is optional. These visuals do not imply endorsement.
+- `tokilo-ambient-tech.mp4`: the default full-page background on every public page, including the hero and unmarked sections. Playback copy: 960 × 540, 8 seconds, 1,088,845 bytes (original: 7,306,711 bytes).
+- `tokilo-connected-products.mp4`: the default film below the homepage, About, Services, Projects and Contact heroes. Playback copy: 1280 × 720, 8 seconds, 1,627,726 bytes.
+- `tokilo-ai-network.mp4`: Practical AI film and the background behind About and Services. Playback copy: 1280 × 720, approximately 10 seconds, 1,777,768 bytes.
+- `tokilo-digital-engineering.mp4`: Digital engineering film and the background behind the build process. Playback copy: 1280 × 720, 8 seconds, 1,302,565 bytes.
+- `tokilo-growth-ribbon.mp4`: Built for growth film and the background behind team, contact, consultation and footer sections. Playback copy: 1280 × 720, approximately 10 seconds, 1,463,723 bytes.
 
-Video elements are decorative, muted, looped and inline. They load near the viewport, pause off screen or in a hidden tab, and are omitted for reduced-motion users. Each section has a still background, readable content and a keyboard-accessible pause control; the hero's existing motion control also pauses its footage. The circuit footage is desaturated and inverted in CSS to suit the light palette.
+Playback copies use H.264, yuv420p, 24 fps and fast-start MP4. Audio was removed. Encoded with FFmpeg/libx264, medium preset, CRF 25 with a 1000k maximum bitrate for the ambient clip; CRF 23 with a 2000k maximum bitrate for the four showcase clips. Posters are extracted at 0.7 seconds.
+
+One full-page background and the current showcase film are mounted. The background changes when the corresponding section crosses the middle of the viewport, with a gentle fade and the same behavior while scrolling back. The four showcase films play automatically in order after each clip finishes, then repeat. Tabs still allow direct selection; while a selector has focus its current film loops so keyboard interaction is not interrupted. Pausing stops playback and automatic advancement. Offscreen and hidden-tab films pause. Background clips loop independently.
+
+Reduced motion and JavaScript-disabled views retain the ambient still background and all essential server-rendered content. A navigation background control and a separate showcase control support keyboard use; the four film selectors also support Left/Right, Home and End keys. Policy, account and error pages keep their primary content easy to reach above the shared background.
+
+Concept films are decorative illustrations, not screenshots of client work. They do not imply client results or endorsements. Earlier Pexels background footage has been replaced by these owner-provided assets.

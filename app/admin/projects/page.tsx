@@ -17,9 +17,10 @@ import {
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "../../../lib/supabaseClient";
+import Link from "next/link";
+import { isWebsiteAdmin } from "../../../lib/admin-access";
 import { SHOWCASE_SELECT, showcaseToProject, type Project, type ShowcaseRow } from "../../../lib/project-showcase";
 
-const ADMIN_EMAIL = "mubassirnasar@gmail.com";
 
 export default function ProjectMaintenancePage() {
   const router = useRouter();
@@ -58,7 +59,7 @@ export default function ProjectMaintenancePage() {
       const { data } = await supabase.auth.getUser();
       const currentUser = data.user;
 
-      if (!currentUser || currentUser.email?.toLowerCase() !== ADMIN_EMAIL) {
+      if (!isWebsiteAdmin(currentUser)) {
         router.push("/login");
         return;
       }
@@ -191,6 +192,7 @@ export default function ProjectMaintenancePage() {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
+            <Link href="/admin" className="inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-bold">Content workspace</Link>
             <button
               type="button"
               onClick={() => router.push("/admin/projects/add")}

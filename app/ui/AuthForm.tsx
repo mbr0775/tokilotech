@@ -6,6 +6,8 @@ import { Eye, EyeOff, LogIn, ShieldCheck, UserPlus } from "lucide-react";
 import { supabase } from "../../lib/supabaseClient";
 import styles from "./editorial.module.css";
 import ui from "../design.module.css";
+import { isWebsiteAdmin } from "../../lib/admin-access";
+import { signInDestination } from "../../lib/communications";
 
 export default function AuthForm({ mode }: { mode: "login" | "register" }) {
   const register = mode === "register";
@@ -27,9 +29,10 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
         if (!active) return;
         if (data.user) {
           router.replace(
-            data.user.email?.toLowerCase() === "mubassirnasar@gmail.com"
-              ? "/admin/projects/add"
-              : "/",
+            signInDestination(
+              window.location.search,
+              isWebsiteAdmin(data.user),
+            ),
           );
           router.refresh();
         }
@@ -64,7 +67,12 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
         });
         if (cause) throw cause;
         if (data.session) {
-          router.replace("/");
+          router.replace(
+            signInDestination(
+              window.location.search,
+              isWebsiteAdmin(data.user),
+            ),
+          );
           router.refresh();
         } else {
           setMessage(
@@ -81,9 +89,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
         });
         if (cause) throw cause;
         router.replace(
-          data.user?.email?.toLowerCase() === "mubassirnasar@gmail.com"
-            ? "/admin/projects/add"
-            : "/",
+          signInDestination(window.location.search, isWebsiteAdmin(data.user)),
         );
         router.refresh();
       }

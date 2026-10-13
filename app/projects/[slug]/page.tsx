@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import type { Metadata } from "next";
 import Link from "next/link";
 import { cache } from "react";
@@ -14,7 +13,7 @@ import {
 import PublicShell from "../../ui/PublicShell";
 import Contact from "../../contact/contact";
 import ProjectGallery from "./ProjectGallery";
-import styles from "../../ui/editorial.module.css";
+import styles from "./detail.module.css";
 import ui from "../../design.module.css";
 export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ slug: string }> };
@@ -79,88 +78,78 @@ export default async function ProjectDetailsPage({ params }: Props) {
     : null;
   return (
     <PublicShell>
-      <section className={`${styles.section} ${styles.case}`}>
+      <section className={styles.section}>
         <Link href="/projects" className={ui.textLink}>
           <ArrowLeft size={16} />
           All projects
         </Link>
-        <div className={styles.caseHeader}>
-          <div>
-            <span className={ui.eyebrow}>Case study / {project.category}</span>
+        <div className={styles.layout}>
+          <div className={styles.summary}>
+            <span className={styles.eyebrow}>
+              Case study / {project.category}
+            </span>
             <h1>{project.title}</h1>
-            <p>
+            <p className={styles.description}>
               {project.description ||
-                "Explore the uploaded screens and product details below."}
+                "Explore the uploaded screens and product details."}
             </p>
-            <div className={styles.caseLinks}>
-              {project.live_url && (
-                <a
-                  href={project.live_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={ui.pill}
-                >
-                  <ExternalLink size={17} />
-                  View live project
-                </a>
+            {(project.live_url || project.github_url) && (
+              <div className={styles.links}>
+                {project.live_url && (
+                  <a
+                    href={project.live_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={ui.pill}
+                  >
+                    <ExternalLink size={17} />
+                    View live project
+                  </a>
+                )}
+                {project.github_url && (
+                  <a
+                    href={project.github_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={ui.pill}
+                  >
+                    <Github size={17} />
+                    View source
+                  </a>
+                )}
+              </div>
+            )}
+            <dl className={styles.facts}>
+              {project.client_name && (
+                <div>
+                  <dt>Client</dt>
+                  <dd>{project.client_name}</dd>
+                </div>
               )}
-              {project.github_url && (
-                <a
-                  href={project.github_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={ui.pill}
-                >
-                  <Github size={17} />
-                  View source
-                </a>
+              <div>
+                <dt>Discipline</dt>
+                <dd>{project.category}</dd>
+              </div>
+              {date && (
+                <div>
+                  <dt>Published</dt>
+                  <dd>{date}</dd>
+                </div>
               )}
-            </div>
+              <div>
+                <dt>Inside the project</dt>
+                <dd>
+                  {gallery.length} media item{gallery.length === 1 ? "" : "s"}
+                </dd>
+              </div>
+            </dl>
           </div>
-          <dl className={styles.caseFacts}>
-            {project.client_name && (
-              <div>
-                <dt>Client</dt>
-                <dd>{project.client_name}</dd>
-              </div>
-            )}
-            <div>
-              <dt>Discipline</dt>
-              <dd>{project.category}</dd>
-            </div>
-            {date && (
-              <div>
-                <dt>Published</dt>
-                <dd>{date}</dd>
-              </div>
-            )}
-            <div>
-              <dt>Inside the project</dt>
-              <dd>
-                {gallery.length} media item{gallery.length === 1 ? "" : "s"}
-              </dd>
-            </div>
-          </dl>
+
+          <div className={styles.gallery}>
+            <h2>Project gallery</h2>
+            <ProjectGallery media={gallery} projectTitle={project.title} />
+          </div>
         </div>
-        {cover && (
-          <img
-            src={cover}
-            alt={`${project.title} product overview`}
-            className={styles.caseCover}
-            fetchPriority="high"
-          />
-        )}
-      </section>
-      <section className={styles.section}>
-        <div className={styles.galleryHeading}>
-          <span className={ui.eyebrow}>In the details</span>
-          <h2>Explore the experience.</h2>
-          <p>
-            Browse the screens and videos. Use the thumbnails, arrow keys, or
-            full-screen viewer for a closer look.
-          </p>
-        </div>
-        <ProjectGallery media={gallery} projectTitle={project.title} />
       </section>
       <Contact />
     </PublicShell>

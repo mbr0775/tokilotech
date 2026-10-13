@@ -34,7 +34,7 @@ The website connects directly to the Supabase project used by
 above in your hosting provider as well as locally, and rebuild the website.
 Use the same public key as the Flutter app's
 `lib/core/constants/supabase_constants.dart`, or obtain it from that project's
-Supabase dashboard. No separate API server or mobile app change is required.
+Supabase dashboard. Content management does not require a separate API server or mobile app change.
 
 Both applications share Supabase Auth users. An existing mobile account can
 sign in on `/login`; website registrations can also sign in on mobile after
@@ -63,19 +63,37 @@ Refresh a page to see changes saved in the other application.
 The website admin pages use the mobile app's showcase fields: title, subtitle,
 portfolio link, display order, publishing, cover, and gallery images. The mobile
 schema supports images and does not store custom slugs, video types, live URLs,
-or GitHub URLs. Edit linked portfolio details in the mobile app. Removing a
+or GitHub URLs. Edit linked portfolio details at `/admin/portfolio` or in the mobile app. Removing a
 showcase removes it from both applications; its linked portfolio and uploaded
 files are retained because other app features may reference them.
 
 Existing Supabase row-level security and storage policies still apply. Admin
 screens recognize the same admin email as the mobile app, but the database must
-enforce write permissions. No database migrations or policy changes are made
-by this integration. Public read access was verified; authenticated writes
+enforce write permissions. Content management does not require database migrations or policy changes.
+Public read access was verified; authenticated writes
 must be checked by signing in with the existing administrator account.
 
-The mobile app's products, services, orders, client portal, chat, and
-notifications are separate features and are not implemented on the website
-by this connection.
+The administrator workspace is available at `/admin`. It links to the showcase
+editor, `/admin/portfolio` for public project details, and `/admin/products` for
+the existing `it_products` catalog. Product names, brands, categories, prices,
+availability and cover images are saved to the same rows used by mobile. Private
+portfolio pricing is retained without being exposed or overwritten by the web
+editor. Admin pages are excluded from indexing.
+
+See [Shared Supabase setup](docs/supabase-setup.md) for connection and verification
+details. Product management does not introduce a web checkout. Services, orders
+and the client portal remain separate mobile features.
+
+### Messaging and notifications
+
+The top navigation includes `/messages` and `/notifications`, using the mobile
+app's shared support conversations and account notifications. These authenticated
+pages include Realtime updates, unread counts, message history, persistent read
+receipts and safe send retries. They require the separately supplied
+`supabase/migrations/202610130001_web_communications.sql` database migration.
+Until it is applied, setup errors are shown rather than fabricated content.
+See [Realtime messaging setup](docs/realtime-messaging.md) for activation,
+security checks and the required mobile adaptation for broadcast receipts.
 
 Then run the development server:
 

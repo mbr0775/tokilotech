@@ -1,0 +1,26 @@
+.displayControls {
+  display: flex;
+}
+.desktopTheme {
+  display: grid;
+}
+.mobileControls {
+  display: none;
+}
+.logout {
+  min-height: 44px;
+  text-align: left;
+  font-size: 13px;
+  padding: 12px 5px;
+}
+@media (max-width: 600px) {
+  .displayControls,
+  .desktopTheme {
+    display: none !important;
+  }
+  .mobileControls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}

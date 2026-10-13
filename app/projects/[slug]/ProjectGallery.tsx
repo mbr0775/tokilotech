@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import styles from "./detail.module.css";
 import {
   ChevronLeft,
   ChevronRight,
@@ -114,9 +115,7 @@ export default function ProjectGallery({
           src={item.media_url}
           controls
           playsInline
-          className={`h-full w-full bg-black object-contain ${
-            mode === "lightbox" ? "max-h-[86vh]" : ""
-          }`}
+          className={mode === "lightbox" ? styles.lightboxMedia : styles.media}
         />
       );
     }
@@ -125,18 +124,16 @@ export default function ProjectGallery({
       <img
         src={item.media_url}
         alt={item.alt_text || projectTitle}
-        className={`h-full w-full object-contain ${
-          mode === "stage" ? "p-2 sm:p-4" : "max-h-[86vh] max-w-[94vw]"
-        }`}
+        className={mode === "stage" ? styles.media : styles.lightboxMedia}
       />
     );
   };
 
   return (
     <>
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_250px]">
-        <div className="overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-[0_30px_90px_-45px_rgba(15,23,42,0.55)] dark:border-white/10 dark:bg-[#0f1521]">
-          <div className="flex items-center justify-between gap-4 border-b border-slate-200/80 px-5 py-4 dark:border-white/10 sm:px-6">
+      <div className={styles.viewer}>
+        <div className="overflow-hidden rounded-2xl border border-white/80 bg-white shadow-[0_30px_90px_-45px_rgba(15,23,42,0.55)] dark:border-white/10 dark:bg-[#0f1521]">
+          <div className="flex items-center justify-between gap-4 border-b border-slate-200/80 px-4 py-3 dark:border-white/10">
             <div className="min-w-0">
               <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#385f8a] dark:text-[#99c4f3]">
                 {activeMedia.media_type}
@@ -163,7 +160,7 @@ export default function ProjectGallery({
             </div>
           </div>
 
-          <div className="relative flex aspect-[16/10] min-h-[300px] items-center justify-center bg-[#eef1f6] dark:bg-[#080c14] sm:min-h-[430px] lg:min-h-[560px]">
+          <div className={styles.stage}>
             {renderMedia(activeMedia, "stage")}
 
             {media.length > 1 && (
@@ -192,9 +189,11 @@ export default function ProjectGallery({
             </span>
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-slate-200/80 px-5 py-4 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="flex flex-col gap-3 border-t border-slate-200/80 px-4 py-3 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs leading-6 text-slate-500 dark:text-slate-400">
-              Select a thumbnail or use the navigation arrows.
+              {media.length > 1
+                ? "Select a thumbnail or use the navigation arrows."
+                : "Use full-screen view for a closer look."}
             </p>
             {activeMedia.media_type !== "video" && (
               <a
@@ -209,56 +208,48 @@ export default function ProjectGallery({
           </div>
         </div>
 
-        <div className="rounded-[1.75rem] border border-white/80 bg-white/80 p-3 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04]">
-          <div className="mb-3 flex items-center justify-between px-2 pt-1">
-            <p className="text-xs font-black uppercase tracking-[0.17em] text-slate-400">
-              Media
-            </p>
-            <p className="text-xs font-black text-slate-400">{media.length}</p>
-          </div>
+        {media.length > 1 && (
+          <div className={styles.thumbnailPanel}>
+            <div className={styles.thumbnails}>
+              {media.map((item, index) => {
+                const isActive = safeActiveIndex === index;
 
-          <div className="grid max-h-[660px] grid-cols-3 gap-2 overflow-y-auto pr-1 sm:grid-cols-5 lg:grid-cols-1">
-            {media.map((item, index) => {
-              const isActive = safeActiveIndex === index;
-
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setActiveIndex(index)}
-                  className={`group/thumb relative overflow-hidden rounded-2xl border p-1 text-left transition ${
-                    isActive
-                      ? "border-[#426c9b] bg-[#426c9b]/10 shadow-sm"
-                      : "border-transparent bg-slate-100 hover:border-slate-300 dark:bg-white/[0.05] dark:hover:border-white/20"
-                  }`}
-                  aria-label={`Open media ${index + 1}`}
-                  aria-current={isActive ? "true" : undefined}
-                >
-                  <div className="relative aspect-video overflow-hidden rounded-xl bg-slate-200 dark:bg-black/30">
-                    {item.media_type === "video" ? (
-                      <div className="flex h-full w-full items-center justify-center bg-slate-950 text-white">
-                        <PlayCircle size={24} />
-                      </div>
-                    ) : (
-                      <img
-                        src={item.media_url}
-                        alt={item.alt_text || projectTitle}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition duration-500 group-hover/thumb:scale-105"
-                      />
-                    )}
-                    <span className="absolute bottom-1.5 left-1.5 rounded-md bg-slate-950/65 px-1.5 py-0.5 text-[9px] font-black uppercase text-white backdrop-blur">
-                      {index + 1}
-                    </span>
-                  </div>
-                  <p className="hidden truncate px-2 py-2 text-xs font-bold text-slate-600 dark:text-slate-300 lg:block">
-                    {item.alt_text || `${item.media_type} ${index + 1}`}
-                  </p>
-                </button>
-              );
-            })}
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setActiveIndex(index)}
+                    className={`group/thumb relative overflow-hidden rounded-2xl border p-1 text-left transition ${
+                      isActive
+                        ? "border-[#426c9b] bg-[#426c9b]/10 shadow-sm"
+                        : "border-transparent bg-slate-100 hover:border-slate-300 dark:bg-white/[0.05] dark:hover:border-white/20"
+                    }`}
+                    aria-label={`Open media ${index + 1}`}
+                    aria-current={isActive ? "true" : undefined}
+                  >
+                    <div className={styles.thumbnailImage}>
+                      {item.media_type === "video" ? (
+                        <div className="flex h-full w-full items-center justify-center bg-slate-950 text-white">
+                          <PlayCircle size={24} />
+                        </div>
+                      ) : (
+                        <img
+                          src={item.media_url}
+                          alt={item.alt_text || projectTitle}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition duration-500 group-hover/thumb:scale-105"
+                        />
+                      )}
+                      <span className="absolute bottom-1.5 left-1.5 rounded-md bg-slate-950/65 px-1.5 py-0.5 text-[9px] font-black uppercase text-white backdrop-blur">
+                        {index + 1}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {isLightboxOpen && (

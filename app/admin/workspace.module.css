@@ -1,0 +1,362 @@
+.workspace {
+  min-height: 100vh;
+  background: #f5f8fb;
+  color: #142337;
+  font-family: Arial, sans-serif;
+}
+.loading {
+  display: grid;
+  place-content: center;
+  min-height: 100vh;
+  gap: 20px;
+  background: #f5f8fb;
+  color: #142337;
+}
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+  padding: 24px 5vw;
+  border-bottom: 1px solid #d5dee6;
+  background: #fff;
+}
+.brand {
+  text-decoration: none;
+  font-size: 24px;
+  letter-spacing: 0.06em;
+  color: inherit;
+}
+.brand span {
+  display: block;
+  margin-top: 5px;
+  font-size: 8px;
+  color: #566575;
+}
+.topbar > div {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-size: 12px;
+}
+.topbar button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px 5vw;
+  border-bottom: 1px solid #d5dee6;
+}
+.navigation a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 10px 15px;
+  border-radius: 9px;
+  text-decoration: none;
+  color: #566575;
+  font-size: 12px;
+}
+.navigation a[aria-current="page"] {
+  background: #142337;
+  color: #fff;
+}
+.content {
+  padding: 45px 5vw 80px;
+  max-width: 1440px;
+  margin: auto;
+}
+.eyebrow {
+  font-size: 9px;
+  color: #426c9b;
+  letter-spacing: 0.1em;
+}
+.content h1 {
+  font-size: clamp(30px, 3.4vw, 46px);
+  line-height: 1.15;
+  letter-spacing: -0.045em;
+  margin: 16px 0 24px;
+  font-weight: 500;
+}
+.intro {
+  max-width: 650px;
+  line-height: 1.8;
+  color: #566575;
+  margin-bottom: 32px;
+  font-size: 14px;
+}
+.overview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+.overview a {
+  padding: 32px;
+  border: 1px solid #d5dee6;
+  border-radius: 18px;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+}
+.overview h2 {
+  margin: 24px 0 14px;
+  font-size: 24px;
+  letter-spacing: -0.04em;
+  font-weight: 500;
+}
+.overview p {
+  color: #566575;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.overview span {
+  display: block;
+  margin-top: 28px;
+  font-size: 12px;
+  color: #426c9b;
+}
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 26px;
+}
+.toolbar input {
+  width: min(100%, 430px);
+}
+.button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 12px 18px;
+  border: 1px solid #142337;
+  border-radius: 10px;
+  background: #142337;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+.secondary {
+  background: #fff;
+  color: #142337;
+  border-color: #d5dee6;
+}
+.form {
+  background: #fff;
+  border: 1px solid #d5dee6;
+  border-radius: 18px;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+.form h2 {
+  font-size: 24px;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  border: 0;
+  padding: 0;
+}
+.fields:disabled {
+  opacity: 0.6;
+}
+.field {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+}
+.field input,
+.field textarea,
+.field select,
+.toolbar input {
+  display: block;
+  width: 100%;
+  margin-top: 9px;
+  padding: 13px;
+  border: 1px solid #b8c7d4;
+  border-radius: 9px;
+  background: #fff;
+  color: #142337;
+  font: inherit;
+  min-height: 46px;
+}
+.field textarea {
+  min-height: 115px;
+  resize: vertical;
+}
+.wide {
+  grid-column: 1/-1;
+}
+.checks {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+  grid-column: 1/-1;
+  font-size: 12px;
+}
+.checks label {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  min-height: 44px;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+.preview {
+  display: block;
+  width: min(100%, 300px);
+  height: 170px;
+  object-fit: contain;
+  margin: 18px 0;
+  border-radius: 10px;
+  background: #edf2f6;
+}
+.list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.item {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 22px;
+  padding: 22px;
+  border: 1px solid #d5dee6;
+  border-radius: 16px;
+  background: #fff;
+  min-width: 0;
+}
+.image {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  background: #edf2f6;
+  border-radius: 10px;
+}
+.placeholder {
+  display: grid;
+  place-items: center;
+}
+.item h2 {
+  font-size: 20px;
+  overflow-wrap: anywhere;
+  margin: 5px 0 10px;
+  font-weight: 500;
+}
+.item p {
+  font-size: 12px;
+  color: #566575;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+  font-size: 10px;
+}
+.badges span {
+  padding: 6px 9px;
+  background: #edf2f6;
+  border-radius: 99px;
+}
+.error,
+.success {
+  padding: 18px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.error {
+  background: #fff0f0;
+  color: #a31f32;
+}
+.success {
+  background: #eaf7ef;
+  color: #23623a;
+}
+.empty {
+  padding: 35px;
+  border: 1px dashed #b8c7d4;
+  border-radius: 16px;
+  text-align: center;
+  color: #566575;
+}
+.workspace :is(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid #426c9b;
+  outline-offset: 4px;
+}
+.workspace button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+@media (max-width: 850px) {
+  .overview {
+    grid-template-columns: 1fr;
+  }
+  .list {
+    grid-template-columns: 1fr;
+  }
+  .topbar > div > span {
+    display: none;
+  }
+}
+@media (max-width: 500px) {
+  .content {
+    padding: 32px 20px 65px;
+  }
+  .topbar {
+    padding: 20px;
+  }
+  .navigation {
+    padding: 12px;
+  }
+  .navigation a {
+    padding-inline: 10px;
+    font-size: 10px;
+  }
+  .fields {
+    grid-template-columns: 1fr;
+  }
+  .form {
+    padding: 22px;
+  }
+  .item {
+    grid-template-columns: 75px 1fr;
+    padding: 18px;
+    gap: 15px;
+  }
+  .image {
+    width: 75px;
+    height: 85px;
+  }
+  .checks {
+    gap: 5px 18px;
+  }
+}

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../../lib/supabaseClient";
+import { isWebsiteAdmin } from "../../../../lib/admin-access";
 import {
   isShowcaseId,
   PROJECT_MEDIA_BUCKET,
@@ -15,7 +16,6 @@ import {
   type ShowcaseRow,
 } from "../../../../lib/project-showcase";
 
-const ADMIN_EMAIL = "mubassirnasar@gmail.com";
 function errorMessage(cause: unknown, fallback: string) {
   return typeof cause === "object" && cause !== null && "message" in cause && typeof cause.message === "string" ? cause.message : fallback;
 }
@@ -46,7 +46,7 @@ export default function ShowcaseEditor({ projectId }: { projectId?: string }) {
     async function load() {
       try {
         const { data, error: authError } = await supabase.auth.getUser();
-        if (data.user?.email?.toLowerCase() !== ADMIN_EMAIL) {
+        if (!isWebsiteAdmin(data.user)) {
           router.replace("/login");
           return;
         }
@@ -183,7 +183,7 @@ export default function ShowcaseEditor({ projectId }: { projectId?: string }) {
                   <option value="">Standalone showcase</option>
                   {portfolios.map((portfolio) => <option key={portfolio.id} value={portfolio.id}>{portfolio.title}{portfolio.is_active ? "" : " (inactive)"}</option>)}
                 </select>
-                <span className="mt-2 block text-sm font-normal text-slate-500 dark:text-slate-400">An active linked portfolio supplies the category, client name, and description. Manage portfolio details in the mobile app.</span>
+                <span className="mt-2 block text-sm font-normal text-slate-500 dark:text-slate-400">An active linked portfolio supplies the category, client name, and description. <Link href="/admin/portfolio" className="underline">Manage portfolio projects</Link> on the website or mobile app.</span>
               </label>
               <label className="block font-bold">Display order
                 <input type="number" step="1" required value={sortOrder} onChange={(event) => setSortOrder(Number(event.target.value))} className={fieldClass} />

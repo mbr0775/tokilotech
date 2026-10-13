@@ -1,11 +1,16 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X, Moon, Sun, ArrowUpRight } from "lucide-react";
 import { useTheme } from "../theme-provider";
 import styles from "../design.module.css";
 import { SiteVideoControl } from "../motion/SiteVideo";
+import AccountIcons from "../communications/AccountIcons";
+import { useCommunications } from "../communications/CommunicationProvider";
+import { isWebsiteAdmin } from "../../lib/admin-access";
+import { supabase } from "../../lib/supabaseClient";
+import account from "./account.module.css";
 const links = [
   { label: "Work", href: "/projects" },
   { label: "Services", href: "/services" },
@@ -15,6 +20,9 @@ const links = [
 export default function Navigation() {
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
+  const router = useRouter();
+  const { user } = useCommunications();
+  const [accountError, setAccountError] = useState("");
   const [open, setOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -60,12 +68,24 @@ export default function Navigation() {
             ))}
           </div>
           <div className={styles.navActions}>
-            <SiteVideoControl />
-            <Link href="/login" className={styles.login}>
-              Sign in
+            <AccountIcons />
+            <div className={account.displayControls}>
+              <SiteVideoControl />
+            </div>
+            <Link
+              href={
+                user
+                  ? isWebsiteAdmin(user)
+                    ? "/admin"
+                    : "/messages"
+                  : "/login"
+              }
+              className={styles.login}
+            >
+              {user ? "Account" : "Sign in"}
             </Link>
             <button
-              className={styles.themeButton}
+              className={`${styles.themeButton} ${account.desktopTheme}`}
               type="button"
               onClick={toggleTheme}
               aria-label={
@@ -107,9 +127,57 @@ export default function Navigation() {
                 {link.label}
               </Link>
             ))}
-            <Link href="/login" onClick={() => setOpen(false)}>
-              Sign in
+            <Link
+              href={
+                user
+                  ? isWebsiteAdmin(user)
+                    ? "/admin"
+                    : "/messages"
+                  : "/login"
+              }
+              onClick={() => setOpen(false)}
+            >
+              {user ? "My account" : "Sign in"}
             </Link>
+            <Link href="/messages" onClick={() => setOpen(false)}>
+              Messages
+            </Link>
+            <Link href="/notifications" onClick={() => setOpen(false)}>
+              Notifications
+            </Link>
+            <div className={account.mobileControls}>
+              <SiteVideoControl />
+              <button
+                type="button"
+                className={styles.themeButton}
+                onClick={toggleTheme}
+                aria-label={
+                  theme === "dark"
+                    ? "Switch to light theme"
+                    : "Switch to dark theme"
+                }
+              >
+                {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
+              </button>
+            </div>
+            {user && (
+              <button
+                type="button"
+                className={account.logout}
+                onClick={async () => {
+                  const { error } = await supabase.auth.signOut();
+                  if (error)
+                    setAccountError("Could not sign out. Please try again.");
+                  else {
+                    setOpen(false);
+                    router.push("/");
+                  }
+                }}
+              >
+                Sign out
+              </button>
+            )}
+            {accountError && <p role="alert">{accountError}</p>}
             <Link
               href="/shedule_contact"
               className={styles.navCta}

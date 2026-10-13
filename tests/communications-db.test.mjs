@@ -42,6 +42,7 @@ test(
     try {
       await db.exec(`
       create role anon; create role authenticated;
+      alter default privileges in schema public grant execute on functions to anon, authenticated;
       create schema auth; create table auth.users(id uuid primary key, email text, email_confirmed_at timestamptz);
     `);
       // Cast explicitly rather than relying on a fixture's text-to-UUID coercion.
@@ -72,6 +73,24 @@ test(
       );
       await db.exec(migration);
       await db.exec(migration); // Idempotent; retains seeded data and policies.
+      const grantsMigration = await readFile(
+        new URL("../supabase/migrations/202610130002_communications_function_grants.sql", import.meta.url),
+        "utf8",
+      );
+      await db.exec(grantsMigration);
+      await db.exec(grantsMigration);
+      const rpcPrivileges = await query(`
+        select p.proname, has_function_privilege('anon', p.oid, 'EXECUTE') as anon_execute,
+          has_function_privilege('authenticated', p.oid, 'EXECUTE') as authenticated_execute
+        from pg_proc p join pg_namespace n on n.oid=p.pronamespace
+        where n.nspname='public' and p.proname in ('tokilo_open_conversation', 'tokilo_send_message',
+          'tokilo_read_conversation', 'tokilo_notification_feed', 'tokilo_read_notifications')
+      `);
+      assert.equal(rpcPrivileges.length, 5);
+      for (const rpc of rpcPrivileges) {
+        assert.equal(rpc.anon_execute, false, rpc.proname);
+        assert.equal(rpc.authenticated_execute, true, rpc.proname);
+      }
       await login(alice);
       const [thread] = await query(
         "select * from public.tokilo_open_conversation()",

@@ -231,10 +231,10 @@ begin
 end; $$;
 
 revoke all on function public.tokilo_open_conversation(), public.tokilo_send_message(uuid, uuid, text),
-  public.tokilo_read_conversation(uuid, uuid), public.tokilo_notification_feed(integer), public.tokilo_read_notifications(uuid) from public;
+  public.tokilo_read_conversation(uuid, uuid), public.tokilo_notification_feed(integer), public.tokilo_read_notifications(uuid) from public, anon;
 grant execute on function public.tokilo_open_conversation(), public.tokilo_send_message(uuid, uuid, text),
   public.tokilo_read_conversation(uuid, uuid), public.tokilo_notification_feed(integer), public.tokilo_read_notifications(uuid) to authenticated;
-revoke all on function public.tokilo_guard_message_insert(), public.tokilo_guard_conversation_insert(), public.tokilo_guard_message_update(), public.tokilo_guard_conversation_update(), public.tokilo_guard_notification_update() from public;
+revoke all on function public.tokilo_guard_message_insert(), public.tokilo_guard_conversation_insert(), public.tokilo_guard_message_update(), public.tokilo_guard_conversation_update(), public.tokilo_guard_notification_update() from public, anon, authenticated;
 
 do $$ declare target text; begin
   foreach target in array array['conversations', 'messages', 'notifications', 'notification_reads'] loop

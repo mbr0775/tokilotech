@@ -6,6 +6,12 @@ The navigation links to `/messages` and `/notifications` on every public page. S
 
 Run [202610130001_web_communications.sql](../supabase/migrations/202610130001_web_communications.sql) in the SQL Editor of **nsosypdtxdoeiszilpwj**, or apply it with an authorized Supabase migration connection. The anon/public application key cannot execute database migrations. The website reports a setup error until the required RPC functions exist; it never substitutes demonstration messages or local-only read state.
 
+Apply [202610130002_communications_function_grants.sql](../supabase/migrations/202610130002_communications_function_grants.sql) afterward. It also upgrades installations of the first migration by revoking explicit anonymous grants inherited from Supabase's default function privileges. The first migration now includes these revocations for fresh installations.
+
+### Shared project activation
+
+Both migrations were applied through the SQL Editor to **TokiloMobileApp / nsosypdtxdoeiszilpwj** on 2026-10-13. A read-only catalog query passed all eight checks: five RPCs installed, anonymous execution denied/authenticated execution granted, pinned function search paths, RLS on four tables, Realtime publication membership on four tables, restrictive privacy boundaries, five enabled identity/receipt guard triggers, and the existing confirmed support administrator account. The website messaging route renders its sign-in gate correctly. Authenticated web-to-mobile delivery still needs verification with intended test accounts; the dashboard session does not sign into the website. Mobile broadcast receipt integration remains the app-side change described below.
+
 The atomic, repeatable migration retains current conversation/message/notification records. It creates `notification_reads` for individual broadcast receipts, authenticated RPC functions, indexes, Realtime publication entries, and restrictive RLS boundaries intersecting existing policies. Existing clients retain access to their conversations; other customers and anonymous visitors cannot read or modify them. Administrator authorization is checked against the confirmed email in `auth.users`, not editable profile metadata or a browser-supplied role. The administrator is the same `mubassirnasar@gmail.com` account already used by the mobile app.
 
 Apply to a staging copy first when possible. Take a database backup before applying production changes. A schema/type mismatch rolls back the whole migration. This change neither creates users nor resets data.

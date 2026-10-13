@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PublicShell from "../ui/PublicShell";
 import AccountGate from "../communications/AccountGate";
 import MessageInbox from "./MessageInbox";
+import AccountNavigation from "../communications/AccountNavigation";
 import { validConversationId } from "../../lib/communications";
 import styles from "../communications/communications.module.css";
 export const metadata: Metadata = {
@@ -20,12 +21,11 @@ export default async function MessagesPage({
     ? query.conversation!
     : null;
   return (
-    <PublicShell>
-      <section className={styles.page}>
-        <div className={styles.pageHeader}>
-          <span>Your account / Messages</span>
-          <h1>Let’s keep in touch.</h1>
-          <p>Your conversations are shared with the Tokilo mobile app.</p>
+    <PublicShell hideFooter>
+      <section className={`${styles.page} ${styles.chatPage}`}>
+        <div className={styles.chatPageHeader}>
+          <div><h1>Messages</h1><p>Your conversations with Tokilo, across web and mobile.</p></div>
+          <AccountNavigation />
         </div>
         <AccountGate destination="/messages">
           <MessageInbox key={id ?? "inbox"} initialConversation={id} />

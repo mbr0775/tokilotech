@@ -2,6 +2,8 @@
 
 The navigation links to `/messages` and `/notifications` on every public page. Sign in using the existing Supabase account from the mobile app. The support administrator sees customer conversations; customers see their own conversations. Account pages are excluded from search indexing.
 
+The public navigation includes Home and a Back control on inner pages. Account pages also have labeled Back/Home controls. Messaging uses a two-pane desktop inbox with conversation search, unread filtering, initials avatars, day separators, read receipts, emoji insertion and a bounded composer. Mobile shows either the chat list or the selected conversation, with a Back to chats control and preserved drafts. Hidden mobile conversations do not trigger read receipts. The interface displays connection state, not inferred contact presence.
+
 ## Required database activation
 
 Run [202610130001_web_communications.sql](../supabase/migrations/202610130001_web_communications.sql) in the SQL Editor of **nsosypdtxdoeiszilpwj**, or apply it with an authorized Supabase migration connection. The anon/public application key cannot execute database migrations. The website reports a setup error until the required RPC functions exist; it never substitutes demonstration messages or local-only read state.

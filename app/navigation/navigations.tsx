@@ -2,7 +2,8 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, Moon, Sun, ArrowUpRight } from "lucide-react";
+import { Menu, X, Moon, Sun, ArrowUpRight, House } from "lucide-react";
+import BackButton from "./BackButton";
 import { useTheme } from "../theme-provider";
 import styles from "../design.module.css";
 import { SiteVideoControl } from "../motion/SiteVideo";
@@ -12,6 +13,7 @@ import { isWebsiteAdmin } from "../../lib/admin-access";
 import { supabase } from "../../lib/supabaseClient";
 import account from "./account.module.css";
 const links = [
+  { label: "Home", href: "/" },
   { label: "Work", href: "/projects" },
   { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
@@ -40,6 +42,8 @@ export default function Navigation() {
     <header className={styles.header}>
       <nav className={styles.nav} aria-label="Main navigation">
         <div className={styles.navRow}>
+          <div className={account.brandNavigation}>
+          {pathname !== "/" && <BackButton className={account.backButton} />}
           <Link
             href="/"
             className={styles.brand}
@@ -54,13 +58,15 @@ export default function Navigation() {
               <span className={styles.brandDescriptor}>TECHNOLOGIES</span>
             </span>
           </Link>
+          {pathname !== "/" && <Link href="/" className={account.mobileHome} aria-label="Home" title="Home" onClick={() => setOpen(false)}><House size={18} aria-hidden="true" /></Link>}
+          </div>
           <div className={styles.navLinks}>
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 aria-current={
-                  pathname.startsWith(link.href) ? "page" : undefined
+                  (link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)) ? "page" : undefined
                 }
               >
                 {link.label}
@@ -121,7 +127,7 @@ export default function Navigation() {
                 href={link.href}
                 onClick={() => setOpen(false)}
                 aria-current={
-                  pathname.startsWith(link.href) ? "page" : undefined
+                  (link.href === "/" ? pathname === "/" : pathname.startsWith(link.href)) ? "page" : undefined
                 }
               >
                 {link.label}

@@ -6,7 +6,7 @@ import SiteVideo from "../motion/SiteVideo";
 import styles from "../design.module.css";
 import CommunicationProvider from "../communications/CommunicationProvider";
 
-export default function PublicShell({ children }: { children: ReactNode }) {
+export default function PublicShell({ children, hideFooter = false }: { children: ReactNode; hideFooter?: boolean }) {
   return (
     <CommunicationProvider>
       <ScrollExperience className={styles.site}>
@@ -16,7 +16,7 @@ export default function PublicShell({ children }: { children: ReactNode }) {
           </a>
           <Navigation />
           <main id="main-content">{children}</main>
-          <Footer />
+          {!hideFooter && <Footer />}
         </SiteVideo>
       </ScrollExperience>
     </CommunicationProvider>

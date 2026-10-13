@@ -5,6 +5,7 @@ import {
   useEffect,
   useRef,
   useState,
+  Fragment,
   type FormEvent,
 } from "react";
 import {
@@ -14,6 +15,11 @@ import {
   Plus,
   RefreshCw,
   Send,
+  ArrowLeft,
+  Search,
+  Smile,
+  LoaderCircle,
+  ShieldCheck,
 } from "lucide-react";
 import { supabase } from "../../lib/supabaseClient";
 import { isWebsiteAdmin } from "../../lib/admin-access";
@@ -64,6 +70,12 @@ export default function MessageInbox({
   const admin = isWebsiteAdmin(user);
   const uid = user?.id ?? "";
   const [selected, setSelected] = useState(initialConversation);
+  const [search, setSearch] = useState("");
+  const [unreadOnly, setUnreadOnly] = useState(false);
+  const [mobileThreadOpen, setMobileThreadOpen] = useState(Boolean(initialConversation));
+  const [emojiOpen, setEmojiOpen] = useState(false);
+  const sidebar = useRef<HTMLElement>(null);
+  const composerInput = useRef<HTMLTextAreaElement>(null);
   const conversationId = selected ?? conversations[0]?.id ?? "";
   const [thread, setThread] = useState<Thread>(empty);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
@@ -195,6 +207,7 @@ export default function MessageInbox({
       !current.conversation ||
       current.error ||
       !nearBottom.current ||
+      !list.current?.getClientRects().length ||
       document.visibilityState !== "visible" ||
       !document.hasFocus()
     )
@@ -229,7 +242,7 @@ export default function MessageInbox({
       window.removeEventListener("focus", focus);
       document.removeEventListener("visibilitychange", focus);
     };
-  }, [current.messages, markVisible]);
+  }, [current.messages, markVisible, mobileThreadOpen]);
 
   async function start() {
     setStarting(true);
@@ -240,6 +253,7 @@ export default function MessageInbox({
         .single();
       if (error) throw error;
       setSelected((data as Conversation).id);
+      setMobileThreadOpen(true);
       await refresh();
     } catch (cause) {
       setError(communicationError(cause));
@@ -300,32 +314,33 @@ export default function MessageInbox({
     }
   }
   const allLoading = loading || !conversationsLoaded;
+  const nameFor = (row: Conversation) => admin ? row.client_name || row.client_email || "Customer" : "Tokilo team";
+  const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join("").toUpperCase();
+  const visibleConversations = conversations.filter(row =>
+    (!unreadOnly || !(admin ? row.is_read_admin : row.is_read_client)) &&
+    `${nameFor(row)} ${row.client_email ?? ""} ${row.last_message ?? ""}`.toLowerCase().includes(search.toLowerCase().trim())
+  );
   return (
     <>
-      <div className={styles.toolbar}>
-        <p className={styles.muted}>
-          {live ? "Account updates connected" : "Connecting to live updates…"}
-        </p>
-        <button
-          type="button"
-          className={styles.secondary}
-          onClick={() => {
-            receipt.current = "";
-            void Promise.all([refresh(), reloadThread.current()]);
-          }}
-        >
-          <RefreshCw size={15} aria-hidden="true" />
-          Refresh
-        </button>
-      </div>
       {conversationError && (
         <p className={styles.error} role="alert">
           {conversationError}
         </p>
       )}
-      <div className={styles.inbox}>
-        <aside className={styles.conversations} aria-label="Conversations">
-          <h2>{admin ? "Customer conversations" : "Your conversations"}</h2>
+      <div className={styles.inbox} data-view={mobileThreadOpen ? "thread" : "list"}>
+        <aside ref={sidebar} className={styles.conversations} aria-label="Conversations">
+          <div className={styles.chatListHeader}>
+            <div><span>Tokilo inbox</span><h2>{admin ? "Customer conversations" : "Your conversations"}</h2></div>
+            <button type="button" className={styles.chatIcon} aria-label="Refresh conversations" title="Refresh conversations" onClick={() => {
+              receipt.current = "";
+              void Promise.all([refresh(), reloadThread.current()]);
+            }}><RefreshCw size={18} aria-hidden="true" /></button>
+          </div>
+          <label className={styles.chatSearch}><Search size={17} aria-hidden="true" /><input type="search" aria-label="Search conversations" placeholder="Search conversations" value={search} onChange={event => setSearch(event.target.value)} /></label>
+          <div className={styles.chatFilters} aria-label="Filter conversations">
+            <button type="button" aria-pressed={!unreadOnly} onClick={() => setUnreadOnly(false)}>All chats</button>
+            <button type="button" aria-pressed={unreadOnly} onClick={() => setUnreadOnly(true)}>Unread</button>
+          </div>
           {allLoading ? (
             <p role="status" className={styles.smallEmpty}>
               Loading conversations…
@@ -338,7 +353,7 @@ export default function MessageInbox({
             </p>
           ) : (
             <ul>
-              {conversations.map((row) => (
+              {visibleConversations.map((row) => (
                 <li key={row.id}>
                   <button
                     type="button"
@@ -346,32 +361,36 @@ export default function MessageInbox({
                     aria-pressed={conversationId === row.id}
                     onClick={() => {
                       setSelected(row.id);
+                      setMobileThreadOpen(true);
+                      setEmojiOpen(false);
                       setError("");
                       setReceiptError("");
                     }}
                   >
                     <span className={styles.avatar}>
-                      <MessageSquare size={19} aria-hidden="true" />
+                      {initials(nameFor(row))}
                     </span>
                     <span className={styles.conversationText}>
                       <strong>
-                        {admin
-                          ? row.client_name || row.client_email || "Customer"
-                          : "Tokilo team"}
+                        {nameFor(row)}
                       </strong>
                       <span>{row.last_message || "No messages yet"}</span>
                     </span>
+                    <span className={styles.conversationMeta}>
+                      <time dateTime={row.last_message_at}>{formatMessageTime(row.last_message_at)}</time>
                     {!(admin ? row.is_read_admin : row.is_read_client) && (
                       <span
                         className={styles.unreadDot}
                         aria-label="Unread conversation"
                       />
                     )}
+                    </span>
                   </button>
                 </li>
               ))}
             </ul>
           )}
+          {!allLoading && conversations.length > 0 && visibleConversations.length === 0 && <p className={styles.smallEmpty} role="status">{unreadOnly && !search ? "You’re all caught up." : "No conversations match your search."}</p>}
           {moreConversations && (
             <button
               type="button"
@@ -403,10 +422,17 @@ export default function MessageInbox({
                 {starting ? "Opening…" : "Start a conversation"}
               </button>
             )}
+          <div className={styles.chatConnectivity}><span data-live={live} /><p>{live ? "Account updates connected" : "Connecting to live updates…"}</p></div>
         </aside>
         <div className={styles.thread}>
           <div className={styles.threadHeader}>
-            <div>
+            <button type="button" className={`${styles.chatIcon} ${styles.chatBack}`} aria-label="Back to chats" onClick={() => {
+              setMobileThreadOpen(false);
+              setEmojiOpen(false);
+              requestAnimationFrame(() => sidebar.current?.querySelector<HTMLButtonElement>('[aria-pressed="true"]')?.focus());
+            }}><ArrowLeft size={21} aria-hidden="true" /></button>
+            <span className={`${styles.avatar} ${styles.threadAvatar}`} aria-hidden="true">{admin ? initials(current.conversation?.client_name || current.conversation?.client_email || "Customer") : "TT"}</span>
+            <div className={styles.threadIdentity}>
               <h2>
                 {admin
                   ? current.conversation?.client_name ||
@@ -422,6 +448,7 @@ export default function MessageInbox({
                     : "Private support conversation"}
               </p>
             </div>
+            <ShieldCheck size={19} className={styles.privacyIcon} aria-label="Private support conversation" />
           </div>
           {threadLoading ? (
             <div className={styles.empty} role="status">
@@ -482,12 +509,13 @@ export default function MessageInbox({
                   No messages yet. Send your first message below.
                 </p>
               )}
-              {current.messages.map((message) => {
+              {current.messages.map((message, index) => {
                 const own = message.sender_id === uid;
                 const attachment = safeAttachment(message.attachment_url);
                 return (
+                  <Fragment key={message.id}>
+                  {(index === 0 || new Date(current.messages[index - 1].created_at).toDateString() !== new Date(message.created_at).toDateString()) && <div className={styles.dayDivider}><time dateTime={message.created_at}>{new Date(message.created_at).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })}</time></div>}
                   <div
-                    key={message.id}
                     className={styles.messageRow}
                     data-own={own}
                   >
@@ -534,6 +562,7 @@ export default function MessageInbox({
                       </div>
                     </div>
                   </div>
+                  </Fragment>
                 );
               })}
             </div>
@@ -545,6 +574,18 @@ export default function MessageInbox({
           )}
           {current.conversation && !current.error && (
             <form className={styles.composer} onSubmit={send}>
+              {emojiOpen && <div className={styles.emojiPicker} role="group" aria-label="Choose an emoji">
+                {["👋", "😊", "👍", "🙏", "✨", "❤️"].map(emoji => <button key={emoji} type="button" aria-label={`Add ${emoji}`} onClick={() => {
+                  const input = composerInput.current;
+                  const from = input?.selectionStart ?? text.length;
+                  const to = input?.selectionEnd ?? text.length;
+                  const next = text.slice(0, from) + emoji + text.slice(to);
+                  if (next.length <= 4000) setDrafts(old => ({ ...old, [conversationId]: next }));
+                  setEmojiOpen(false);
+                  requestAnimationFrame(() => { input?.focus(); input?.setSelectionRange(from + emoji.length, from + emoji.length); });
+                }}>{emoji}</button>)}
+              </div>}
+              <button type="button" className={styles.chatIcon} aria-label="Add emoji" aria-expanded={emojiOpen} disabled={sending} onClick={() => setEmojiOpen(!emojiOpen)}><Smile size={22} aria-hidden="true" /></button>
               <label htmlFor="message-content" className={styles.srOnly}>
                 Message to{" "}
                 {admin
@@ -552,15 +593,18 @@ export default function MessageInbox({
                   : "Tokilo team"}
               </label>
               <textarea
+                ref={composerInput}
                 id="message-content"
-                rows={2}
+                rows={1}
                 value={text}
                 maxLength={4000}
                 disabled={sending}
                 placeholder="Write a message…"
-                onChange={(event) =>
-                  setDrafts({ ...drafts, [conversationId]: event.target.value })
-                }
+                onChange={(event) => {
+                  setDrafts(old => ({ ...old, [conversationId]: event.target.value }));
+                  event.target.style.height = "auto";
+                  event.target.style.height = `${Math.min(event.target.scrollHeight, 112)}px`;
+                }}
                 onKeyDown={(event) => {
                   if (
                     event.key === "Enter" &&
@@ -576,16 +620,12 @@ export default function MessageInbox({
               <button
                 type="submit"
                 aria-label="Send message"
-                className={styles.primary}
+                className={styles.sendButton}
                 disabled={sending || !text.trim()}
               >
-                <Send size={17} aria-hidden="true" />
-                <span>{sending ? "Sending…" : "Send"}</span>
+                {sending ? <LoaderCircle size={20} aria-hidden="true" /> : <Send size={20} aria-hidden="true" />}
               </button>
-              <p>
-                Enter to send · Shift + Enter for a new line · {text.length}
-                /4000
-              </p>
+              <p><span>Enter to send · Shift + Enter for a new line</span><span>{text.length}/4000</span></p>
             </form>
           )}
         </div>

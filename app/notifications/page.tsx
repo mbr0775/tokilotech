@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import PublicShell from "../ui/PublicShell";
 import AccountGate from "../communications/AccountGate";
 import NotificationInbox from "./NotificationInbox";
+import AccountNavigation from "../communications/AccountNavigation";
 import styles from "../communications/communications.module.css";
 export const metadata: Metadata = {
   title: "Notifications | Tokilo Technologies",
@@ -13,6 +14,7 @@ export default function NotificationsPage() {
   return (
     <PublicShell>
       <section className={styles.page}>
+        <AccountNavigation />
         <div className={styles.pageHeader}>
           <span>Your account / Notifications</span>
           <h1>Your latest updates.</h1>

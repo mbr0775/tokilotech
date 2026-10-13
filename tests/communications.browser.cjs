@@ -399,6 +399,12 @@ async function fixture(browser, owner = alice) {
       false,
     );
     report.flows.push("guest icons/sign-in gate");
+    await guest.getByRole("navigation", { name: "Account page navigation" }).getByRole("link", { name: "Home", exact: true }).click();
+    await guest.waitForURL(base + "/");
+    await guest.goto(base + "/messages");
+    await guest.getByRole("navigation", { name: "Account page navigation" }).getByRole("button", { name: "Go back" }).click();
+    await guest.waitForURL(base + "/");
+    report.flows.push("explicit Home navigation and Back control");
     const { context, state, emit } = await fixture(browser);
     const page = await context.newPage();
     page.on("pageerror", (e) => report.errors.push(e.message));
@@ -428,6 +434,15 @@ async function fixture(browser, owner = alice) {
     );
     assert.equal("sender_role" in state.sends[0], false);
     report.flows.push("persisted send with server identity");
+    await page.getByRole("button", { name: "Add emoji", exact: true }).click();
+    await page.getByRole("button", { name: "Add 👋", exact: true }).click();
+    assert.equal(await composer.inputValue(), "👋");
+    await composer.fill("");
+    const chatSearch = page.getByRole("searchbox", { name: "Search conversations" });
+    await chatSearch.fill("no matching person");
+    await page.getByText("No conversations match your search.").waitFor();
+    await chatSearch.fill("");
+    report.flows.push("conversation search and emoji insertion");
     state.ambiguousSend = true;
     await composer.fill("Safe retry");
     await page.getByRole("button", { name: "Send message" }).click();
@@ -532,10 +547,44 @@ async function fixture(browser, owner = alice) {
         await page.screenshot({
           path: `${dir}/tokilo-communications-${route.slice(1)}-${width}.png`,
         });
+        if (route === "/messages" && width <= 780) {
+          assert.equal(await page.getByRole("textbox", { name: "Message to Tokilo team" }).isVisible(), false);
+          await page.getByRole("complementary", { name: "Conversations" }).getByRole("button").filter({ hasText: "Tokilo team" }).click();
+          await page.getByRole("textbox", { name: "Message to Tokilo team" }).waitFor();
+          assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+          await page.screenshot({ path: `${dir}/tokilo-communications-chat-${width}.png` });
+          await page.getByRole("button", { name: "Back to chats" }).click();
+          await page.getByRole("searchbox", { name: "Search conversations" }).waitFor();
+        }
         report.layouts.push({ route, width, overflow: false });
       }
     }
     const other = await fixture(browser, admin);
+    const mobile = await fixture(browser);
+    const mobilePage = await mobile.context.newPage();
+    await mobilePage.setViewportSize({ width: 390, height: 844 });
+    await mobilePage.goto(base + "/messages");
+    await mobilePage.bringToFront();
+    await mobilePage.evaluate(() => Object.defineProperty(document, "hasFocus", { configurable: true, value: () => true }));
+    const mobileConversation = mobilePage.getByRole("complementary", { name: "Conversations" }).getByRole("button").filter({ hasText: "Tokilo team" });
+    await mobileConversation.waitFor();
+    await mobilePage.waitForTimeout(500);
+    assert.equal(mobile.state.messages[0].is_read, false);
+    await mobileConversation.click();
+    const mobileComposer = mobilePage.getByRole("textbox", { name: "Message to Tokilo team" });
+    await mobileComposer.fill("Keep this draft");
+    await mobilePage.getByRole("button", { name: "Back to chats" }).click();
+    const mobileIncoming = { ...mobile.state.messages[0], id: "00000000-0000-4000-8000-000000000045", content: "Unread while viewing chat list", is_read: false, created_at: stamp() };
+    mobile.state.messages.push(mobileIncoming);
+    mobile.state.conversations[0].is_read_client = false;
+    mobile.emit("messages", mobileIncoming);
+    mobile.emit("conversations", mobile.state.conversations[0], "UPDATE");
+    await mobilePage.getByRole("complementary", { name: "Conversations" }).getByLabel("Unread conversation", { exact: true }).waitFor();
+    await mobilePage.waitForTimeout(500);
+    assert.equal(mobileIncoming.is_read, false);
+    await mobileConversation.click();
+    assert.equal(await mobileComposer.inputValue(), "Keep this draft");
+    report.flows.push("mobile list does not mark hidden chats read and preserves drafts");
     const adminPage = await other.context.newPage();
     await adminPage.goto(base + "/messages");
     await adminPage

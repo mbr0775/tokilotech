@@ -1,6 +1,8 @@
 # Shared Supabase connection
 
-The website and Tokilo mobile application use `https://nsosypdtxdoeiszilpwj.supabase.co`. Set `NEXT_PUBLIC_SUPABASE_URL` and that project's anon/public key in the ignored `.env.local` file and in the hosting environment. Restart development and rebuild production after changing either value. Never put service-role credentials in a `NEXT_PUBLIC_` variable.
+The website and Tokilo mobile application use `https://nsosypdtxdoeiszilpwj.supabase.co`. Set `NEXT_PUBLIC_TOKILO_SUPABASE_URL` and `NEXT_PUBLIC_TOKILO_SUPABASE_ANON_KEY` in the ignored `.env.local` file and in the hosting environment. On Vercel these are public Config variables for Production and Preview. Restart development and rebuild production after changing either value. Never put service-role credentials in a `NEXT_PUBLIC_` variable.
+
+The legacy `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` pair is a fallback only when neither new variable exists. Both browser and server-rendered clients use the same complete pair. A partially configured new pair fails clearly instead of combining credentials from different projects. The old Vercel variables were write-only secrets that could not be converted in place; new Config names let the deployment use the shared backend without deleting those legacy settings.
 
 The former website project `ylxeydwmwbwbebujkeyi` does not contain the required content tables. Connecting to the shared project resolves its missing-table errors; the existing shared tables do not need to be recreated.
 

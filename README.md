@@ -17,14 +17,18 @@ cp .env.example .env.local
 Fill in both values in `.env.local` using the Supabase project for this website:
 
 ```dotenv
-NEXT_PUBLIC_SUPABASE_URL=your_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_public_key
+NEXT_PUBLIC_TOKILO_SUPABASE_URL=your_project_url
+NEXT_PUBLIC_TOKILO_SUPABASE_ANON_KEY=your_anon_public_key
 ```
 
 The values must be real project credentials, not the placeholders above. Use the
 anon public key, never a service role or secret key. The home page loads projects
 from Supabase, so both values are required. `.env.local` is ignored by Git.
 Restart the development server after changing these values.
+
+The older `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` pair
+remains supported when neither Tokilo-prefixed variable is set. Set both new
+variables together; the app never mixes a new URL with an old public key.
 
 ## Shared backend with the Tokilo mobile app
 

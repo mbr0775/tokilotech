@@ -48,6 +48,7 @@ export default function Footer() {
           <span>© {new Date().getFullYear()} Tokilo Technologies</span>
           <nav aria-label="Legal navigation">
             <Link href="/privacy-policy">Privacy policy</Link>
+            <Link href="/delete-account">Delete account</Link>
             <Link href="/terms-and-conditions">Terms &amp; conditions</Link>
           </nav>
           <a href="#main-content">Back to top ↑</a>

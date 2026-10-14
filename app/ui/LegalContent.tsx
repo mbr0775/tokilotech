@@ -17,7 +17,7 @@ export default function LegalContent({
       </nav>
       <div className={styles.legalBody}>
         {privacy && (
-          <p className={styles.revision}>Last updated: September 2026</p>
+          <p className={styles.revision}>Last updated: 13 October 2026</p>
         )}
         {sections.map((section, index) => (
           <article key={section.title} id={`policy-${index}`}>
@@ -25,6 +25,7 @@ export default function LegalContent({
             <p>{section.content}</p>
           </article>
         ))}
+        {privacy && <article><h2>Manage your account and data</h2><p><a href="/delete-account">Request deletion of your Tokilo Business Hub account and associated data.</a> You can use this page even if you have uninstalled the mobile app.</p></article>}
         <article>
           <h2>Contact Tokilo Technologies</h2>
           <p>

@@ -1,7 +1,7 @@
 export const CONVERSATION_FIELDS =
   "id,client_id,client_name,client_email,last_message,last_message_at,is_read_admin,is_read_client,created_at";
 export const MESSAGE_FIELDS =
-  "id,conversation_id,sender_id,sender_name,sender_role,content,is_read,seen_at,message_type,attachment_url,attachment_name,created_at";
+  "id,conversation_id,sender_id,sender_name,sender_role,content,is_read,seen_at,message_type,attachment_url,attachment_bucket,attachment_path,attachment_name,created_at";
 export type Conversation = {
   id: string;
   client_id: string;
@@ -24,6 +24,8 @@ export type ChatMessage = {
   seen_at: string | null;
   message_type: string;
   attachment_url: string | null;
+  attachment_bucket?: string | null;
+  attachment_path?: string | null;
   attachment_name: string | null;
   created_at: string;
 };

@@ -134,12 +134,22 @@ export default function MessageInbox({
           .order("id", { ascending: false })
           .limit(limit);
         if (error) throw error;
+        const messages = await Promise.all(
+          [...(data ?? [])].reverse().map(async (row) => {
+            if (row.attachment_bucket !== "chat-attachments" || !row.attachment_path)
+              return row as ChatMessage;
+            const { data: attachment } = await supabase.storage
+              .from("chat-attachments")
+              .createSignedUrl(row.attachment_path, 1800);
+            return { ...row, attachment_url: attachment?.signedUrl ?? null } as ChatMessage;
+          }),
+        );
         if (alive && request === requestId)
           setThread({
             owner: uid,
             id: conversationId,
             conversation: conversation as Conversation,
-            messages: [...(data ?? [])].reverse() as ChatMessage[],
+            messages,
             more: (data?.length ?? 0) >= limit,
             error: "",
           });

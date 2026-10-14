@@ -13,7 +13,7 @@ export default function PolicyPage() {
       icon: "👤",
       title: "Information We Collect",
       content:
-        "Tokilo Business Hub collects the account information you provide, including your name, email address, company and phone details. Google sign-in provides your Google account identity, email and profile information. Project requests and support conversations may contain business details and images you choose to upload. We also process your likes, online presence, notification read status and device push registration tokens. We do not request access to your contacts, location, SMS or call history.",
+        "Tokilo Business Hub collects the account information you provide, including your name, email address, company and phone details. Google sign-in provides your Google account identity, email and profile information. Project requests and support conversations may contain business details and images you choose to upload. We also process your likes, online presence, notification read status, Firebase installation identifiers and device push registration tokens. Firebase processes basic app and device metadata for its services. We do not request access to your contacts, location, SMS or call history.",
     },
 
     {

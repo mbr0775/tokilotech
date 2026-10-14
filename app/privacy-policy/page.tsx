@@ -34,7 +34,7 @@ export default function PolicyPage() {
       icon: "☁️",
       title: "Third-Party Services",
       content:
-        "Supabase processes authentication, database and storage information on our behalf. Google supports Google sign-in, and Firebase Cloud Messaging processes device registration and notification delivery information. These providers may process data outside your country. Other customers are not intended recipients of your private project requests or support conversations.",
+        "Supabase processes authentication, database and storage information on our behalf. Resend delivers account confirmation and password-reset emails and processes the recipient email address and delivery information. Google supports Google sign-in, and Firebase Cloud Messaging processes device registration and notification delivery information. These providers may process data outside your country. Other customers are not intended recipients of your private project requests or support conversations.",
     },
 
     {
